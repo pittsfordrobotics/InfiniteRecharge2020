@@ -7,18 +7,21 @@
 
 package frc.robot.commands;
 
+import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.DriveTrain;
 
 public class DriveWithJoysticks extends CommandBase {
     private DriveTrain m_driveTrain;
+    private Joystick m_joystick;
 
     /**
      * Creates a new DriveWithJoysticks.
      */
-    public DriveWithJoysticks(DriveTrain driveTrain) {
+    public DriveWithJoysticks(DriveTrain driveTrain, Joystick joystick) {
         addRequirements(driveTrain);
         m_driveTrain = driveTrain;
+        m_joystick = joystick;
     }
 
     // Called when the command is initially scheduled.
@@ -29,7 +32,7 @@ public class DriveWithJoysticks extends CommandBase {
     // Called every time the scheduler runs while the command is scheduled.
     @Override
     public void execute() {
-        m_driveTrain.drive();
+        m_driveTrain.drive(m_joystick.getY() * 0.75, m_joystick.getX() * 0.75);
     }
 
     // Called once the command ends or is interrupted.

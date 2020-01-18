@@ -23,15 +23,12 @@ public class DriveTrain extends SubsystemBase {
     private CANSparkMax m_rightPrimary = new CANSparkMax(kRightPrimary, MotorType.kBrushless);
     private CANSparkMax m_rightFollower = new CANSparkMax(kRightFollower, MotorType.kBrushless);
 
-    private Joystick m_leftJoystick;
-    private Joystick m_rightJoystick;
-
     private DifferentialDrive m_differentialDrive;
 
     /**
      * Creates a new DriveTrain.
      */
-    public DriveTrain(Joystick leftJoystick, Joystick rightJoystick) {
+    public DriveTrain() {
         m_leftPrimary.restoreFactoryDefaults();
         m_leftFollower.restoreFactoryDefaults();
         m_leftFollower.follow(m_leftPrimary);
@@ -40,14 +37,11 @@ public class DriveTrain extends SubsystemBase {
         m_rightFollower.restoreFactoryDefaults();
         m_rightFollower.follow(m_rightPrimary);
 
-        m_leftJoystick = leftJoystick;
-        m_rightJoystick = rightJoystick;
-
         m_differentialDrive = new DifferentialDrive(m_leftPrimary, m_rightPrimary);
     }
 
-    public void drive() {
-        m_differentialDrive.tankDrive(m_leftJoystick.getY() * 0.75, m_rightJoystick.getY() * 0.75);
+    public void drive(double speed, double rotation) {
+        m_differentialDrive.arcadeDrive(speed, rotation);
         SmartDashboard.putNumber("Right Primary", m_rightPrimary.get());
         SmartDashboard.putNumber("Right Follower", m_rightFollower.get());
         SmartDashboard.putNumber("Left Primary", m_leftPrimary.get());
