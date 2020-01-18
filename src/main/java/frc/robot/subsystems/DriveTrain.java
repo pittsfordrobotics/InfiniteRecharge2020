@@ -39,10 +39,13 @@ public class DriveTrain extends SubsystemBase {
         m_rightFollower.restoreFactoryDefaults();
         m_rightFollower.follow(m_rightPrimary);
 
+        m_leftJoystick = leftJoystick;
+        m_rightJoystick = rightJoystick;
+
         m_differentialDrive = new DifferentialDrive(m_leftPrimary, m_rightPrimary);
     }
 
     public void drive() {
-        m_differentialDrive.tankDrive(-m_leftJoystick.getY() * 0.5, -m_rightJoystick.getY() * 0.5);
+        m_differentialDrive.tankDrive(m_leftJoystick.getY() * 0.5, m_rightJoystick.getY() * 0.5);
     }
 }
