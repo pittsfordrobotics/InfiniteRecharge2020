@@ -12,6 +12,7 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import static frc.robot.Constants.*;
 
@@ -46,6 +47,10 @@ public class DriveTrain extends SubsystemBase {
     }
 
     public void drive() {
-        m_differentialDrive.tankDrive(m_leftJoystick.getY() * 0.5, m_rightJoystick.getY() * 0.5);
+        m_differentialDrive.tankDrive(m_leftJoystick.getY() * 0.75, m_rightJoystick.getY() * 0.75);
+        SmartDashboard.putNumber("Right Primary", m_rightPrimary.get());
+        SmartDashboard.putNumber("Right Follower", m_rightFollower.get());
+        SmartDashboard.putNumber("Left Primary", m_leftPrimary.get());
+        SmartDashboard.putNumber("Left Follower", m_leftFollower.get());
     }
 }
