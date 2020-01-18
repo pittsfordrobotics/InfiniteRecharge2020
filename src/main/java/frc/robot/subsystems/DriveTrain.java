@@ -8,6 +8,7 @@
 package frc.robot.subsystems;
 
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
@@ -28,12 +29,12 @@ public class DriveTrain extends SubsystemBase {
      * Creates a new DriveTrain.
      */
     public DriveTrain() {
-        m_leftPrimary.restoreFactoryDefaults();
-        m_leftFollower.restoreFactoryDefaults();
+        initController(m_leftPrimary);
+        initController(m_leftFollower);
         m_leftFollower.follow(m_leftPrimary);
 
-        m_rightPrimary.restoreFactoryDefaults();
-        m_rightFollower.restoreFactoryDefaults();
+        initController(m_rightPrimary);
+        initController(m_rightFollower);
         m_rightFollower.follow(m_rightPrimary);
 
         m_differentialDrive = new DifferentialDrive(m_leftPrimary, m_rightPrimary);
@@ -45,5 +46,10 @@ public class DriveTrain extends SubsystemBase {
         SmartDashboard.putNumber("Right Follower", m_rightFollower.get());
         SmartDashboard.putNumber("Left Primary", m_leftPrimary.get());
         SmartDashboard.putNumber("Left Follower", m_leftFollower.get());
+    }
+
+    private static void initController(CANSparkMax controller) {
+        controller.restoreFactoryDefaults();
+        controller.setIdleMode(IdleMode.kBrake);
     }
 }
