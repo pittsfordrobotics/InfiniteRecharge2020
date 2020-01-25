@@ -22,7 +22,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import static frc.robot.Constants.*;
 
 public class DriveTrain extends SubsystemBase {
-    private static final double kGearRatioMultiplier = 10;
+    private static final double kGearRatio = 10.71;
 
     private CANSparkMax m_leftPrimary = new CANSparkMax(Ports.kLeftPrimary, MotorType.kBrushless);
     private CANSparkMax m_leftFollower = new CANSparkMax(Ports.kLeftFollower, MotorType.kBrushless);
@@ -52,6 +52,7 @@ public class DriveTrain extends SubsystemBase {
         m_odometry = new DifferentialDriveOdometry(Rotation2d.fromDegrees(ahrs.getAngle()));
 
         m_ahrs = ahrs;
+        m_ahrs.reset();
 
         m_pose = new Pose2d(0, 0, new Rotation2d(0));
     }
@@ -65,21 +66,23 @@ public class DriveTrain extends SubsystemBase {
         SmartDashboard.putNumber("Left Follower", m_leftFollower.get());
 
         SmartDashboard.putNumber("Left ticks", m_leftPrimary.getEncoder().getPosition());
+        SmartDashboard.putNumber("Ticks per rotation", m_leftPrimary.getEncoder().getCountsPerRevolution());
+        SmartDashboard.putNumber("Conversion factor", m_leftPrimary.getEncoder().getPositionConversionFactor());
     }
 
     public void tankDrive(double left, double right) {
         m_differentialDrive.tankDrive(left, right);
 
-        double leftMeters = getControllerEncoderDistanceMeters(m_leftPrimary);
-        double rightMeters = getControllerEncoderDistanceMeters(m_rightPrimary);
+        double leftMeters = getControllerEncoderDistanceMeters(m_leftPrimary, false);
+        double rightMeters = getControllerEncoderDistanceMeters(m_rightPrimary, true);
 
         SmartDashboard.putNumber("Left Meters", leftMeters);
         SmartDashboard.putNumber("Right Meters", rightMeters);
 
         m_pose = m_odometry.update(
             new Rotation2d(0), 
-            getControllerEncoderDistanceMeters(m_leftPrimary),
-            getControllerEncoderDistanceMeters(m_rightPrimary));
+            getControllerEncoderDistanceMeters(m_leftPrimary, false),
+            getControllerEncoderDistanceMeters(m_rightPrimary, true));
 
         SmartDashboard.putNumber("Right Primary", m_rightPrimary.get());
         SmartDashboard.putNumber("Right Follower", m_rightFollower.get());
@@ -91,8 +94,13 @@ public class DriveTrain extends SubsystemBase {
         return m_pose;
     }
 
-    private static double getControllerEncoderDistanceMeters(CANSparkMax controller) {
-        return -controller.getEncoder().getPosition() / (controller.getEncoder().getCountsPerRevolution() * kGearRatioMultiplier) * Math.PI * Units.inchesToMeters(Dimensions.kWheelDiameterInches);
+    private static double getControllerEncoderDistanceMeters(CANSparkMax controller, boolean isInverted) {
+        double numMotorRotations = controller.getEncoder().getPosition();
+        double numWheelRotations = numMotorRotations / kGearRatio;
+        double wheelCircumference = Math.PI * Units.inchesToMeters(Dimensions.kWheelDiameterInches);
+        double distance = numWheelRotations * wheelCircumference;
+
+        return isInverted ? -distance : distance;
     }
 
     private static void initController(CANSparkMax controller) {
