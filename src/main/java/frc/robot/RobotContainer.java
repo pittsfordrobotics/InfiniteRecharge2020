@@ -7,9 +7,23 @@
 
 package frc.robot;
 
+import java.util.List;
+
+import com.kauailabs.navx.frc.AHRS;
+
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.SPI.Port;
+import edu.wpi.first.wpilibj.controller.RamseteController;
+import edu.wpi.first.wpilibj.geometry.Pose2d;
+import edu.wpi.first.wpilibj.geometry.Rotation2d;
+import edu.wpi.first.wpilibj.geometry.Translation2d;
+import edu.wpi.first.wpilibj.kinematics.DifferentialDriveKinematics;
+import edu.wpi.first.wpilibj.trajectory.Trajectory;
+import edu.wpi.first.wpilibj.trajectory.TrajectoryConfig;
+import edu.wpi.first.wpilibj.trajectory.TrajectoryGenerator;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.RamseteCommand;
 import frc.robot.commands.DriveWithJoysticks;
 import frc.robot.subsystems.DriveTrain;
 
@@ -23,8 +37,9 @@ import frc.robot.subsystems.DriveTrain;
 public class RobotContainer {
     // The robot's subsystems and commands are defined here...
     private ScaledJoystick m_joystick = new ScaledJoystick(0);
+    private AHRS m_ahrs = new AHRS(Port.kMXP);
 
-    private DriveTrain m_driveTrain = new DriveTrain();
+    private DriveTrain m_driveTrain = new DriveTrain(m_ahrs);
 
     /**
      * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -50,7 +65,22 @@ public class RobotContainer {
      * @return the command to run in autonomous
      */
     public Command getAutonomousCommand() {
-        // An ExampleCommand will run in autonomous
-        return null;
+        TrajectoryConfig config = new TrajectoryConfig(0.2, 0.5);
+
+        Trajectory traj = TrajectoryGenerator.generateTrajectory(
+            new Pose2d(0, 0, new Rotation2d(0)), 
+            List.of(),
+            new Pose2d(3, 0, new Rotation2d(0)), 
+            config);
+
+        RamseteCommand ramsete = new RamseteCommand(
+            traj, 
+            m_driveTrain::getPose, 
+            new RamseteController(),
+            new DifferentialDriveKinematics(0.6), 
+            m_driveTrain::tankDrive, 
+            m_driveTrain);
+
+        return ramsete.andThen(() -> m_driveTrain.tankDrive(0, 0), m_driveTrain);
     }
 }
