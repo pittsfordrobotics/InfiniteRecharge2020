@@ -18,9 +18,13 @@ package frc.robot;
  * wherever the constants are needed, to reduce verbosity.
  */
 public final class Constants {
-    public static final int kLeftPrimary = 2;
-    public static final int kLeftFollower = 3;
+    public static final class Ports {
+        public static final class CAN {
+            public static final int kLeftPrimary = 1;
+            public static final int kLeftFollower = 4;
 
-    public static final int kRightPrimary = 4;
-    public static final int kRightFollower = 5;
+            public static final int kRightPrimary = 2;
+            public static final int kRightFollower = 3;
+        }
+    }
 }
