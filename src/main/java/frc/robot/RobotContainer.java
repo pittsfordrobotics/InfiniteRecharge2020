@@ -22,6 +22,7 @@ import edu.wpi.first.wpilibj.geometry.Translation2d;
 import edu.wpi.first.wpilibj.trajectory.Trajectory;
 import edu.wpi.first.wpilibj.trajectory.TrajectoryConfig;
 import edu.wpi.first.wpilibj.trajectory.TrajectoryGenerator;
+import edu.wpi.first.wpilibj.trajectory.constraint.DifferentialDriveVoltageConstraint;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RamseteCommand;
 import frc.robot.Constants.Drive;
@@ -66,12 +67,19 @@ public class RobotContainer {
      * @return the command to run in autonomous
      */
     public Command getAutonomousCommand() {
-        TrajectoryConfig config = new TrajectoryConfig(Drive.kMaxVelocityMetersPerSecond, Drive.kMaxAccelerationMetersPerSecondSquared);
+        var voltageConstraint = new DifferentialDriveVoltageConstraint(
+            new SimpleMotorFeedforward(Drive.kS, Drive.kV, Drive.kA),
+            Drive.kKinematics, 
+            1000);
+
+        TrajectoryConfig config = new TrajectoryConfig(Drive.kMaxVelocityMetersPerSecond, Drive.kMaxAccelerationMetersPerSecondSquared)
+        .setKinematics(Drive.kKinematics)
+        .addConstraint(voltageConstraint);
 
         // Test trajectory
         Trajectory traj = TrajectoryGenerator.generateTrajectory(
             new Pose2d(0, 0, new Rotation2d(0)), 
-            List.of(new Translation2d(1, 0.3)),
+            List.of(),
             new Pose2d(3, 0, new Rotation2d(0)), 
             config);
 
@@ -80,7 +88,7 @@ public class RobotContainer {
             m_driveTrain::getPose, 
             new RamseteController(), 
             new SimpleMotorFeedforward(Drive.kS, Drive.kV, Drive.kA), 
-            m_driveTrain.getKinematics(), 
+            Drive.kKinematics, 
             m_driveTrain::getWheelSpeeds, 
             m_driveTrain.getLeftController(), 
             m_driveTrain.getRightController(), 

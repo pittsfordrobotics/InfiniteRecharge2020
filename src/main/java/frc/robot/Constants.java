@@ -7,6 +7,7 @@
 
 package frc.robot;
 
+import edu.wpi.first.wpilibj.kinematics.DifferentialDriveKinematics;
 import edu.wpi.first.wpilibj.util.Units;
 
 /**
@@ -44,5 +45,6 @@ public final class Constants {
 
         public static final double kGearRatio = 10.71;
         public static final double kWheelDiameterMeters = Units.inchesToMeters(6);
+        public static final DifferentialDriveKinematics kKinematics = new DifferentialDriveKinematics(0.563);
     }
 }
