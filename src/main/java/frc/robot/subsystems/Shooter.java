@@ -28,7 +28,7 @@ public class Shooter extends SubsystemBase {
     @Override
     public void periodic() {
         // This method will be called once per scheduler run
-        m_sparkMax.set(-m_joystick.getScaledThrottle());
+        m_sparkMax.set(m_joystick.getScaledThrottle()*0.75);
 
     }
 }
