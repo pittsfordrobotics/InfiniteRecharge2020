@@ -7,6 +7,7 @@
 
 package frc.robot.subsystems;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.ScaledJoystick;
 
@@ -23,12 +24,21 @@ public class Shooter extends SubsystemBase {
      */
     public Shooter(ScaledJoystick joystick) {
         m_joystick = joystick;
+        SmartDashboard.putNumber("Max Speed", 0.5);
+        SmartDashboard.putBoolean("Invert Motor", true);
     }
 
     @Override
     public void periodic() {
         // This method will be called once per scheduler run
-        m_sparkMax.set(m_joystick.getScaledThrottle()*0.75);
+        double maxSpeed = SmartDashboard.getNumber("Max Speed", 0.5);
+        boolean invert = SmartDashboard.getBoolean("Invert Motor", true);
+        if (invert){
+            m_sparkMax.set(m_joystick.getScaledThrottle()*maxSpeed*-1);
+        }
+        else {
+            m_sparkMax.set(m_joystick.getScaledThrottle()*maxSpeed);
+        }
 
     }
 }
