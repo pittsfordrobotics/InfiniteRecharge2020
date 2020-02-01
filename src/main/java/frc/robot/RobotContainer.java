@@ -15,14 +15,16 @@ import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.SPI.Port;
 import edu.wpi.first.wpilibj.controller.RamseteController;
+import edu.wpi.first.wpilibj.controller.SimpleMotorFeedforward;
 import edu.wpi.first.wpilibj.geometry.Pose2d;
 import edu.wpi.first.wpilibj.geometry.Rotation2d;
-import edu.wpi.first.wpilibj.kinematics.DifferentialDriveKinematics;
+import edu.wpi.first.wpilibj.geometry.Translation2d;
 import edu.wpi.first.wpilibj.trajectory.Trajectory;
 import edu.wpi.first.wpilibj.trajectory.TrajectoryConfig;
 import edu.wpi.first.wpilibj.trajectory.TrajectoryGenerator;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RamseteCommand;
+import frc.robot.Constants.Drive;
 import frc.robot.commands.DriveWithJoysticks;
 import frc.robot.subsystems.DriveTrain;
 
@@ -64,22 +66,27 @@ public class RobotContainer {
      * @return the command to run in autonomous
      */
     public Command getAutonomousCommand() {
-        TrajectoryConfig config = new TrajectoryConfig(0.2, 0.5);
+        TrajectoryConfig config = new TrajectoryConfig(Drive.kMaxVelocityMetersPerSecond, Drive.kMaxAccelerationMetersPerSecondSquared);
 
+        // Test trajectory
         Trajectory traj = TrajectoryGenerator.generateTrajectory(
             new Pose2d(0, 0, new Rotation2d(0)), 
-            List.of(),
+            List.of(new Translation2d(1, 0.3)),
             new Pose2d(3, 0, new Rotation2d(0)), 
             config);
 
         RamseteCommand ramsete = new RamseteCommand(
             traj, 
             m_driveTrain::getPose, 
-            new RamseteController(),
-            new DifferentialDriveKinematics(0.6), 
-            m_driveTrain::tankDrive, 
+            new RamseteController(), 
+            new SimpleMotorFeedforward(Drive.kS, Drive.kV, Drive.kA), 
+            m_driveTrain.getKinematics(), 
+            m_driveTrain::getWheelSpeeds, 
+            m_driveTrain.getLeftController(), 
+            m_driveTrain.getRightController(), 
+            m_driveTrain::driveVolts, 
             m_driveTrain);
 
-        return ramsete.andThen(() -> m_driveTrain.tankDrive(0, 0), m_driveTrain);
+        return ramsete.andThen(() -> m_driveTrain.driveVolts(0, 0), m_driveTrain);
     }
 }
