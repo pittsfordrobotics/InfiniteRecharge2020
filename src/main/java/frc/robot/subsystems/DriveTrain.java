@@ -14,14 +14,14 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import static frc.robot.Constants.*;
+import static frc.robot.Constants.Ports.*;
 
 public class DriveTrain extends SubsystemBase {
-    private CANSparkMax m_leftPrimary = new CANSparkMax(kLeftPrimary, MotorType.kBrushless);
-    private CANSparkMax m_leftFollower = new CANSparkMax(kLeftFollower, MotorType.kBrushless);
+    private CANSparkMax m_leftPrimary = new CANSparkMax(CAN.kLeftPrimary, MotorType.kBrushless);
+    private CANSparkMax m_leftFollower = new CANSparkMax(CAN.kLeftFollower, MotorType.kBrushless);
 
-    private CANSparkMax m_rightPrimary = new CANSparkMax(kRightPrimary, MotorType.kBrushless);
-    private CANSparkMax m_rightFollower = new CANSparkMax(kRightFollower, MotorType.kBrushless);
+    private CANSparkMax m_rightPrimary = new CANSparkMax(CAN.kRightPrimary, MotorType.kBrushless);
+    private CANSparkMax m_rightFollower = new CANSparkMax(CAN.kRightFollower, MotorType.kBrushless);
 
     private DifferentialDrive m_differentialDrive;
 
