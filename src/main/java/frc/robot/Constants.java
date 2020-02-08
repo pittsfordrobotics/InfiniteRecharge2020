@@ -8,7 +8,6 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.kinematics.DifferentialDriveKinematics;
-import edu.wpi.first.wpilibj.util.Units;
 
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide
@@ -32,7 +31,7 @@ public final class Constants {
     }
 
     public static final class Drive {
-        public static final double kP = 0.3;
+        public static final double kP = 3;
         public static final double kI = 0;
         public static final double kD = 0;
 
@@ -40,11 +39,11 @@ public final class Constants {
         public static final double kV = 2.76;
         public static final double kA = 0.326;
 
-        public static final double kMaxVelocityMetersPerSecond = 0.5;
+        public static final double kMaxVelocityMetersPerSecond = 1.5;
         public static final double kMaxAccelerationMetersPerSecondSquared = 1;
 
         public static final double kGearRatio = 10.71;
-        public static final double kWheelDiameterMeters = Units.inchesToMeters(6);
+        public static final double kWheelDiameterMeters = 0.1524;
         public static final DifferentialDriveKinematics kKinematics = new DifferentialDriveKinematics(0.563);
     }
 }

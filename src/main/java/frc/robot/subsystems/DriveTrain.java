@@ -16,11 +16,11 @@ import edu.wpi.first.wpilibj.controller.PIDController;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.geometry.Pose2d;
 import edu.wpi.first.wpilibj.geometry.Rotation2d;
-import edu.wpi.first.wpilibj.kinematics.DifferentialDriveKinematics;
 import edu.wpi.first.wpilibj.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.wpilibj.kinematics.DifferentialDriveWheelSpeeds;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+
 import static frc.robot.Constants.Ports.*;
 import static frc.robot.Constants.Drive.*;
 
@@ -61,6 +61,11 @@ public class DriveTrain extends SubsystemBase {
 
         m_pose = new Pose2d(0, 0, Rotation2d.fromDegrees(getAngle()));
         m_wheelSpeeds = new DifferentialDriveWheelSpeeds(0, 0);
+
+        m_leftPrimary.getEncoder().setPositionConversionFactor(Math.PI * kWheelDiameterMeters / kGearRatio);
+        m_rightPrimary.getEncoder().setPositionConversionFactor(Math.PI * kWheelDiameterMeters / kGearRatio);
+        m_leftPrimary.getEncoder().setVelocityConversionFactor(Math.PI * kWheelDiameterMeters / kGearRatio / 60);
+        m_rightPrimary.getEncoder().setVelocityConversionFactor(Math.PI * kWheelDiameterMeters / kGearRatio / 60);
     }
 
     public void drive(double speed, double rotation) {
@@ -70,23 +75,14 @@ public class DriveTrain extends SubsystemBase {
         SmartDashboard.putNumber("Right Follower", m_rightFollower.get());
         SmartDashboard.putNumber("Left Primary", m_leftPrimary.get());
         SmartDashboard.putNumber("Left Follower", m_leftFollower.get());
-
-        SmartDashboard.putNumber("Left ticks", m_leftPrimary.getEncoder().getPosition());
-        SmartDashboard.putNumber("Ticks per rotation", m_leftPrimary.getEncoder().getCountsPerRevolution());
-        SmartDashboard.putNumber("Conversion factor", m_leftPrimary.getEncoder().getPositionConversionFactor());
     }
 
     public void driveVolts(double left, double right) {
-        SmartDashboard.putNumber("Left Set", left);
-        SmartDashboard.putNumber("Right Set", right);
-        
         m_leftPrimary.setVoltage(left);
         m_rightPrimary.setVoltage(-right);
 
-        SmartDashboard.putNumber("Right Primary", m_rightPrimary.getOutputCurrent());
-        SmartDashboard.putNumber("Right Follower", m_rightFollower.getOutputCurrent());
-        SmartDashboard.putNumber("Left Primary", m_leftPrimary.getOutputCurrent());
-        SmartDashboard.putNumber("Left Follower", m_leftFollower.getOutputCurrent());
+        SmartDashboard.putNumber("Right Set Voltage", right);
+        SmartDashboard.putNumber("Left Set Voltage", left);
 
         m_differentialDrive.feed();
     }
@@ -103,9 +99,9 @@ public class DriveTrain extends SubsystemBase {
 
     @Override
     public void periodic() {
-        // Distance calculations
-        double leftMeters = getControllerEncoderDistanceMeters(m_leftPrimary, false);
-        double rightMeters = getControllerEncoderDistanceMeters(m_rightPrimary, true);
+        // Distance
+        double leftMeters = m_leftPrimary.getEncoder().getPosition(); 
+        double rightMeters = -m_rightPrimary.getEncoder().getPosition();
 
         SmartDashboard.putNumber("Left Meters", leftMeters);
         SmartDashboard.putNumber("Right Meters", rightMeters);
@@ -119,9 +115,9 @@ public class DriveTrain extends SubsystemBase {
             leftMeters,
             rightMeters);
 
-        // Velocity calculations
-        double leftVelocity = getControllerEncoderVelocityMetersPerSecond(m_leftPrimary, false);
-        double rightVelocity = getControllerEncoderVelocityMetersPerSecond(m_rightPrimary, true);
+        // Velocity
+        double leftVelocity = m_leftPrimary.getEncoder().getVelocity();
+        double rightVelocity = -m_rightPrimary.getEncoder().getVelocity();
 
         SmartDashboard.putNumber("Left Velocity", leftVelocity);
         SmartDashboard.putNumber("Right Velocity", rightVelocity);
@@ -147,24 +143,6 @@ public class DriveTrain extends SubsystemBase {
 
     private double getAngle() {
         return -m_ahrs.getAngle();
-    }
-
-    private double getControllerEncoderDistanceMeters(CANSparkMax controller, boolean isInverted) {
-        double numMotorRotations = controller.getEncoder().getPosition();
-        double numWheelRotations = numMotorRotations / kGearRatio;
-        double wheelCircumference = Math.PI * kWheelDiameterMeters;
-        double distance = numWheelRotations * wheelCircumference;
-
-        return isInverted ? -distance : distance;
-    }
-
-    private double getControllerEncoderVelocityMetersPerSecond(CANSparkMax controller, boolean isInverted) {
-        double motorVelocity = controller.getEncoder().getVelocity() / 60;
-        double wheelVelocity = motorVelocity / kGearRatio;
-        double wheelCircumference = Math.PI * kWheelDiameterMeters;
-        double velocity = wheelVelocity * wheelCircumference;
-
-        return isInverted ? -velocity : velocity;
     }
 
     private void initController(CANSparkMax controller) {

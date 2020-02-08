@@ -78,9 +78,13 @@ public class RobotContainer {
 
         // Test trajectory
         Trajectory traj = TrajectoryGenerator.generateTrajectory(
-            new Pose2d(0, 0, new Rotation2d(0)), 
-            List.of(),
-            new Pose2d(3, 0, new Rotation2d(0)), 
+            List.of(
+                new Pose2d(0, 0, Rotation2d.fromDegrees(0)),
+                new Pose2d(1, -1, Rotation2d.fromDegrees(-90)),
+                new Pose2d(0, -2, Rotation2d.fromDegrees(-180)),
+                new Pose2d(-1, -1, Rotation2d.fromDegrees(-270)),
+                new Pose2d(0, 0, Rotation2d.fromDegrees(0))
+            ), 
             config);
 
         m_driveTrain.resetOdometry(traj.getInitialPose());
@@ -88,7 +92,7 @@ public class RobotContainer {
         RamseteCommand ramsete = new RamseteCommand(
             traj, 
             m_driveTrain::getPose, 
-            new RamseteController(), 
+            new RamseteController(),
             new SimpleMotorFeedforward(Drive.kS, Drive.kV, Drive.kA), 
             Drive.kKinematics, 
             m_driveTrain::getWheelSpeeds, 
