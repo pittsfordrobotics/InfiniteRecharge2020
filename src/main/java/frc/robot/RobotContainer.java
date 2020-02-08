@@ -7,9 +7,24 @@
 
 package frc.robot;
 
+import java.util.List;
+
+import com.kauailabs.navx.frc.AHRS;
+
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.SPI.Port;
+import edu.wpi.first.wpilibj.controller.RamseteController;
+import edu.wpi.first.wpilibj.controller.SimpleMotorFeedforward;
+import edu.wpi.first.wpilibj.geometry.Pose2d;
+import edu.wpi.first.wpilibj.geometry.Rotation2d;
+import edu.wpi.first.wpilibj.trajectory.Trajectory;
+import edu.wpi.first.wpilibj.trajectory.TrajectoryConfig;
+import edu.wpi.first.wpilibj.trajectory.TrajectoryGenerator;
+import edu.wpi.first.wpilibj.trajectory.constraint.DifferentialDriveVoltageConstraint;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.RamseteCommand;
+import frc.robot.Constants.Drive;
 import frc.robot.commands.DriveWithJoysticks;
 import frc.robot.subsystems.DriveTrain;
 
@@ -23,14 +38,16 @@ import frc.robot.subsystems.DriveTrain;
 public class RobotContainer {
     // The robot's subsystems and commands are defined here...
     private ScaledJoystick m_joystick = new ScaledJoystick(0);
+    private AHRS m_ahrs = new AHRS(Port.kMXP);
 
-    private DriveTrain m_driveTrain = new DriveTrain();
+    private DriveTrain m_driveTrain = new DriveTrain(m_ahrs);
 
     /**
      * The container for the robot. Contains subsystems, OI devices, and commands.
      */
     public RobotContainer() {
         // Configure the button bindings
+        m_ahrs.enableBoardlevelYawReset(true);
         m_driveTrain.setDefaultCommand(new DriveWithJoysticks(m_driveTrain, m_joystick));
         configureButtonBindings();
     }
@@ -50,7 +67,40 @@ public class RobotContainer {
      * @return the command to run in autonomous
      */
     public Command getAutonomousCommand() {
-        // An ExampleCommand will run in autonomous
-        return null;
+        var voltageConstraint = new DifferentialDriveVoltageConstraint(
+            new SimpleMotorFeedforward(Drive.kS, Drive.kV, Drive.kA),
+            Drive.kKinematics, 
+            10);
+
+        TrajectoryConfig config = new TrajectoryConfig(Drive.kMaxVelocityMetersPerSecond, Drive.kMaxAccelerationMetersPerSecondSquared)
+        .setKinematics(Drive.kKinematics)
+        .addConstraint(voltageConstraint);
+
+        // Test trajectory
+        Trajectory traj = TrajectoryGenerator.generateTrajectory(
+            List.of(
+                new Pose2d(0, 0, Rotation2d.fromDegrees(0)),
+                new Pose2d(1, -1, Rotation2d.fromDegrees(-90)),
+                new Pose2d(0, -2, Rotation2d.fromDegrees(-180)),
+                new Pose2d(-1, -1, Rotation2d.fromDegrees(-270)),
+                new Pose2d(0, 0, Rotation2d.fromDegrees(0))
+            ), 
+            config);
+
+        m_driveTrain.resetOdometry(traj.getInitialPose());
+
+        RamseteCommand ramsete = new RamseteCommand(
+            traj, 
+            m_driveTrain::getPose, 
+            new RamseteController(),
+            new SimpleMotorFeedforward(Drive.kS, Drive.kV, Drive.kA), 
+            Drive.kKinematics, 
+            m_driveTrain::getWheelSpeeds, 
+            m_driveTrain.getLeftController(), 
+            m_driveTrain.getRightController(), 
+            m_driveTrain::driveVolts, 
+            m_driveTrain);
+
+        return ramsete.andThen(() -> m_driveTrain.driveVolts(0, 0), m_driveTrain);
     }
 }
