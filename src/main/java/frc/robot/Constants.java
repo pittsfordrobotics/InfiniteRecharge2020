@@ -32,13 +32,13 @@ public final class Constants {
     }
 
     public static final class Drive {
-        public static final double kP = 3.82;
+        public static final double kP = 0.3;
         public static final double kI = 0;
-        public static final double kD = 1750;
+        public static final double kD = 0;
 
-        public static final double kS = 0.194;
+        public static final double kS = 0.174;
         public static final double kV = 2.76;
-        public static final double kA = 0.378;
+        public static final double kA = 0.326;
 
         public static final double kMaxVelocityMetersPerSecond = 0.5;
         public static final double kMaxAccelerationMetersPerSecondSquared = 1;

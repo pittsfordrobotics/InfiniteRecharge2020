@@ -49,14 +49,17 @@ public class DriveTrain extends SubsystemBase {
         initController(m_rightFollower);
         m_rightFollower.follow(m_rightPrimary);
 
-        m_differentialDrive = new DifferentialDrive(m_leftPrimary, m_rightPrimary);
+        resetEncoders();
 
-        m_odometry = new DifferentialDriveOdometry(Rotation2d.fromDegrees(ahrs.getAngle()));
+        m_differentialDrive = new DifferentialDrive(m_leftPrimary, m_rightPrimary);
 
         m_ahrs = ahrs;
         m_ahrs.reset();
 
-        m_pose = new Pose2d(0, 0, new Rotation2d(m_ahrs.getAngle()));
+        m_odometry = new DifferentialDriveOdometry(Rotation2d.fromDegrees(getAngle()));
+
+
+        m_pose = new Pose2d(0, 0, Rotation2d.fromDegrees(getAngle()));
         m_wheelSpeeds = new DifferentialDriveWheelSpeeds(0, 0);
     }
 
@@ -88,6 +91,44 @@ public class DriveTrain extends SubsystemBase {
         m_differentialDrive.feed();
     }
 
+    public void resetOdometry(Pose2d pose) {
+        m_odometry.resetPosition(pose, Rotation2d.fromDegrees(getAngle()));
+        resetEncoders();
+    }
+
+    public void resetEncoders() {
+        m_leftPrimary.getEncoder().setPosition(0);
+        m_rightPrimary.getEncoder().setPosition(0);
+    }
+
+    @Override
+    public void periodic() {
+        // Distance calculations
+        double leftMeters = getControllerEncoderDistanceMeters(m_leftPrimary, false);
+        double rightMeters = getControllerEncoderDistanceMeters(m_rightPrimary, true);
+
+        SmartDashboard.putNumber("Left Meters", leftMeters);
+        SmartDashboard.putNumber("Right Meters", rightMeters);
+        SmartDashboard.putNumber("gyro angle", m_ahrs.getAngle());
+        SmartDashboard.putNumber("Pose angle", m_pose.getRotation().getDegrees());
+        SmartDashboard.putNumber("Pose X", m_pose.getTranslation().getX());
+        SmartDashboard.putNumber("Pose Y", m_pose.getTranslation().getY());
+
+        m_pose = m_odometry.update(
+            Rotation2d.fromDegrees(getAngle()), 
+            leftMeters,
+            rightMeters);
+
+        // Velocity calculations
+        double leftVelocity = getControllerEncoderVelocityMetersPerSecond(m_leftPrimary, false);
+        double rightVelocity = getControllerEncoderVelocityMetersPerSecond(m_rightPrimary, true);
+
+        SmartDashboard.putNumber("Left Velocity", leftVelocity);
+        SmartDashboard.putNumber("Right Velocity", rightVelocity);
+
+        m_wheelSpeeds = new DifferentialDriveWheelSpeeds(leftVelocity, rightVelocity);
+    }
+
     public PIDController getLeftController() {
         return new PIDController(kP, kI, kD);
     }
@@ -97,14 +138,6 @@ public class DriveTrain extends SubsystemBase {
     }
 
     public DifferentialDriveWheelSpeeds getWheelSpeeds() {
-        double leftVelocity = getControllerEncoderVelocityMetersPerSecond(m_leftPrimary, false);
-        double rightVelocity = getControllerEncoderVelocityMetersPerSecond(m_rightPrimary, true);
-
-        SmartDashboard.putNumber("Left Velocity", leftVelocity);
-        SmartDashboard.putNumber("Right Velocity", rightVelocity);
-
-        m_wheelSpeeds = new DifferentialDriveWheelSpeeds(leftVelocity, rightVelocity);
-
         return m_wheelSpeeds;
     }
 
@@ -112,18 +145,8 @@ public class DriveTrain extends SubsystemBase {
         return m_pose;
     }
 
-    @Override
-    public void periodic() {
-        double leftMeters = getControllerEncoderDistanceMeters(m_leftPrimary, false);
-        double rightMeters = getControllerEncoderDistanceMeters(m_rightPrimary, true);
-
-        SmartDashboard.putNumber("Left Meters", leftMeters);
-        SmartDashboard.putNumber("Right Meters", rightMeters);
-
-        m_pose = m_odometry.update(
-            new Rotation2d(m_ahrs.getAngle()), 
-            leftMeters,
-            rightMeters);
+    private double getAngle() {
+        return -m_ahrs.getAngle();
     }
 
     private double getControllerEncoderDistanceMeters(CANSparkMax controller, boolean isInverted) {

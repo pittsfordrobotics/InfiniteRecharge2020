@@ -18,7 +18,6 @@ import edu.wpi.first.wpilibj.controller.RamseteController;
 import edu.wpi.first.wpilibj.controller.SimpleMotorFeedforward;
 import edu.wpi.first.wpilibj.geometry.Pose2d;
 import edu.wpi.first.wpilibj.geometry.Rotation2d;
-import edu.wpi.first.wpilibj.geometry.Translation2d;
 import edu.wpi.first.wpilibj.trajectory.Trajectory;
 import edu.wpi.first.wpilibj.trajectory.TrajectoryConfig;
 import edu.wpi.first.wpilibj.trajectory.TrajectoryGenerator;
@@ -48,6 +47,7 @@ public class RobotContainer {
      */
     public RobotContainer() {
         // Configure the button bindings
+        m_ahrs.enableBoardlevelYawReset(true);
         m_driveTrain.setDefaultCommand(new DriveWithJoysticks(m_driveTrain, m_joystick));
         configureButtonBindings();
     }
@@ -70,7 +70,7 @@ public class RobotContainer {
         var voltageConstraint = new DifferentialDriveVoltageConstraint(
             new SimpleMotorFeedforward(Drive.kS, Drive.kV, Drive.kA),
             Drive.kKinematics, 
-            1000);
+            10);
 
         TrajectoryConfig config = new TrajectoryConfig(Drive.kMaxVelocityMetersPerSecond, Drive.kMaxAccelerationMetersPerSecondSquared)
         .setKinematics(Drive.kKinematics)
@@ -82,6 +82,8 @@ public class RobotContainer {
             List.of(),
             new Pose2d(3, 0, new Rotation2d(0)), 
             config);
+
+        m_driveTrain.resetOdometry(traj.getInitialPose());
 
         RamseteCommand ramsete = new RamseteCommand(
             traj, 
