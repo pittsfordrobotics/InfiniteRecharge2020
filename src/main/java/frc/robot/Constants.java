@@ -27,6 +27,7 @@ public final class Constants {
 
             public static final int kRightPrimary = 2;
             public static final int kRightFollower = 3;
+            public static final int kSpinnerMotor = 5;
         }
     }
 
