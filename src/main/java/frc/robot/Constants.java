@@ -7,7 +7,10 @@
 
 package frc.robot;
 
+import com.revrobotics.ColorMatch;
+
 import edu.wpi.first.wpilibj.kinematics.DifferentialDriveKinematics;
+import edu.wpi.first.wpilibj.util.Color;
 
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide
@@ -46,5 +49,12 @@ public final class Constants {
         public static final double kGearRatio = 10.71;
         public static final double kWheelDiameterMeters = 0.1524;
         public static final DifferentialDriveKinematics kKinematics = new DifferentialDriveKinematics(0.563);
+    }
+    
+    public static final class TargetColors{
+        public static final Color kBlueTarget = ColorMatch.makeColor(0.17, 0.43, 0.41);
+        public static final Color kGreenTarget = ColorMatch.makeColor(0.23, 0.50, 0.27);
+        public static final Color kRedTarget = ColorMatch.makeColor(0.35, 0.43, 0.23);
+        public static final Color kYellowTarget = ColorMatch.makeColor(0.30, 0.52, 0.18);
     }
 }
