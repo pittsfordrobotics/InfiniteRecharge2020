@@ -77,6 +77,10 @@ public class DriveTrain extends SubsystemBase {
         SmartDashboard.putNumber("Left Follower", m_leftFollower.get());
     }
 
+    public void setThrottle(double throttle) {
+        m_differentialDrive.setMaxOutput(throttle);
+    }
+
     public void driveVolts(double left, double right) {
         m_leftPrimary.setVoltage(left);
         m_rightPrimary.setVoltage(-right);

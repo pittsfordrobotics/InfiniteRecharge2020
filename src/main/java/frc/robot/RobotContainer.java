@@ -24,6 +24,8 @@ import edu.wpi.first.wpilibj.trajectory.TrajectoryGenerator;
 import edu.wpi.first.wpilibj.trajectory.constraint.DifferentialDriveVoltageConstraint;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RamseteCommand;
+import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import edu.wpi.first.wpilibj2.command.button.POVButton;
 import frc.robot.Constants.Drive;
 import frc.robot.commands.DriveWithJoysticks;
 import frc.robot.commands.DriveWithXboxController;
@@ -59,6 +61,9 @@ public class RobotContainer {
      * passing it to a {@link edu.wpi.first.wpilibj2.command.button.JoystickButton}.
      */
     private void configureButtonBindings() {
+        new POVButton(m_controller, 0).whenActive(()-> m_driveTrain.setThrottle(0.9));
+        new POVButton(m_controller, 270).whenActive(()-> m_driveTrain.setThrottle(0.6));
+        new POVButton(m_controller, 180).whenActive(()-> m_driveTrain.setThrottle(0.3));
     }
 
     /**
