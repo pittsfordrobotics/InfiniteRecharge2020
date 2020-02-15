@@ -1,0 +1,41 @@
+/*----------------------------------------------------------------------------*/
+/* Copyright (c) 2019 FIRST. All Rights Reserved.                             */
+/* Open Source Software - may be modified and shared by FRC teams. The code   */
+/* must be accompanied by the FIRST BSD license file in the root directory of */
+/* the project.                                                               */
+/*----------------------------------------------------------------------------*/
+
+package frc.robot.subsystems;
+
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants.Ports.*;
+
+public class Climber extends SubsystemBase {
+    private CANSparkMax m_telescopingArmMotor = new CANSparkMax(CAN.kTelescopingArm, MotorType.kBrushless);
+    private CANSparkMax m_winchLeft = new CANSparkMax(CAN.kWinchLeft, MotorType.kBrushless);
+    private CANSparkMax m_winchRight = new CANSparkMax(CAN.kWinchRight, MotorType.kBrushless);
+
+    /**
+    * Creates a new Climber.
+    */
+    public Climber() {
+       m_winchRight.setInverted(true);
+    }
+
+    public void driveTelescopingArm(double speed) {
+        m_telescopingArmMotor.set(speed);
+    }
+
+    public void driveWinch(double speed) {
+        m_winchLeft.set(speed);
+        m_winchRight.set(speed);
+    }
+
+    @Override
+    public void periodic() {
+        // This method will be called once per scheduler run
+    }
+}
