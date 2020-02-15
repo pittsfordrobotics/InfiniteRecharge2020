@@ -14,9 +14,9 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.Ports.*;
 
 public class Climber extends SubsystemBase {
-    private CANSparkMax m_telescopingArmMotor = new CANSparkMax(CAN.kTelescopingArm, MotorType.kBrushless);
-    private CANSparkMax m_winchLeft = new CANSparkMax(CAN.kWinchLeft, MotorType.kBrushless);
-    private CANSparkMax m_winchRight = new CANSparkMax(CAN.kWinchRight, MotorType.kBrushless);
+    private CANSparkMax m_telescopingArmMotor = new CANSparkMax(CAN.kClimberTelescopingArm, MotorType.kBrushless);
+    private CANSparkMax m_winchLeft = new CANSparkMax(CAN.kClimberWinchLeft, MotorType.kBrushless);
+    private CANSparkMax m_winchRight = new CANSparkMax(CAN.kClimberWinchRight, MotorType.kBrushless);
 
     /**
     * Creates a new Climber.

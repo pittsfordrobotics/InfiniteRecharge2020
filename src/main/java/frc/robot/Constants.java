@@ -22,23 +22,16 @@ import edu.wpi.first.wpilibj.kinematics.DifferentialDriveKinematics;
 public final class Constants {
     public static final class Ports {
         public static final class CAN {
-<<<<<<< HEAD
-            public static final int kDriveLeftPrimary = 11;
-            public static final int kDriveLeftFollower = 12;
-            public static final int kDriveRightPrimary = 13;
-            public static final int kDriveRightFollower = 14;
-=======
-            public static final int kTelescopingArm = 6;
-            public static final int kWinchLeft = 7;
-            public static final int kWinchRight = 8;            
+            public static final int kClimberTelescopingArm = 6;
+            public static final int kClimberWinchLeft = 7;
+            public static final int kClimberWinchRight = 8;            
 
 
-            public static final int kLeftPrimary = 1;
-            public static final int kLeftFollower = 4;
+            public static final int kDriveLeftPrimary = 1;
+            public static final int kDriveLeftFollower = 4;
 
-            public static final int kRightPrimary = 2;
-            public static final int kRightFollower = 3;
->>>>>>> made the basic climber code.
+            public static final int kDriveRightPrimary = 2;
+            public static final int kDriveRightFollower = 3;
         }
     }
 
