@@ -26,6 +26,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RamseteCommand;
 import frc.robot.Constants.Drive;
 import frc.robot.commands.DriveWithJoysticks;
+import frc.robot.commands.DriveWithXboxController;
 import frc.robot.subsystems.DriveTrain;
 
 /**
@@ -37,9 +38,8 @@ import frc.robot.subsystems.DriveTrain;
  */
 public class RobotContainer {
     // The robot's subsystems and commands are defined here...
-    private ScaledJoystick m_joystick = new ScaledJoystick(0);
+    private XboxController m_controller = new XboxController(0);
     private AHRS m_ahrs = new AHRS(Port.kMXP);
-
     private DriveTrain m_driveTrain = new DriveTrain(m_ahrs);
 
     /**
@@ -48,7 +48,7 @@ public class RobotContainer {
     public RobotContainer() {
         // Configure the button bindings
         m_ahrs.enableBoardlevelYawReset(true);
-        m_driveTrain.setDefaultCommand(new DriveWithJoysticks(m_driveTrain, m_joystick));
+        m_driveTrain.setDefaultCommand(new DriveWithXboxController(m_driveTrain, m_controller));
         configureButtonBindings();
     }
 
