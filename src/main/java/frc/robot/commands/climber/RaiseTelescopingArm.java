@@ -5,18 +5,18 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.commands;
+package frc.robot.commands.climber;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Climber;
 
-public class WinchUp extends CommandBase {
+public class RaiseTelescopingArm extends CommandBase {
     private Climber m_climber;
- 
+
     /**
-     * Creates a new WinchUp.
+     * Creates a new RaiseTelescopingArm.
      */
-    public WinchUp(Climber climber) {
+    public RaiseTelescopingArm(Climber climber) {
         // Use addRequirements() here to declare subsystem dependencies.
         addRequirements(climber);
 
@@ -31,13 +31,13 @@ public class WinchUp extends CommandBase {
     // Called every time the scheduler runs while the command is scheduled.
     @Override
     public void execute() {
-        m_climber.driveWinch(0.75);
+        m_climber.driveTelescopingArm(0.5);
     }
 
     // Called once the command ends or is interrupted.
     @Override
     public void end(boolean interrupted) {
-        m_climber.driveWinch(0);
+        m_climber.driveTelescopingArm(0);
     }
 
     // Returns true when the command should end.

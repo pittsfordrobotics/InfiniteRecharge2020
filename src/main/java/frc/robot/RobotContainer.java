@@ -9,15 +9,14 @@ package frc.robot;
 
 import com.kauailabs.navx.frc.AHRS;
 
-import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.SPI.Port;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
-import frc.robot.commands.DriveWithJoysticks;
-import frc.robot.commands.DriveWithXboxController;
+import frc.robot.commands.drivetrain.DriveWithXboxController;
 import frc.robot.commands.auto.FollowPath;
 import frc.robot.subsystems.DriveTrain;
+import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Shooter;
 
 /**
@@ -34,6 +33,7 @@ public class RobotContainer {
     private AHRS m_ahrs = new AHRS(Port.kMXP);
     private DriveTrain m_driveTrain = new DriveTrain(m_ahrs);
     private Shooter m_shooter = new Shooter(m_joystick);
+    private Intake m_intake = new Intake();
     /**
      * The container for the robot. Contains subsystems, OI devices, and commands.
      */
