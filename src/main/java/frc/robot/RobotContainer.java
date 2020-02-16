@@ -9,10 +9,13 @@ package frc.robot;
 
 import com.kauailabs.navx.frc.AHRS;
 
+import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.SPI.Port;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.button.POVButton;
 import frc.robot.commands.DriveWithJoysticks;
+import frc.robot.commands.DriveWithXboxController;
 import frc.robot.commands.auto.FollowPath;
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.Shooter;
@@ -27,6 +30,7 @@ import frc.robot.subsystems.Shooter;
 public class RobotContainer {
     // The robot's subsystems and commands are defined here...
     private XboxController m_controller = new XboxController(0);
+    private ScaledJoystick m_joystick = new ScaledJoystick(1);
     private AHRS m_ahrs = new AHRS(Port.kMXP);
     private DriveTrain m_driveTrain = new DriveTrain(m_ahrs);
     private Shooter m_shooter = new Shooter(m_joystick);
@@ -35,7 +39,6 @@ public class RobotContainer {
      */
     public RobotContainer() {
         // Configure the button bindings
-        m_ahrs.enableBoardlevelYawReset(true);
         m_driveTrain.setDefaultCommand(new DriveWithXboxController(m_driveTrain, m_controller));
         configureButtonBindings();
     }
