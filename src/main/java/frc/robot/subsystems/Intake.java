@@ -7,10 +7,10 @@ import frc.robot.ScaledJoystick;
 
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
-import static frc.robot.Constants.*;
+import static frc.robot.Constants.Ports.*;
 
 public class Intake extends SubsystemBase {
-    private CANSparkMax m_intakeSparkMax = new CANSparkMax(kIntake, MotorType.kBrushless);
+    private CANSparkMax m_intakeSparkMax = new CANSparkMax(CAN.kIntakeInner, MotorType.kBrushless);
     private ScaledJoystick m_joystick = new ScaledJoystick(1);
     private JoystickButton m_intakeButton = new JoystickButton(m_joystick, 4);
     
