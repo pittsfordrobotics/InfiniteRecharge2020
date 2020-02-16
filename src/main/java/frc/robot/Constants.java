@@ -7,6 +7,11 @@
 
 package frc.robot;
 
+import edu.wpi.first.wpilibj.controller.SimpleMotorFeedforward;
+import edu.wpi.first.wpilibj.kinematics.DifferentialDriveKinematics;
+import edu.wpi.first.wpilibj.trajectory.TrajectoryConfig;
+import edu.wpi.first.wpilibj.trajectory.constraint.DifferentialDriveVoltageConstraint;
+
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide
  * numerical or boolean constants. This class should not be used for any other
@@ -18,8 +23,74 @@ package frc.robot;
  * wherever the constants are needed, to reduce verbosity.
  */
 public final class Constants {
-    public static final int kLeftPrimary = 2;
-    public static final int kLeftFollower = 3;
+    public static final class Ports {
+        public static final class CAN {
+            public static final int kDriveLeftPrimary = 11;
+            public static final int kDriveLeftFollower = 12;
+            public static final int kDriveRightPrimary = 13;
+            public static final int kDriveRightFollower = 14;
+
+            public static final int kClimberTelescopingArm = 21;
+            public static final int kClimberWinchLeft = 22;
+            public static final int kClimberWinchRight = 23;            
+        }
+    }
+
+    public static final class PWM {
+
+    }
+
+    public static final class DIO {
+
+    }
+
+    public static final class AIO {
+
+    }
+
+    public static final class Auto {
+        public static final TrajectoryConfig kConfig = new TrajectoryConfig(
+            Drive.kMaxVelocityMetersPerSecond,
+            Drive.kMaxAccelerationMetersPerSecondSquared)
+            .setKinematics(Drive.kKinematics)
+            .addConstraint(
+                new DifferentialDriveVoltageConstraint(new SimpleMotorFeedforward(Drive.kS, Drive.kV, Drive.kA),
+                Drive.kKinematics,
+                10
+            )
+        );
+    }
+
+    public static final class Drive {
+        public static final double kP = 3;
+        public static final double kI = 0;
+        public static final double kD = 0;
+
+        public static final double kS = 0.174;
+        public static final double kV = 2.76;
+        public static final double kA = 0.326;
+
+        public static final double kMaxVelocityMetersPerSecond = 1.5;
+        public static final double kMaxAccelerationMetersPerSecondSquared = 1;
+
+        public static final double kGearRatio = 10.71;
+        public static final double kWheelDiameterMeters = 0.1524;
+        public static final DifferentialDriveKinematics kKinematics = new DifferentialDriveKinematics(0.563);
+    }
+
+    public static final class Intake {
+
+    }
+
+    public static final class Shooter {
+
+    }
+
+    public static final class Climber {
+
+    }
+
+    public static final class Spinner {
 
     public static final int kRightPrimary = 4;
     public static final int kRightFollower = 5;
