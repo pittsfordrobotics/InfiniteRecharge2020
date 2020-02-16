@@ -92,5 +92,8 @@ public final class Constants {
 
     public static final class Spinner {
 
-    }
+    public static final int kRightPrimary = 4;
+    public static final int kRightFollower = 5;
+
+    public static final int kShooter = 7;
 }

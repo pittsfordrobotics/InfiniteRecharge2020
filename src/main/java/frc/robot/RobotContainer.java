@@ -18,6 +18,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.commands.DriveWithJoysticks;
 import frc.robot.commands.auto.FollowPath;
 import frc.robot.subsystems.DriveTrain;
+import frc.robot.subsystems.Shooter;
 
 /**
  * This class is where the bulk of the robot should be declared. Since
@@ -32,13 +33,12 @@ public class RobotContainer {
     private AHRS m_ahrs = new AHRS(Port.kMXP);
 
     private DriveTrain m_driveTrain = new DriveTrain(m_ahrs);
-
+    private Shooter m_shooter = new Shooter(m_joystick);
     /**
      * The container for the robot. Contains subsystems, OI devices, and commands.
      */
     public RobotContainer() {
         // Configure the button bindings
-        m_ahrs.enableBoardlevelYawReset(true);
         m_driveTrain.setDefaultCommand(new DriveWithJoysticks(m_driveTrain, m_joystick));
         configureButtonBindings();
     }
