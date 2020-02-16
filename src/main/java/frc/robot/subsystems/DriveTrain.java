@@ -25,11 +25,11 @@ import static frc.robot.Constants.Ports.*;
 import static frc.robot.Constants.Drive.*;
 
 public class DriveTrain extends SubsystemBase {
-    private CANSparkMax m_leftPrimary = new CANSparkMax(CAN.kLeftPrimary, MotorType.kBrushless);
-    private CANSparkMax m_leftFollower = new CANSparkMax(CAN.kLeftFollower, MotorType.kBrushless);
+    private CANSparkMax m_leftPrimary = new CANSparkMax(CAN.kDriveLeftPrimary, MotorType.kBrushless);
+    private CANSparkMax m_leftFollower = new CANSparkMax(CAN.kDriveLeftFollower, MotorType.kBrushless);
 
-    private CANSparkMax m_rightPrimary = new CANSparkMax(CAN.kRightPrimary, MotorType.kBrushless);
-    private CANSparkMax m_rightFollower = new CANSparkMax(CAN.kRightFollower, MotorType.kBrushless);
+    private CANSparkMax m_rightPrimary = new CANSparkMax(CAN.kDriveRightPrimary, MotorType.kBrushless);
+    private CANSparkMax m_rightFollower = new CANSparkMax(CAN.kDriveRightFollower, MotorType.kBrushless);
 
     private DifferentialDrive m_differentialDrive;
     private DifferentialDriveOdometry m_odometry;
@@ -57,7 +57,6 @@ public class DriveTrain extends SubsystemBase {
         m_ahrs.reset();
 
         m_odometry = new DifferentialDriveOdometry(Rotation2d.fromDegrees(getAngle()));
-
 
         m_pose = new Pose2d(0, 0, Rotation2d.fromDegrees(getAngle()));
         m_wheelSpeeds = new DifferentialDriveWheelSpeeds(0, 0);
