@@ -7,6 +7,10 @@
 
 package frc.robot;
 
+import com.revrobotics.ColorMatch;
+
+import edu.wpi.first.wpilibj.util.Color;
+
 import edu.wpi.first.wpilibj.controller.SimpleMotorFeedforward;
 import edu.wpi.first.wpilibj.kinematics.DifferentialDriveKinematics;
 import edu.wpi.first.wpilibj.trajectory.TrajectoryConfig;
@@ -35,6 +39,8 @@ public final class Constants {
             public static final int kClimberWinchRight = 23;
 
             public static final int kShooterMain = 31;
+            
+            public static final int kSpinnerMain = 41;
         }
     }
 
@@ -93,5 +99,10 @@ public final class Constants {
     }
 
     public static final class Spinner {
+        public static final Color kBlueTarget = ColorMatch.makeColor(0.17, 0.43, 0.41);
+        public static final Color kGreenTarget = ColorMatch.makeColor(0.23, 0.50, 0.27);
+        public static final Color kRedTarget = ColorMatch.makeColor(0.35, 0.43, 0.23);
+        public static final Color kYellowTarget = ColorMatch.makeColor(0.30, 0.52, 0.18);
+
     }
 }
