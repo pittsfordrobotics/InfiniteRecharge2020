@@ -26,9 +26,8 @@ import frc.robot.subsystems.Shooter;
  */
 public class RobotContainer {
     // The robot's subsystems and commands are defined here...
-    private ScaledJoystick m_joystick = new ScaledJoystick(0);
+    private XboxController m_controller = new XboxController(0);
     private AHRS m_ahrs = new AHRS(Port.kMXP);
-
     private DriveTrain m_driveTrain = new DriveTrain(m_ahrs);
     private Shooter m_shooter = new Shooter(m_joystick);
     /**
@@ -36,7 +35,8 @@ public class RobotContainer {
      */
     public RobotContainer() {
         // Configure the button bindings
-        m_driveTrain.setDefaultCommand(new DriveWithJoysticks(m_driveTrain, m_joystick));
+        m_ahrs.enableBoardlevelYawReset(true);
+        m_driveTrain.setDefaultCommand(new DriveWithXboxController(m_driveTrain, m_controller));
         configureButtonBindings();
     }
 
@@ -47,6 +47,9 @@ public class RobotContainer {
      * passing it to a {@link edu.wpi.first.wpilibj2.command.button.JoystickButton}.
      */
     private void configureButtonBindings() {
+        new POVButton(m_controller, 0).whenActive(()-> m_driveTrain.setThrottle(0.9));
+        new POVButton(m_controller, 270).whenActive(()-> m_driveTrain.setThrottle(0.6));
+        new POVButton(m_controller, 180).whenActive(()-> m_driveTrain.setThrottle(0.3));
     }
 
     /**
