@@ -9,8 +9,12 @@ package frc.robot;
 
 import com.revrobotics.ColorMatch;
 
-import edu.wpi.first.wpilibj.kinematics.DifferentialDriveKinematics;
 import edu.wpi.first.wpilibj.util.Color;
+
+import edu.wpi.first.wpilibj.controller.SimpleMotorFeedforward;
+import edu.wpi.first.wpilibj.kinematics.DifferentialDriveKinematics;
+import edu.wpi.first.wpilibj.trajectory.TrajectoryConfig;
+import edu.wpi.first.wpilibj.trajectory.constraint.DifferentialDriveVoltageConstraint;
 
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide
@@ -25,13 +29,44 @@ import edu.wpi.first.wpilibj.util.Color;
 public final class Constants {
     public static final class Ports {
         public static final class CAN {
-            public static final int kLeftPrimary = 1;
-            public static final int kLeftFollower = 4;
+            public static final int kDriveLeftPrimary = 11;
+            public static final int kDriveLeftFollower = 12;
+            public static final int kDriveRightPrimary = 13;
+            public static final int kDriveRightFollower = 14;
 
-            public static final int kRightPrimary = 2;
-            public static final int kRightFollower = 3;
-            public static final int kSpinnerMotor = 5;
+            public static final int kClimberTelescopingArm = 21;
+            public static final int kClimberWinchLeft = 22;
+            public static final int kClimberWinchRight = 23;
+
+            public static final int kShooterMain = 31;
+            
+            public static final int kSpinnerMain = 41;
         }
+    }
+
+    public static final class PWM {
+
+    }
+
+    public static final class DIO {
+
+    }
+
+    public static final class AIO {
+
+    }
+
+    public static final class Auto {
+        public static final TrajectoryConfig kConfig = new TrajectoryConfig(
+            Drive.kMaxVelocityMetersPerSecond,
+            Drive.kMaxAccelerationMetersPerSecondSquared)
+            .setKinematics(Drive.kKinematics)
+            .addConstraint(
+                new DifferentialDriveVoltageConstraint(new SimpleMotorFeedforward(Drive.kS, Drive.kV, Drive.kA),
+                Drive.kKinematics,
+                10
+            )
+        );
     }
 
     public static final class Drive {
@@ -50,11 +85,24 @@ public final class Constants {
         public static final double kWheelDiameterMeters = 0.1524;
         public static final DifferentialDriveKinematics kKinematics = new DifferentialDriveKinematics(0.563);
     }
-    
-    public static final class TargetColors{
+
+    public static final class Intake {
+
+    }
+
+    public static final class Shooter {
+
+    }
+
+    public static final class Climber {
+
+    }
+
+    public static final class Spinner {
         public static final Color kBlueTarget = ColorMatch.makeColor(0.17, 0.43, 0.41);
         public static final Color kGreenTarget = ColorMatch.makeColor(0.23, 0.50, 0.27);
         public static final Color kRedTarget = ColorMatch.makeColor(0.35, 0.43, 0.23);
         public static final Color kYellowTarget = ColorMatch.makeColor(0.30, 0.52, 0.18);
+
     }
 }
