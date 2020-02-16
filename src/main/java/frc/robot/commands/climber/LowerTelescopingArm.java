@@ -5,20 +5,16 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.commands;
+package frc.robot.commands.climber;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.Spinner;
 
-public class SpinTheSpinner extends CommandBase {
-  private Spinner m_spinner;
+public class LowerTelescopingArm extends CommandBase {
   /**
-   * Creates a new SpinTheSpinner.
+   * Creates a new LowerTelescopingArm.
    */
-  public SpinTheSpinner(Spinner newSpinner) {
-    m_spinner = newSpinner;
+  public LowerTelescopingArm() {
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(m_spinner);
   }
 
   // Called when the command is initially scheduled.
@@ -29,13 +25,11 @@ public class SpinTheSpinner extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_spinner.spin(0.5);
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    m_spinner.spin(0.0);
   }
 
   // Returns true when the command should end.
