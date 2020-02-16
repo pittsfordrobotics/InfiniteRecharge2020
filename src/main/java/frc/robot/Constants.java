@@ -25,12 +25,27 @@ import edu.wpi.first.wpilibj.trajectory.constraint.DifferentialDriveVoltageConst
 public final class Constants {
     public static final class Ports {
         public static final class CAN {
-            public static final int kLeftPrimary = 1;
-            public static final int kLeftFollower = 4;
+            public static final int kDriveLeftPrimary = 11;
+            public static final int kDriveLeftFollower = 12;
+            public static final int kDriveRightPrimary = 13;
+            public static final int kDriveRightFollower = 14;
 
-            public static final int kRightPrimary = 2;
-            public static final int kRightFollower = 3;
+            public static final int kClimberTelescopingArm = 21;
+            public static final int kClimberWinchLeft = 22;
+            public static final int kClimberWinchRight = 23;            
         }
+    }
+
+    public static final class PWM {
+
+    }
+
+    public static final class DIO {
+
+    }
+
+    public static final class AIO {
+
     }
 
     public static final class Auto {
@@ -61,5 +76,21 @@ public final class Constants {
         public static final double kGearRatio = 10.71;
         public static final double kWheelDiameterMeters = 0.1524;
         public static final DifferentialDriveKinematics kKinematics = new DifferentialDriveKinematics(0.563);
+    }
+
+    public static final class Intake {
+
+    }
+
+    public static final class Shooter {
+
+    }
+
+    public static final class Climber {
+
+    }
+
+    public static final class Spinner {
+
     }
 }
