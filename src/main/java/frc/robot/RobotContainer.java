@@ -33,7 +33,7 @@ public class RobotContainer {
     private AHRS m_ahrs = new AHRS(Port.kMXP);
     private DriveTrain m_driveTrain = new DriveTrain(m_ahrs);
     private Shooter m_shooter = new Shooter(m_joystick);
-    private Intake m_intake = new Intake();
+    private Intake m_intake = new Intake(m_joystick);
     /**
      * The container for the robot. Contains subsystems, OI devices, and commands.
      */
