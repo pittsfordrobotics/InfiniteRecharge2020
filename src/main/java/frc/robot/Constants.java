@@ -32,7 +32,9 @@ public final class Constants {
 
             public static final int kClimberTelescopingArm = 21;
             public static final int kClimberWinchLeft = 22;
-            public static final int kClimberWinchRight = 23;            
+            public static final int kClimberWinchRight = 23;
+
+            public static final int kShooterMain = 31;
         }
     }
 
@@ -91,9 +93,5 @@ public final class Constants {
     }
 
     public static final class Spinner {
-
-    public static final int kRightPrimary = 4;
-    public static final int kRightFollower = 5;
-
-    public static final int kShooter = 7;
+    }
 }

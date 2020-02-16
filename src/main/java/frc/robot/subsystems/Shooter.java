@@ -13,11 +13,11 @@ import frc.robot.ScaledJoystick;
 
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
-import static frc.robot.Constants.*;
+import static frc.robot.Constants.Ports.*;
 
 public class Shooter extends SubsystemBase {
 
-    private CANSparkMax m_sparkMax = new CANSparkMax(kShooter, MotorType.kBrushless);
+    private CANSparkMax m_sparkMax = new CANSparkMax(CAN.kShooterMain, MotorType.kBrushless);
     private ScaledJoystick m_joystick;
     /**
      * Creates a new Shooter.
