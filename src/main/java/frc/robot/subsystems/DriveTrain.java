@@ -58,7 +58,6 @@ public class DriveTrain extends SubsystemBase {
 
         m_odometry = new DifferentialDriveOdometry(Rotation2d.fromDegrees(getAngle()));
 
-
         m_pose = new Pose2d(0, 0, Rotation2d.fromDegrees(getAngle()));
         m_wheelSpeeds = new DifferentialDriveWheelSpeeds(0, 0);
 
