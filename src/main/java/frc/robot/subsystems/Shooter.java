@@ -26,6 +26,8 @@ public class Shooter extends SubsystemBase {
         m_joystick = joystick;
         SmartDashboard.putNumber("Max Speed", 0.5);
         SmartDashboard.putBoolean("Invert Motor", true);
+        m_sparkMax.getEncoder().setPositionConversionFactor(0.25);
+        m_sparkMax.getEncoder().setPosition(0.0);
     }
 
     @Override
@@ -33,6 +35,8 @@ public class Shooter extends SubsystemBase {
         // This method will be called once per scheduler run
         double maxSpeed = SmartDashboard.getNumber("Max Speed", 0.5);
         boolean invert = SmartDashboard.getBoolean("Invert Motor", true);
+        SmartDashboard.putNumber("Position", m_sparkMax.getEncoder().getPosition());
+        
         if (invert){
             m_sparkMax.set(m_joystick.getScaledThrottle()*maxSpeed*-1);
         }

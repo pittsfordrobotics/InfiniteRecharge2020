@@ -41,6 +41,8 @@ public final class Constants {
             public static final int kShooterMain = 31;
             
             public static final int kSpinnerMain = 41;
+
+            public static final int kIntakeInner = 51;
         }
     }
 

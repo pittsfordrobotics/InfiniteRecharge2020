@@ -16,6 +16,7 @@ import edu.wpi.first.wpilibj2.command.button.POVButton;
 import frc.robot.commands.drivetrain.DriveWithXboxController;
 import frc.robot.commands.auto.FollowPath;
 import frc.robot.subsystems.DriveTrain;
+import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Shooter;
 
 /**
@@ -32,6 +33,7 @@ public class RobotContainer {
     private AHRS m_ahrs = new AHRS(Port.kMXP);
     private DriveTrain m_driveTrain = new DriveTrain(m_ahrs);
     private Shooter m_shooter = new Shooter(m_joystick);
+    private Intake m_intake = new Intake(m_joystick);
     /**
      * The container for the robot. Contains subsystems, OI devices, and commands.
      */
