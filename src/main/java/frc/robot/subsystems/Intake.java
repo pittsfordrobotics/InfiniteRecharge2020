@@ -10,19 +10,26 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import static frc.robot.Constants.Ports.*;
 
 public class Intake extends SubsystemBase {
-    private CANSparkMax m_intakeSparkMax = new CANSparkMax(CAN.kIntakeInner, MotorType.kBrushless);
+    private CANSparkMax m_intakeInner = new CANSparkMax(CAN.kIntakeInner, MotorType.kBrushless);
+    private CANSparkMax m_intakeOuter = new CANSparkMax(CAN.kIntakeOuter, MotorType.kBrushless);
+
     private ScaledJoystick m_joystick;
-    private JoystickButton m_intakeButton;
+    private JoystickButton m_intakeInnerButton;
+    private JoystickButton m_intakeOuterButton;
     
     public Intake(ScaledJoystick joystick) {
         SmartDashboard.putNumber("Speed", 0.5);
         SmartDashboard.putBoolean("Reversed", false);
 
-        m_intakeSparkMax.getEncoder().setPositionConversionFactor(0);
-        m_intakeSparkMax.getEncoder().setPosition(0);
+        m_intakeInner.restoreFactoryDefaults();
+        m_intakeInner.getEncoder().setPosition(0);
+
+        m_intakeOuter.restoreFactoryDefaults();
+        m_intakeOuter.getEncoder().setPosition(0);
 
         m_joystick = joystick;
-        m_intakeButton = new JoystickButton(m_joystick, 4);
+        m_intakeInnerButton = new JoystickButton(m_joystick, 4);
+        m_intakeOuterButton = new JoystickButton(m_joystick, 5);
     }
     
     @Override
@@ -30,10 +37,14 @@ public class Intake extends SubsystemBase {
         double speed = SmartDashboard.getNumber("Speed", 0.5);
         boolean reversed = SmartDashboard.getBoolean("Reversed", false);
 
-        m_intakeSparkMax.setInverted(reversed);
+        m_intakeInner.setInverted(reversed);
 
-        if (m_intakeButton.get()){
-            m_intakeSparkMax.set(speed);
+        if (m_intakeInnerButton.get()){
+            m_intakeInner.set(speed);
+        }
+        
+        if (m_intakeOuterButton.get()){
+            m_intakeOuter.set(speed);
         }
     }
 }

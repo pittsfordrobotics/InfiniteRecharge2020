@@ -16,33 +16,42 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import static frc.robot.Constants.Ports.*;
 
 public class Shooter extends SubsystemBase {
+    private CANSparkMax m_shooterMain = new CANSparkMax(CAN.kShooterMain, MotorType.kBrushless);
+    private CANSparkMax m_shooterFeed = new CANSparkMax(CAN.kShooterFeed, MotorType.kBrushless);
 
-    private CANSparkMax m_sparkMax = new CANSparkMax(CAN.kShooterMain, MotorType.kBrushless);
     private ScaledJoystick m_joystick;
     /**
      * Creates a new Shooter.
      */
     public Shooter(ScaledJoystick joystick) {
         m_joystick = joystick;
-        SmartDashboard.putNumber("Max Speed", 0.5);
-        SmartDashboard.putBoolean("Invert Motor", true);
-        m_sparkMax.getEncoder().setPositionConversionFactor(0.25);
-        m_sparkMax.getEncoder().setPosition(0.0);
+
+        SmartDashboard.putNumber("Max Speed Main", 0.5);
+        SmartDashboard.putBoolean("Invert Motor Main", true);
+
+        SmartDashboard.putNumber("Max Speed Feed", 0.5);
+        SmartDashboard.putBoolean("Invert Motor Feed", true);
+
+        m_shooterMain.restoreFactoryDefaults();
+        m_shooterMain.getEncoder().setPosition(0);
+
+        m_shooterFeed.restoreFactoryDefaults();
+        m_shooterFeed.getEncoder().setPosition(0);
     }
 
     @Override
     public void periodic() {
         // This method will be called once per scheduler run
-        double maxSpeed = SmartDashboard.getNumber("Max Speed", 0.5);
-        boolean invert = SmartDashboard.getBoolean("Invert Motor", true);
-        SmartDashboard.putNumber("Position", m_sparkMax.getEncoder().getPosition());
-        
-        if (invert){
-            m_sparkMax.set(m_joystick.getScaledThrottle()*maxSpeed*-1);
-        }
-        else {
-            m_sparkMax.set(m_joystick.getScaledThrottle()*maxSpeed);
-        }
+        double maxSpeedMain = SmartDashboard.getNumber("Max Speed Main", 0.5);
+        boolean invertMain = SmartDashboard.getBoolean("Invert Motor Main", true);
 
+        double maxSpeedFeed = SmartDashboard.getNumber("Max Speed Main", 0.5);
+        boolean invertFeed = SmartDashboard.getBoolean("Invert Motor Main", true);
+
+        m_shooterMain.setInverted(invertMain);
+        m_shooterFeed.setInverted(invertFeed);
+
+        m_shooterMain.set(m_joystick.getScaledThrottle() * maxSpeedMain);
+        m_shooterFeed.set(m_joystick.getScaledThrottle() * maxSpeedFeed);
     }
 }

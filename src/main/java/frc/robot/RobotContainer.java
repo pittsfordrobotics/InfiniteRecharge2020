@@ -12,9 +12,14 @@ import com.kauailabs.navx.frc.AHRS;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.SPI.Port;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
 import frc.robot.commands.drivetrain.DriveWithXboxController;
 import frc.robot.commands.auto.FollowPath;
+import frc.robot.commands.climber.LowerTelescopingArm;
+import frc.robot.commands.climber.RaiseTelescopingArm;
+import frc.robot.commands.climber.WinchUp;
+import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Shooter;
@@ -32,6 +37,7 @@ public class RobotContainer {
     private ScaledJoystick m_joystick = new ScaledJoystick(1);
     private AHRS m_ahrs = new AHRS(Port.kMXP);
     private DriveTrain m_driveTrain = new DriveTrain(m_ahrs);
+    private Climber m_climber = new Climber();
     private Shooter m_shooter = new Shooter(m_joystick);
     private Intake m_intake = new Intake(m_joystick);
     /**
@@ -53,6 +59,10 @@ public class RobotContainer {
         new POVButton(m_controller, 0).whenActive(()-> m_driveTrain.setThrottle(0.9));
         new POVButton(m_controller, 270).whenActive(()-> m_driveTrain.setThrottle(0.6));
         new POVButton(m_controller, 180).whenActive(()-> m_driveTrain.setThrottle(0.3));
+
+        new JoystickButton(m_joystick, 6).whileHeld(new RaiseTelescopingArm(m_climber));
+        new JoystickButton(m_joystick, 7).whileHeld(new LowerTelescopingArm(m_climber));
+        new JoystickButton(m_joystick, 8).whileHeld(new WinchUp(m_climber));
     }
 
     /**

@@ -11,36 +11,36 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Spinner;
 
 public class SpinTheSpinner extends CommandBase {
-  private Spinner m_spinner;
-  /**
-   * Creates a new SpinTheSpinner.
-   */
-  public SpinTheSpinner(Spinner newSpinner) {
-    m_spinner = newSpinner;
-    // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(m_spinner);
-  }
+    private Spinner m_spinner;
 
-  // Called when the command is initially scheduled.
-  @Override
-  public void initialize() {
-  }
+    /**
+     * Creates a new SpinTheSpinner.
+     */
+    public SpinTheSpinner(Spinner spinner) {
+        addRequirements(spinner);
+        m_spinner = spinner;
+    }
 
-  // Called every time the scheduler runs while the command is scheduled.
-  @Override
-  public void execute() {
-    m_spinner.spin(0.5);
-  }
+    // Called when the command is initially scheduled.
+    @Override
+    public void initialize() {
+    }
 
-  // Called once the command ends or is interrupted.
-  @Override
-  public void end(boolean interrupted) {
-    m_spinner.spin(0.0);
-  }
+    // Called every time the scheduler runs while the command is scheduled.
+    @Override
+    public void execute() {
+        m_spinner.spin(0.5);
+    }
 
-  // Returns true when the command should end.
-  @Override
-  public boolean isFinished() {
-    return false;
-  }
+    // Called once the command ends or is interrupted.
+    @Override
+    public void end(boolean interrupted) {
+        m_spinner.spin(0);
+    }
+
+    // Returns true when the command should end.
+    @Override
+    public boolean isFinished() {
+        return false;
+    }
 }
