@@ -16,28 +16,34 @@ import static frc.robot.Constants.Ports.*;
 
 public class Shooter extends SubsystemBase {
     private CANSparkMax m_shooterMain = new CANSparkMax(CAN.kShooterMain, MotorType.kBrushless);
+    private CANSparkMax m_shooterSecondary = new CANSparkMax(CAN.kShooterSecondary, MotorType.kBrushless);
     private CANSparkMax m_shooterFeeder = new CANSparkMax(CAN.kShooterFeeder, MotorType.kBrushless);
-    private CANSparkMax m_shooterBeltFeeder = new CANSparkMax(CAN.kShooterBeltFeeder, MotorType.kBrushless);
 
     /**
      * Creates a new Shooter.
      */
     public Shooter() {
         SmartDashboard.putNumber("Speed Main", 0.5);
+        SmartDashboard.putNumber("Speed Secondary", 0.5);
         SmartDashboard.putNumber("Speed Feeder", 0.5);
-        SmartDashboard.putNumber("Speed Belt Feeder", 0.5);
 
         m_shooterMain.restoreFactoryDefaults();
         m_shooterMain.getEncoder().setPosition(0);
+
+        m_shooterSecondary.restoreFactoryDefaults();
+        m_shooterSecondary.getEncoder().setPosition(0);
 
         m_shooterFeeder.restoreFactoryDefaults();
         m_shooterFeeder.getEncoder().setPosition(0);
     }
 
-    public void driveMotors(double mainSpeed, double feederSpeed, double beltFeederSpeed) {
+    public void driveMotors(double mainSpeed, double secondarySpeed) {
         m_shooterMain.set(mainSpeed);
+        m_shooterSecondary.set(secondarySpeed);
+    }
+
+    public void feed(double feederSpeed) {
         m_shooterFeeder.set(feederSpeed);
-        m_shooterBeltFeeder.set(beltFeederSpeed);
     }
 
     @Override

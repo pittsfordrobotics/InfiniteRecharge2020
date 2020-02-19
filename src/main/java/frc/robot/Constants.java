@@ -39,8 +39,8 @@ public final class Constants {
             public static final int kClimberWinchRight = 23;
 
             public static final int kShooterMain = 31;
-            public static final int kShooterFeeder = 32;
-            public static final int kShooterBeltFeeder = 33;
+            public static final int kShooterSecondary = 32;
+            public static final int kShooterFeeder = 33;
             
             public static final int kSpinnerMain = 41;
 

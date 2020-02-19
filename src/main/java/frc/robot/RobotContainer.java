@@ -18,6 +18,7 @@ import frc.robot.commands.drivetrain.DriveWithXboxController;
 import frc.robot.commands.intake.DriveIntake;
 import frc.robot.commands.intake.ToggleIntakeExtend;
 import frc.robot.commands.shooter.DriveShooter;
+import frc.robot.commands.shooter.FeedShooter;
 import frc.robot.commands.spinner.DriveSpinner;
 import frc.robot.commands.auto.FollowPath;
 import frc.robot.commands.climber.LowerTelescopingArm;
@@ -63,20 +64,26 @@ public class RobotContainer {
      * passing it to a {@link edu.wpi.first.wpilibj2.command.button.JoystickButton}.
      */
     private void configureButtonBindings() {
+        // Drivetrain
         new POVButton(m_controller, 0).whenActive(()-> m_driveTrain.setThrottle(0.9));
         new POVButton(m_controller, 270).whenActive(()-> m_driveTrain.setThrottle(0.6));
         new POVButton(m_controller, 180).whenActive(()-> m_driveTrain.setThrottle(0.3));
 
+        // Climber
         new JoystickButton(m_controller, 1).whileHeld(new RaiseTelescopingArm(m_climber));
         new JoystickButton(m_controller, 2).whileHeld(new LowerTelescopingArm(m_climber));
         new JoystickButton(m_controller, 3).whileHeld(new WinchUp(m_climber));
 
+        // Intake
         new JoystickButton(m_controller, 4).whenPressed(new ToggleIntakeExtend(m_intake));
         new JoystickButton(m_controller, 5).whileHeld(new DriveIntake(m_intake));
 
+        // Shooter
         new JoystickButton(m_joystick, 4).whileHeld(new DriveShooter(m_shooter));
+        new JoystickButton(m_joystick, 5).whileHeld(new FeedShooter(m_shooter));
         
-        new JoystickButton(m_joystick, 5).whileHeld(new DriveSpinner(m_spinner));
+        // Spinner
+        new JoystickButton(m_joystick, 6).whileHeld(new DriveSpinner(m_spinner));
     }
 
     /**
