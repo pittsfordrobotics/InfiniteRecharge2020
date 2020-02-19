@@ -5,23 +5,21 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.commands.climber;
+package frc.robot.commands.spinner;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.Climber;
+import frc.robot.subsystems.Spinner;
 
-public class RaiseTelescopingArm extends CommandBase {
-    private Climber m_climber;
+public class DriveSpinner extends CommandBase {
+    private Spinner m_spinner;
 
     /**
-     * Creates a new RaiseTelescopingArm.
+     * Creates a new SpinTheSpinner.
      */
-    public RaiseTelescopingArm(Climber climber) {
-        // Use addRequirements() here to declare subsystem dependencies.
-        addRequirements(climber);
-
-        m_climber = climber;
+    public DriveSpinner(Spinner spinner) {
+        addRequirements(spinner);
+        m_spinner = spinner;
     }
 
     // Called when the command is initially scheduled.
@@ -32,14 +30,14 @@ public class RaiseTelescopingArm extends CommandBase {
     // Called every time the scheduler runs while the command is scheduled.
     @Override
     public void execute() {
-        double speed = SmartDashboard.getNumber("Telescoping Arm Speed", 0.5);
-        m_climber.driveTelescopingArm(speed);
+        double speed = SmartDashboard.getNumber("Spinner Speed", 0.5);
+        m_spinner.spin(speed);
     }
 
     // Called once the command ends or is interrupted.
     @Override
     public void end(boolean interrupted) {
-        m_climber.driveTelescopingArm(0);
+        m_spinner.spin(0);
     }
 
     // Returns true when the command should end.

@@ -10,11 +10,12 @@ package frc.robot.subsystems;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.Ports.*;
 
 public class Climber extends SubsystemBase {
-    private CANSparkMax m_telescopingArmMotor = new CANSparkMax(CAN.kClimberTelescopingArm, MotorType.kBrushless);
+    private CANSparkMax m_telescopingArm = new CANSparkMax(CAN.kClimberTelescopingArm, MotorType.kBrushless);
     private CANSparkMax m_winchLeft = new CANSparkMax(CAN.kClimberWinchLeft, MotorType.kBrushless);
     private CANSparkMax m_winchRight = new CANSparkMax(CAN.kClimberWinchRight, MotorType.kBrushless);
 
@@ -22,11 +23,22 @@ public class Climber extends SubsystemBase {
     * Creates a new Climber.
     */
     public Climber() {
-       m_winchRight.setInverted(true);
+        SmartDashboard.putNumber("Telescoping Arm Speed", 0.5);
+        SmartDashboard.putNumber("Winch Speed", 0.5);
+
+        m_telescopingArm.restoreFactoryDefaults();
+        m_telescopingArm.getEncoder().setPosition(0);
+
+        m_winchLeft.restoreFactoryDefaults();
+        m_winchLeft.getEncoder().setPosition(0);
+
+        m_winchRight.restoreFactoryDefaults();
+        m_winchRight.getEncoder().setPosition(0);
+        m_winchRight.setInverted(true);
     }
 
     public void driveTelescopingArm(double speed) {
-        m_telescopingArmMotor.set(speed);
+        m_telescopingArm.set(speed);
     }
 
     public void driveWinch(double speed) {

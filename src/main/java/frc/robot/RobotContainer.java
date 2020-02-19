@@ -15,6 +15,10 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
 import frc.robot.commands.drivetrain.DriveWithXboxController;
+import frc.robot.commands.intake.DriveIntake;
+import frc.robot.commands.intake.ToggleIntakeExtend;
+import frc.robot.commands.shooter.DriveShooter;
+import frc.robot.commands.spinner.DriveSpinner;
 import frc.robot.commands.auto.FollowPath;
 import frc.robot.commands.climber.LowerTelescopingArm;
 import frc.robot.commands.climber.RaiseTelescopingArm;
@@ -23,6 +27,7 @@ import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Shooter;
+import frc.robot.subsystems.Spinner;
 
 /**
  * This class is where the bulk of the robot should be declared. Since
@@ -38,8 +43,10 @@ public class RobotContainer {
     private AHRS m_ahrs = new AHRS(Port.kMXP);
     private DriveTrain m_driveTrain = new DriveTrain(m_ahrs);
     private Climber m_climber = new Climber();
-    private Shooter m_shooter = new Shooter(m_joystick);
-    private Intake m_intake = new Intake(m_joystick);
+    private Shooter m_shooter = new Shooter();
+    private Intake m_intake = new Intake();
+    private Spinner m_spinner = new Spinner();
+
     /**
      * The container for the robot. Contains subsystems, OI devices, and commands.
      */
@@ -60,9 +67,16 @@ public class RobotContainer {
         new POVButton(m_controller, 270).whenActive(()-> m_driveTrain.setThrottle(0.6));
         new POVButton(m_controller, 180).whenActive(()-> m_driveTrain.setThrottle(0.3));
 
-        new JoystickButton(m_joystick, 6).whileHeld(new RaiseTelescopingArm(m_climber));
-        new JoystickButton(m_joystick, 7).whileHeld(new LowerTelescopingArm(m_climber));
-        new JoystickButton(m_joystick, 8).whileHeld(new WinchUp(m_climber));
+        new JoystickButton(m_controller, 1).whileHeld(new RaiseTelescopingArm(m_climber));
+        new JoystickButton(m_controller, 2).whileHeld(new LowerTelescopingArm(m_climber));
+        new JoystickButton(m_controller, 3).whileHeld(new WinchUp(m_climber));
+
+        new JoystickButton(m_controller, 4).whenPressed(new ToggleIntakeExtend(m_intake));
+        new JoystickButton(m_controller, 5).whileHeld(new DriveIntake(m_intake));
+
+        new JoystickButton(m_joystick, 4).whileHeld(new DriveShooter(m_shooter));
+        
+        new JoystickButton(m_joystick, 5).whileHeld(new DriveSpinner(m_spinner));
     }
 
     /**

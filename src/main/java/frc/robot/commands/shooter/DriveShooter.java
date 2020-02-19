@@ -5,20 +5,21 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.commands.spinner;
+package frc.robot.commands.shooter;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.Spinner;
+import frc.robot.subsystems.Shooter;
 
-public class SpinTheSpinner extends CommandBase {
-    private Spinner m_spinner;
+public class DriveShooter extends CommandBase {
+    private Shooter m_shooter;
 
     /**
-     * Creates a new SpinTheSpinner.
+     * Creates a new DriveShooter.
      */
-    public SpinTheSpinner(Spinner spinner) {
-        addRequirements(spinner);
-        m_spinner = spinner;
+    public DriveShooter(Shooter shooter) {
+        addRequirements(shooter);
+        m_shooter = shooter;
     }
 
     // Called when the command is initially scheduled.
@@ -29,13 +30,15 @@ public class SpinTheSpinner extends CommandBase {
     // Called every time the scheduler runs while the command is scheduled.
     @Override
     public void execute() {
-        m_spinner.spin(0.5);
+        double mainSpeed = SmartDashboard.getNumber("Speed Main", 0.5);
+        double feederSpeed = SmartDashboard.getNumber("Speed Feeder", 0.5);
+        m_shooter.driveMotors(mainSpeed, feederSpeed);
     }
 
     // Called once the command ends or is interrupted.
     @Override
     public void end(boolean interrupted) {
-        m_spinner.spin(0);
+        m_shooter.driveMotors(0, 0);
     }
 
     // Returns true when the command should end.

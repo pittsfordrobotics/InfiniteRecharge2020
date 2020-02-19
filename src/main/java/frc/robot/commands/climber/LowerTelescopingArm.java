@@ -7,6 +7,7 @@
 
 package frc.robot.commands.climber;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Climber;
 
@@ -30,7 +31,8 @@ public class LowerTelescopingArm extends CommandBase {
     // Called every time the scheduler runs while the command is scheduled.
     @Override
     public void execute() {
-        m_climber.driveTelescopingArm(-0.5);
+        double speed = SmartDashboard.getNumber("Telescoping Arm Speed", 0.5);
+        m_climber.driveTelescopingArm(-speed);
     }
 
     // Called once the command ends or is interrupted.
