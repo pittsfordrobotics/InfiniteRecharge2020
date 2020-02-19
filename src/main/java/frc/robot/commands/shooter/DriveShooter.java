@@ -32,13 +32,14 @@ public class DriveShooter extends CommandBase {
     public void execute() {
         double mainSpeed = SmartDashboard.getNumber("Speed Main", 0.5);
         double feederSpeed = SmartDashboard.getNumber("Speed Feeder", 0.5);
-        m_shooter.driveMotors(mainSpeed, feederSpeed);
+        double beltFeederSpeed = SmartDashboard.getNumber("Speed Belt Feeder", 0.5);
+        m_shooter.driveMotors(mainSpeed, feederSpeed, beltFeederSpeed);
     }
 
     // Called once the command ends or is interrupted.
     @Override
     public void end(boolean interrupted) {
-        m_shooter.driveMotors(0, 0);
+        m_shooter.driveMotors(0, 0, 0);
     }
 
     // Returns true when the command should end.

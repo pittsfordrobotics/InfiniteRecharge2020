@@ -40,6 +40,7 @@ public final class Constants {
 
             public static final int kShooterMain = 31;
             public static final int kShooterFeeder = 32;
+            public static final int kShooterBeltFeeder = 33;
             
             public static final int kSpinnerMain = 41;
 
