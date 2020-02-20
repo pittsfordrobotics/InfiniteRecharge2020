@@ -93,7 +93,11 @@ public final class Constants {
     }
 
     public static final class Intake {
-
+        public static final double kMaxActuatorPulse = 2;
+        public static final double kCenterActuatorPulse = 1.5;
+        public static final double kMinActuatorPulse = 1;
+        public static final double kMaxActuatorDeadband = 0.05;
+        public static final double kMinActuatorDeadband = 0;
     }
 
     public static final class Shooter {

@@ -8,6 +8,7 @@ import frc.robot.Constants.PWM;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import static frc.robot.Constants.Ports.*;
+import static frc.robot.Constants.Intake.*;
 
 public class Intake extends SubsystemBase {
     private CANSparkMax m_intakeInner = new CANSparkMax(CAN.kIntakeInner, MotorType.kBrushless);
@@ -29,6 +30,9 @@ public class Intake extends SubsystemBase {
 
         m_intakeOuter.restoreFactoryDefaults();
         m_intakeOuter.getEncoder().setPosition(0);
+
+        m_leftActuator.setBounds(kMaxActuatorPulse, kMaxActuatorDeadband, kCenterActuatorPulse, kMinActuatorDeadband, kMinActuatorPulse);
+        m_rightActuator.setBounds(kMaxActuatorPulse, kMaxActuatorDeadband, kCenterActuatorPulse, kMinActuatorDeadband, kMinActuatorPulse);
     }
 
     public void extend(double setpoint) {
