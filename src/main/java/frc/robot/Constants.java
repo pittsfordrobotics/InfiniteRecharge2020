@@ -36,7 +36,6 @@ public final class Constants {
 
             public static final int kClimberTelescopingArm = 21;
             public static final int kClimberWinchLeft = 22;
-            public static final int kClimberWinchRight = 23;
 
             public static final int kShooterMain = 31;
             public static final int kShooterSecondary = 32;

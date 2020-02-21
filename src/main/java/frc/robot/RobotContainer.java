@@ -40,7 +40,6 @@ import frc.robot.subsystems.Spinner;
 public class RobotContainer {
     // The robot's subsystems and commands are defined here...
     private XboxController m_controller = new XboxController(0);
-    private ScaledJoystick m_joystick = new ScaledJoystick(1);
     private AHRS m_ahrs = new AHRS(Port.kMXP);
     private DriveTrain m_driveTrain = new DriveTrain(m_ahrs);
     private Climber m_climber = new Climber();
@@ -64,26 +63,36 @@ public class RobotContainer {
      * passing it to a {@link edu.wpi.first.wpilibj2.command.button.JoystickButton}.
      */
     private void configureButtonBindings() {
+        JoystickButton shiftButton = new JoystickButton(m_controller, XboxController.Button.kBumperLeft.value);
+        JoystickButton toggleIntakeExtendButton = new JoystickButton(m_controller, XboxController.Button.kY.value);
+        JoystickButton driveIntakeButton = new JoystickButton(m_controller, XboxController.Button.kX.value);
+        JoystickButton winchUpButton = new JoystickButton(m_controller, XboxController.Button.kStart.value);
+        JoystickButton telescopeUpButton = new JoystickButton(m_controller, XboxController.Button.kBumperRight.value);
+        JoystickButton driveShooterButton = new JoystickButton(m_controller, XboxController.Button.kA.value);
+        JoystickButton feedShooterButton = new JoystickButton(m_controller, XboxController.Button.kB.value);
+        JoystickButton driveSpinnerButton = new JoystickButton(m_controller, XboxController.Button.kBack.value);
+
         // Drivetrain
         new POVButton(m_controller, 0).whenActive(()-> m_driveTrain.setThrottle(0.9));
         new POVButton(m_controller, 270).whenActive(()-> m_driveTrain.setThrottle(0.6));
         new POVButton(m_controller, 180).whenActive(()-> m_driveTrain.setThrottle(0.3));
 
         // Climber
-        new JoystickButton(m_controller, 1).whileHeld(new RaiseTelescopingArm(m_climber));
-        new JoystickButton(m_controller, 2).whileHeld(new LowerTelescopingArm(m_climber));
-        new JoystickButton(m_controller, 3).whileHeld(new WinchUp(m_climber));
+        telescopeUpButton.and(shiftButton.negate()).whenActive(new RaiseTelescopingArm(m_climber));
+        telescopeUpButton.and(shiftButton).whenActive(new LowerTelescopingArm(m_climber));
+
+        winchUpButton.whileHeld(new WinchUp(m_climber));
 
         // Intake
-        new JoystickButton(m_controller, 4).whenPressed(new ToggleIntakeExtend(m_intake));
-        new JoystickButton(m_controller, 5).whileHeld(new DriveIntake(m_intake));
+        toggleIntakeExtendButton.whenPressed(new ToggleIntakeExtend(m_intake));
+        driveIntakeButton.whileHeld(new DriveIntake(m_intake));
 
         // Shooter
-        new JoystickButton(m_joystick, 4).whileHeld(new DriveShooter(m_shooter));
-        new JoystickButton(m_joystick, 5).whileHeld(new FeedShooter(m_shooter));
+        driveShooterButton.whileHeld(new DriveShooter(m_shooter));
+        feedShooterButton.whileHeld(new FeedShooter(m_shooter));
         
         // Spinner
-        new JoystickButton(m_joystick, 6).whileHeld(new DriveSpinner(m_spinner));
+        driveSpinnerButton.whileHeld(new DriveSpinner(m_spinner));
     }
 
     /**
