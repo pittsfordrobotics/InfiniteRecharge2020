@@ -15,6 +15,7 @@ import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj.I2C.Port;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
@@ -30,6 +31,8 @@ public class Spinner extends SubsystemBase {
      * Creates a new Spinner.
      */
     public Spinner() {
+        SmartDashboard.putNumber("Spinner Speed", 0.5);
+
         m_spinnerMotor.restoreFactoryDefaults();
         m_spinnerMotor.getEncoder().setPosition(0);
         m_spinnerMotor.setIdleMode(IdleMode.kBrake);
@@ -52,6 +55,5 @@ public class Spinner extends SubsystemBase {
 
     @Override
     public void periodic() {
-        // This method will be called once per scheduler run
     }
 }

@@ -15,6 +15,11 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
 import frc.robot.commands.drivetrain.DriveWithXboxController;
+import frc.robot.commands.intake.DriveIntake;
+import frc.robot.commands.intake.ToggleIntakeExtend;
+import frc.robot.commands.shooter.DriveShooter;
+import frc.robot.commands.shooter.FeedShooter;
+import frc.robot.commands.spinner.DriveSpinner;
 import frc.robot.commands.auto.FollowPath;
 import frc.robot.commands.climber.LowerTelescopingArm;
 import frc.robot.commands.climber.RaiseTelescopingArm;
@@ -23,6 +28,7 @@ import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Shooter;
+import frc.robot.subsystems.Spinner;
 
 /**
  * This class is where the bulk of the robot should be declared. Since
@@ -34,12 +40,13 @@ import frc.robot.subsystems.Shooter;
 public class RobotContainer {
     // The robot's subsystems and commands are defined here...
     private XboxController m_controller = new XboxController(0);
-    private ScaledJoystick m_joystick = new ScaledJoystick(1);
     private AHRS m_ahrs = new AHRS(Port.kMXP);
     private DriveTrain m_driveTrain = new DriveTrain(m_ahrs);
     private Climber m_climber = new Climber();
-    private Shooter m_shooter = new Shooter(m_joystick);
-    private Intake m_intake = new Intake(m_joystick);
+    private Shooter m_shooter = new Shooter();
+    private Intake m_intake = new Intake();
+    private Spinner m_spinner = new Spinner();
+
     /**
      * The container for the robot. Contains subsystems, OI devices, and commands.
      */
@@ -56,13 +63,36 @@ public class RobotContainer {
      * passing it to a {@link edu.wpi.first.wpilibj2.command.button.JoystickButton}.
      */
     private void configureButtonBindings() {
+        JoystickButton shiftButton = new JoystickButton(m_controller, XboxController.Button.kBumperLeft.value);
+        JoystickButton toggleIntakeExtendButton = new JoystickButton(m_controller, XboxController.Button.kY.value);
+        JoystickButton driveIntakeButton = new JoystickButton(m_controller, XboxController.Button.kX.value);
+        JoystickButton winchUpButton = new JoystickButton(m_controller, XboxController.Button.kStart.value);
+        JoystickButton telescopeUpButton = new JoystickButton(m_controller, XboxController.Button.kBumperRight.value);
+        JoystickButton driveShooterButton = new JoystickButton(m_controller, XboxController.Button.kA.value);
+        JoystickButton feedShooterButton = new JoystickButton(m_controller, XboxController.Button.kB.value);
+        JoystickButton driveSpinnerButton = new JoystickButton(m_controller, XboxController.Button.kBack.value);
+
+        // Drivetrain
         new POVButton(m_controller, 0).whenActive(()-> m_driveTrain.setThrottle(0.9));
         new POVButton(m_controller, 270).whenActive(()-> m_driveTrain.setThrottle(0.6));
         new POVButton(m_controller, 180).whenActive(()-> m_driveTrain.setThrottle(0.3));
 
-        new JoystickButton(m_joystick, 6).whileHeld(new RaiseTelescopingArm(m_climber));
-        new JoystickButton(m_joystick, 7).whileHeld(new LowerTelescopingArm(m_climber));
-        new JoystickButton(m_joystick, 8).whileHeld(new WinchUp(m_climber));
+        // Climber
+        telescopeUpButton.and(shiftButton.negate()).whenActive(new RaiseTelescopingArm(m_climber));
+        telescopeUpButton.and(shiftButton).whenActive(new LowerTelescopingArm(m_climber));
+
+        winchUpButton.whileHeld(new WinchUp(m_climber));
+
+        // Intake
+        toggleIntakeExtendButton.whenPressed(new ToggleIntakeExtend(m_intake));
+        driveIntakeButton.whileHeld(new DriveIntake(m_intake));
+
+        // Shooter
+        driveShooterButton.whileHeld(new DriveShooter(m_shooter));
+        feedShooterButton.whileHeld(new FeedShooter(m_shooter));
+        
+        // Spinner
+        driveSpinnerButton.whileHeld(new DriveSpinner(m_spinner));
     }
 
     /**

@@ -1,25 +1,29 @@
 package frc.robot.subsystems;
 
+import edu.wpi.first.wpilibj.Servo;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-import frc.robot.ScaledJoystick;
+import frc.robot.Constants.PWM;
 
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import static frc.robot.Constants.Ports.*;
+import static frc.robot.Constants.Intake.*;
 
 public class Intake extends SubsystemBase {
     private CANSparkMax m_intakeInner = new CANSparkMax(CAN.kIntakeInner, MotorType.kBrushless);
     private CANSparkMax m_intakeOuter = new CANSparkMax(CAN.kIntakeOuter, MotorType.kBrushless);
 
-    private ScaledJoystick m_joystick;
-    private JoystickButton m_intakeInnerButton;
-    private JoystickButton m_intakeOuterButton;
-    
-    public Intake(ScaledJoystick joystick) {
-        SmartDashboard.putNumber("Speed", 0.5);
-        SmartDashboard.putBoolean("Reversed", false);
+    private Servo m_leftActuator = new Servo(PWM.kIntakeLeft);
+    private Servo m_rightActuator = new Servo(PWM.kIntakeRight);
+
+    private boolean m_isExtended = false;
+
+    public Intake() {
+        SmartDashboard.putNumber("Speed Inner", 0.5);
+        SmartDashboard.putNumber("Speed Inner", 0.5);
+
+        SmartDashboard.putNumber("Intake Extend", 0.5);
 
         m_intakeInner.restoreFactoryDefaults();
         m_intakeInner.getEncoder().setPosition(0);
@@ -27,24 +31,32 @@ public class Intake extends SubsystemBase {
         m_intakeOuter.restoreFactoryDefaults();
         m_intakeOuter.getEncoder().setPosition(0);
 
-        m_joystick = joystick;
-        m_intakeInnerButton = new JoystickButton(m_joystick, 4);
-        m_intakeOuterButton = new JoystickButton(m_joystick, 5);
+        m_leftActuator.setBounds(kMaxActuatorPulse, kMaxActuatorDeadband, kCenterActuatorPulse, kMinActuatorDeadband, kMinActuatorPulse);
+        m_rightActuator.setBounds(kMaxActuatorPulse, kMaxActuatorDeadband, kCenterActuatorPulse, kMinActuatorDeadband, kMinActuatorPulse);
+    }
+
+    public void extend(double setpoint) {
+        m_leftActuator.set(setpoint);
+        m_rightActuator.set(setpoint);
+        m_isExtended = true;
+    }
+
+    public void retract() {
+        m_leftActuator.set(0);
+        m_rightActuator.set(0);
+        m_isExtended = false;
+    }
+
+    public void driveMotors(double innerSpeed, double outerSpeed) {
+        m_intakeInner.set(innerSpeed);
+        m_intakeOuter.set(outerSpeed);
+    }
+
+    public boolean isExtended() {
+        return m_isExtended;
     }
     
     @Override
     public void periodic() {
-        double speed = SmartDashboard.getNumber("Speed", 0.5);
-        boolean reversed = SmartDashboard.getBoolean("Reversed", false);
-
-        m_intakeInner.setInverted(reversed);
-
-        if (m_intakeInnerButton.get()){
-            m_intakeInner.set(speed);
-        }
-        
-        if (m_intakeOuterButton.get()){
-            m_intakeOuter.set(speed);
-        }
     }
 }

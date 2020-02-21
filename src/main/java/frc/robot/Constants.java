@@ -36,10 +36,10 @@ public final class Constants {
 
             public static final int kClimberTelescopingArm = 21;
             public static final int kClimberWinchLeft = 22;
-            public static final int kClimberWinchRight = 23;
 
             public static final int kShooterMain = 31;
-            public static final int kShooterFeed = 32;
+            public static final int kShooterSecondary = 32;
+            public static final int kShooterFeeder = 33;
             
             public static final int kSpinnerMain = 41;
 
@@ -49,7 +49,8 @@ public final class Constants {
     }
 
     public static final class PWM {
-
+        public static final int kIntakeLeft = 1;
+        public static final int kIntakeRight = 2;
     }
 
     public static final class DIO {
@@ -91,7 +92,11 @@ public final class Constants {
     }
 
     public static final class Intake {
-
+        public static final double kMaxActuatorPulse = 2;
+        public static final double kCenterActuatorPulse = 1.5;
+        public static final double kMinActuatorPulse = 1;
+        public static final double kMaxActuatorDeadband = 0.05;
+        public static final double kMinActuatorDeadband = 0;
     }
 
     public static final class Shooter {
