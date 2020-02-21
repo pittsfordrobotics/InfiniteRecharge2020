@@ -35,13 +35,13 @@ public final class Constants {
             public static final int kDriveRightFollower = 14;
 
             public static final int kClimberTelescopingArm = 21;
-            public static final int kClimberWinchLeft = 22;
+            public static final int kClimberWinch = 22;
 
             public static final int kShooterMain = 31;
-            public static final int kShooterSecondary = 32;
-            public static final int kShooterFeeder = 33;
+            public static final int kShooterFeeder = 32;
+            public static final int kShooterAgitator = 33;
             
-            public static final int kSpinnerMain = 41;
+            public static final int kSpinnerLeftRight = 41;
 
             public static final int kIntakeInner = 51;
             public static final int kIntakeOuter = 52;

@@ -17,8 +17,9 @@ import edu.wpi.first.wpilibj2.command.button.POVButton;
 import frc.robot.commands.drivetrain.DriveWithXboxController;
 import frc.robot.commands.intake.DriveIntake;
 import frc.robot.commands.intake.ToggleIntakeExtend;
+import frc.robot.commands.shooter.DriveAgitator;
+import frc.robot.commands.shooter.DriveFeederOnly;
 import frc.robot.commands.shooter.DriveShooter;
-import frc.robot.commands.shooter.FeedShooter;
 import frc.robot.commands.spinner.DriveSpinner;
 import frc.robot.commands.auto.FollowPath;
 import frc.robot.commands.climber.LowerTelescopingArm;
@@ -69,7 +70,7 @@ public class RobotContainer {
         JoystickButton winchUpButton = new JoystickButton(m_controller, XboxController.Button.kStart.value);
         JoystickButton telescopeUpButton = new JoystickButton(m_controller, XboxController.Button.kBumperRight.value);
         JoystickButton driveShooterButton = new JoystickButton(m_controller, XboxController.Button.kA.value);
-        JoystickButton feedShooterButton = new JoystickButton(m_controller, XboxController.Button.kB.value);
+        JoystickButton driveAgitatorButton = new JoystickButton(m_controller, XboxController.Button.kB.value);
         JoystickButton driveSpinnerButton = new JoystickButton(m_controller, XboxController.Button.kBack.value);
 
         // Drivetrain
@@ -89,7 +90,8 @@ public class RobotContainer {
 
         // Shooter
         driveShooterButton.whileHeld(new DriveShooter(m_shooter));
-        feedShooterButton.whileHeld(new FeedShooter(m_shooter));
+        driveAgitatorButton.whileHeld(new DriveAgitator(m_shooter));
+        driveAgitatorButton.and(shiftButton).whenActive(new DriveFeederOnly(m_shooter));
         
         // Spinner
         driveSpinnerButton.whileHeld(new DriveSpinner(m_spinner));

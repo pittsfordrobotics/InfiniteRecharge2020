@@ -23,7 +23,7 @@ import static frc.robot.Constants.Spinner.*;
 import static frc.robot.Constants.Ports.*;
 
 public class Spinner extends SubsystemBase {
-    private CANSparkMax m_spinnerMotor = new CANSparkMax(CAN.kSpinnerMain, MotorType.kBrushless);
+    private CANSparkMax m_spinnerLeftRight = new CANSparkMax(CAN.kSpinnerLeftRight, MotorType.kBrushless);
     private ColorSensorV3 m_colorSensor = new ColorSensorV3(Port.kOnboard);
     private ColorMatch m_colorMatcher = new ColorMatch();
 
@@ -33,9 +33,9 @@ public class Spinner extends SubsystemBase {
     public Spinner() {
         SmartDashboard.putNumber("Spinner Speed", 0.5);
 
-        m_spinnerMotor.restoreFactoryDefaults();
-        m_spinnerMotor.getEncoder().setPosition(0);
-        m_spinnerMotor.setIdleMode(IdleMode.kBrake);
+        m_spinnerLeftRight.restoreFactoryDefaults();
+        m_spinnerLeftRight.getEncoder().setPosition(0);
+        m_spinnerLeftRight.setIdleMode(IdleMode.kBrake);
 
         m_colorMatcher.addColorMatch(kBlueTarget);
         m_colorMatcher.addColorMatch(kGreenTarget);
@@ -50,7 +50,7 @@ public class Spinner extends SubsystemBase {
     }
 
     public void spin(double spinSpeed) {
-        m_spinnerMotor.set(spinSpeed);
+        m_spinnerLeftRight.set(spinSpeed);
     }
 
     @Override

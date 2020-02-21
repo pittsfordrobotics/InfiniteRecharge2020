@@ -21,7 +21,7 @@ public class Intake extends SubsystemBase {
 
     public Intake() {
         SmartDashboard.putNumber("Speed Inner", 0.5);
-        SmartDashboard.putNumber("Speed Inner", 0.5);
+        SmartDashboard.putNumber("Speed Outer", 0.5);
 
         SmartDashboard.putNumber("Intake Extend", 0.5);
 

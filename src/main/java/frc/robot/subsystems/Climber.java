@@ -16,7 +16,7 @@ import frc.robot.Constants.Ports.*;
 
 public class Climber extends SubsystemBase {
     private CANSparkMax m_telescopingArm = new CANSparkMax(CAN.kClimberTelescopingArm, MotorType.kBrushless);
-    private CANSparkMax m_winchLeft = new CANSparkMax(CAN.kClimberWinchLeft, MotorType.kBrushless);
+    private CANSparkMax m_winch = new CANSparkMax(CAN.kClimberWinch, MotorType.kBrushless);
 
     /**
     * Creates a new Climber.
@@ -28,8 +28,8 @@ public class Climber extends SubsystemBase {
         m_telescopingArm.restoreFactoryDefaults();
         m_telescopingArm.getEncoder().setPosition(0);
 
-        m_winchLeft.restoreFactoryDefaults();
-        m_winchLeft.getEncoder().setPosition(0);
+        m_winch.restoreFactoryDefaults();
+        m_winch.getEncoder().setPosition(0);
     }
 
     public void driveTelescopingArm(double speed) {
@@ -37,7 +37,7 @@ public class Climber extends SubsystemBase {
     }
 
     public void driveWinch(double speed) {
-        m_winchLeft.set(speed);
+        m_winch.set(speed);
     }
 
     @Override
