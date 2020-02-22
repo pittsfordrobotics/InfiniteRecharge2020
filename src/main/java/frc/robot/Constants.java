@@ -100,9 +100,9 @@ public final class Constants {
     }
 
     public static final class Shooter {
-        public static final int kP = 100;
-        public static final int kF = 3900;
-        public static final int kSpeedDelta = 50;
+        public static final double kP = 0.0003;
+        public static final double kF = 0.00018;
+        public static final double kSpeedDelta = 100;
     }
 
     public static final class Climber {

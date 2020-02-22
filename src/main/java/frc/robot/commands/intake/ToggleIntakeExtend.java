@@ -33,7 +33,7 @@ public class ToggleIntakeExtend extends CommandBase {
         if (m_intake.isExtended()) {
             m_intake.retract();
         } else {
-            double setpoint = SmartDashboard.getNumber("Intake Extend", 0.5);
+            double setpoint = SmartDashboard.getNumber("Intake Extend", 1);
             m_intake.extend(setpoint);
         }
     }
