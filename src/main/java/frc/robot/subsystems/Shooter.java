@@ -33,7 +33,7 @@ public class Shooter extends SubsystemBase {
 
         m_shooterFeeder.restoreFactoryDefaults();
         m_shooterFeeder.getEncoder().setPosition(0);
-        m_shooterFeeder.follow(m_shooterMain);
+        m_shooterFeeder.setInverted(true);
 
         m_shooterAgitator.restoreFactoryDefaults();
         m_shooterAgitator.getEncoder().setPosition(0);
@@ -53,5 +53,6 @@ public class Shooter extends SubsystemBase {
 
     @Override
     public void periodic() {
+        SmartDashboard.putData("Shooter", this);
     }
 }

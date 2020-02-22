@@ -32,6 +32,7 @@ public class DriveFeederOnly extends CommandBase {
     public void execute() {
         double feederSpeed = SmartDashboard.getNumber("Speed Feeder", 0.5);
         m_shooter.driveFeeder(feederSpeed);
+        SmartDashboard.putBoolean("B pressed", true);
     }
 
     // Called once the command ends or is interrupted.
