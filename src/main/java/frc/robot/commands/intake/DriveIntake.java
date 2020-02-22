@@ -32,11 +32,11 @@ public class DriveIntake extends CommandBase {
     // Called every time the scheduler runs while the command is scheduled.
     @Override
     public void execute() {
-        double innerSpeed = SmartDashboard.getNumber("Speed Inner", 0.5);
+        double innerSpeed = SmartDashboard.getNumber("Speed Inner", 0.2);
         double outerSpeed = SmartDashboard.getNumber("Speed Outer", 0.5);
 
         if (m_invert) {
-            innerSpeed *= -1;
+            innerSpeed *= -2;
             outerSpeed *= -1;
         }
 

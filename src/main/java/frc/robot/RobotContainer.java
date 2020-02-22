@@ -67,13 +67,6 @@ public class RobotContainer {
      */
     private void configureButtonBindings() {
         JoystickButton shiftButton = new JoystickButton(m_controller, XboxController.Button.kBumperLeft.value);
-        JoystickButton toggleIntakeExtendButton = new JoystickButton(m_controller, XboxController.Button.kY.value);
-        JoystickButton driveIntakeButton = new JoystickButton(m_controller, XboxController.Button.kX.value);
-        JoystickButton winchUpButton = new JoystickButton(m_controller, XboxController.Button.kStart.value);
-        JoystickButton telescopeUpButton = new JoystickButton(m_controller, XboxController.Button.kBumperRight.value);
-        JoystickButton driveShooterButton = new JoystickButton(m_controller, XboxController.Button.kA.value);
-        JoystickButton driveAgitatorButton = new JoystickButton(m_controller, XboxController.Button.kB.value);
-        JoystickButton driveSpinnerButton = new JoystickButton(m_controller, XboxController.Button.kBack.value);
 
         // Drivetrain
         new POVButton(m_controller, 0).whenActive(()-> m_driveTrain.setThrottle(0.9));
@@ -81,22 +74,32 @@ public class RobotContainer {
         new POVButton(m_controller, 180).whenActive(()-> m_driveTrain.setThrottle(0.3));
 
         // Climber
-        telescopeUpButton.and(shiftButton.negate()).whenActive(new RaiseTelescopingArm(m_climber));
-        telescopeUpButton.and(shiftButton).whenActive(new LowerTelescopingArm(m_climber));
+        JoystickButton winchUpButton = new JoystickButton(m_controller, XboxController.Button.kStart.value);
+
+        //telescopeUpButton.and(shiftButton.negate()).whenActive(new RaiseTelescopingArm(m_climber));
+        //telescopeUpButton.and(shiftButton).whenActive(new LowerTelescopingArm(m_climber));
 
         winchUpButton.whileHeld(new WinchUp(m_climber));
 
         // Intake
+        JoystickButton toggleIntakeExtendButton = new JoystickButton(m_controller, XboxController.Button.kY.value);
+        JoystickButton driveIntakeButton = new JoystickButton(m_controller, XboxController.Button.kBumperRight.value);
+
         toggleIntakeExtendButton.whenPressed(new ToggleIntakeExtend(m_intake));
         driveIntakeButton.and(shiftButton.negate()).whileActiveContinuous(new DriveIntake(m_intake, false));
         driveIntakeButton.and(shiftButton).whileActiveContinuous(new DriveIntake(m_intake, true));
 
         // Shooter
+        JoystickButton driveShooterButton = new JoystickButton(m_controller, XboxController.Button.kA.value);
+        JoystickButton driveAgitatorButton = new JoystickButton(m_controller, XboxController.Button.kB.value);
+
         driveShooterButton.whileHeld(new DriveShooter(m_shooter));
         driveAgitatorButton.whileHeld(new DriveAgitator(m_shooter));
         driveAgitatorButton.and(shiftButton).whileActiveContinuous(new MakeRoomInHopper(m_shooter));
         
         // Spinner
+        JoystickButton driveSpinnerButton = new JoystickButton(m_controller, XboxController.Button.kBack.value);
+
         driveSpinnerButton.whileHeld(new DriveSpinner(m_spinner));
     }
 
