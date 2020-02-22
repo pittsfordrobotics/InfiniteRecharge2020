@@ -13,14 +13,17 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.SPI.Port;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
 import frc.robot.commands.drivetrain.DriveWithXboxController;
 import frc.robot.commands.intake.DriveIntake;
 import frc.robot.commands.intake.ToggleIntakeExtend;
 import frc.robot.commands.shooter.DriveAgitator;
+import frc.robot.commands.shooter.DriveFeederOnly;
 import frc.robot.commands.shooter.DriveShooter;
 import frc.robot.commands.shooter.MakeRoomInHopper;
+import frc.robot.commands.shooter.WaitForSetSpeed;
 import frc.robot.commands.spinner.DriveSpinner;
 import frc.robot.commands.auto.FollowPath;
 import frc.robot.commands.climber.LowerTelescopingArm;
@@ -42,6 +45,7 @@ import frc.robot.subsystems.Spinner;
 public class RobotContainer {
     // The robot's subsystems and commands are defined here...
     private XboxController m_controller = new XboxController(0);
+    private ScaledJoystick m_joystick = new ScaledJoystick(1);
     private AHRS m_ahrs = new AHRS(Port.kMXP);
     private DriveTrain m_driveTrain = new DriveTrain(m_ahrs);
     private Climber m_climber = new Climber();
@@ -75,6 +79,8 @@ public class RobotContainer {
         JoystickButton driveAgitatorButton = new JoystickButton(m_controller, XboxController.Button.kB.value);
         JoystickButton driveSpinnerButton = new JoystickButton(m_controller, XboxController.Button.kBack.value);
 
+        JoystickButton waitAndDriveFeederButton = new JoystickButton(m_controller, 4);
+
         // Drivetrain
         new POVButton(m_controller, 0).whenActive(()-> m_driveTrain.setThrottle(0.9));
         new POVButton(m_controller, 270).whenActive(()-> m_driveTrain.setThrottle(0.6));
@@ -94,6 +100,7 @@ public class RobotContainer {
         driveShooterButton.whileHeld(new DriveShooter(m_shooter));
         driveAgitatorButton.whileHeld(new DriveAgitator(m_shooter));
         driveAgitatorButton.and(shiftButton).whileActiveContinuous(new MakeRoomInHopper(m_shooter));
+        waitAndDriveFeederButton.whileHeld(new SequentialCommandGroup(new WaitForSetSpeed(m_shooter), new DriveFeederOnly(m_shooter)));
         
         // Spinner
         driveSpinnerButton.whileHeld(new DriveSpinner(m_spinner));
