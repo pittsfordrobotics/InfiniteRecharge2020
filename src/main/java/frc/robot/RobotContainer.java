@@ -88,7 +88,8 @@ public class RobotContainer {
 
         // Intake
         toggleIntakeExtendButton.whenPressed(new ToggleIntakeExtend(m_intake));
-        driveIntakeButton.whileHeld(new DriveIntake(m_intake));
+        driveIntakeButton.and(shiftButton.negate()).whileActiveContinuous(new DriveIntake(m_intake, false));
+        driveIntakeButton.and(shiftButton).whileActiveContinuous(new DriveIntake(m_intake, true));
 
         // Shooter
         driveShooterButton.whileHeld(new DriveShooter(m_shooter));
@@ -105,6 +106,6 @@ public class RobotContainer {
      * @return the command to run in autonomous
      */
     public Command getAutonomousCommand() {
-        return new FollowPath(m_driveTrain, Trajectories.circleRight);
+        return new FollowPath(m_driveTrain, Trajectories.simpleForward);
     }
 }
