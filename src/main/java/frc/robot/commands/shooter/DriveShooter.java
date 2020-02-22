@@ -30,7 +30,7 @@ public class DriveShooter extends CommandBase {
     // Called every time the scheduler runs while the command is scheduled.
     @Override
     public void execute() {
-        double mainSpeed = SmartDashboard.getNumber("Speed Main", 3900);
+        double mainSpeed = SmartDashboard.getNumber("Speed Main", 3150);
         m_shooter.driveMain(mainSpeed);
     }
 

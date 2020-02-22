@@ -20,14 +20,12 @@ import frc.robot.commands.intake.DriveIntake;
 import frc.robot.commands.intake.ToggleIntakeExtend;
 import frc.robot.commands.shooter.DriveAgitator;
 import frc.robot.commands.shooter.DriveShooter;
-import frc.robot.commands.spinner.DriveSpinner;
 import frc.robot.commands.auto.FollowPath;
-import frc.robot.commands.climber.WinchUp;
-import frc.robot.subsystems.Climber;
+//import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Shooter;
-import frc.robot.subsystems.Spinner;
+//import frc.robot.subsystems.Spinner;
 
 /**
  * This class is where the bulk of the robot should be declared. Since
@@ -42,10 +40,10 @@ public class RobotContainer {
     private XboxController m_operatorController = new XboxController(1);
     private AHRS m_ahrs = new AHRS(Port.kMXP);
     private DriveTrain m_driveTrain = new DriveTrain(m_ahrs);
-    private Climber m_climber = new Climber();
+    //private Climber m_climber = new Climber();
     private Shooter m_shooter = new Shooter();
     private Intake m_intake = new Intake();
-    private Spinner m_spinner = new Spinner();
+    //private Spinner m_spinner = new Spinner();
 
     /**
      * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -91,7 +89,7 @@ public class RobotContainer {
         JoystickButton driveShooterButton = new JoystickButton(m_operatorController, XboxController.Button.kA.value);
         JoystickButton driveAgitatorButton = new JoystickButton(m_operatorController, XboxController.Button.kB.value);
 
-        driveShooterButton.whileHeld(new DriveShooter(m_shooter));
+        driveShooterButton.toggleWhenPressed(new DriveShooter(m_shooter));
         driveAgitatorButton.whileHeld(new DriveAgitator(m_shooter));
         
         // Spinner
