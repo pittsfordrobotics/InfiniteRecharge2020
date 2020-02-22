@@ -20,11 +20,8 @@ import frc.robot.commands.intake.DriveIntake;
 import frc.robot.commands.intake.ToggleIntakeExtend;
 import frc.robot.commands.shooter.DriveAgitator;
 import frc.robot.commands.shooter.DriveShooter;
-import frc.robot.commands.shooter.MakeRoomInHopper;
 import frc.robot.commands.spinner.DriveSpinner;
 import frc.robot.commands.auto.FollowPath;
-import frc.robot.commands.climber.LowerTelescopingArm;
-import frc.robot.commands.climber.RaiseTelescopingArm;
 import frc.robot.commands.climber.WinchUp;
 import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.DriveTrain;
@@ -95,7 +92,6 @@ public class RobotContainer {
 
         driveShooterButton.whileHeld(new DriveShooter(m_shooter));
         driveAgitatorButton.whileHeld(new DriveAgitator(m_shooter));
-        driveAgitatorButton.and(shiftButton).whileActiveContinuous(new MakeRoomInHopper(m_shooter));
         
         // Spinner
         JoystickButton driveSpinnerButton = new JoystickButton(m_controller, XboxController.Button.kBack.value);
