@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.ControlType;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import static frc.robot.Constants.Ports.*;
 
@@ -23,9 +24,11 @@ public class Shooter extends SubsystemBase {
      * Creates a new Shooter.
      */
     public Shooter() {
-        SmartDashboard.putNumber("Speed Main", 0.5);
+        SmartDashboard.putNumber("Speed Main", 3900);
         SmartDashboard.putNumber("Speed Feeder", 0.5);
         SmartDashboard.putNumber("Speed Agitator", 0.5);
+        SmartDashboard.putNumber("P Main", 100);
+        SmartDashboard.putNumber("F Main", 3900);
 
         m_shooterMain.restoreFactoryDefaults();
         m_shooterMain.getEncoder().setPosition(0);
@@ -40,7 +43,11 @@ public class Shooter extends SubsystemBase {
     }
 
     public void driveMain(double speed) {
-        m_shooterMain.set(speed);
+        double p = SmartDashboard.getNumber("P Main", 100);
+        double f = SmartDashboard.getNumber("F Main", 3900);
+        m_shooterMain.getPIDController().setP(p);
+        m_shooterMain.getPIDController().setFF(f);
+        m_shooterMain.getPIDController().setReference(speed, ControlType.kVelocity);
     }
 
     public void driveFeeder(double speed) {
