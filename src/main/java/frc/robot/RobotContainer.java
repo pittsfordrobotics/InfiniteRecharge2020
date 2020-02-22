@@ -22,12 +22,9 @@ import frc.robot.commands.intake.ToggleIntakeExtend;
 import frc.robot.commands.shooter.DriveAgitator;
 import frc.robot.commands.shooter.DriveFeederOnly;
 import frc.robot.commands.shooter.DriveShooter;
-import frc.robot.commands.shooter.MakeRoomInHopper;
 import frc.robot.commands.shooter.WaitForSetSpeed;
 import frc.robot.commands.spinner.DriveSpinner;
 import frc.robot.commands.auto.FollowPath;
-import frc.robot.commands.climber.LowerTelescopingArm;
-import frc.robot.commands.climber.RaiseTelescopingArm;
 import frc.robot.commands.climber.WinchUp;
 import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.DriveTrain;
@@ -71,13 +68,6 @@ public class RobotContainer {
      */
     private void configureButtonBindings() {
         JoystickButton shiftButton = new JoystickButton(m_controller, XboxController.Button.kBumperLeft.value);
-        JoystickButton toggleIntakeExtendButton = new JoystickButton(m_controller, XboxController.Button.kY.value);
-        JoystickButton driveIntakeButton = new JoystickButton(m_controller, XboxController.Button.kX.value);
-        JoystickButton winchUpButton = new JoystickButton(m_controller, XboxController.Button.kStart.value);
-        JoystickButton telescopeUpButton = new JoystickButton(m_controller, XboxController.Button.kBumperRight.value);
-        JoystickButton driveShooterButton = new JoystickButton(m_controller, XboxController.Button.kA.value);
-        JoystickButton driveAgitatorButton = new JoystickButton(m_controller, XboxController.Button.kB.value);
-        JoystickButton driveSpinnerButton = new JoystickButton(m_controller, XboxController.Button.kBack.value);
 
         JoystickButton waitAndDriveFeederButton = new JoystickButton(m_controller, 4);
 
@@ -87,22 +77,32 @@ public class RobotContainer {
         new POVButton(m_controller, 180).whenActive(()-> m_driveTrain.setThrottle(0.3));
 
         // Climber
-        telescopeUpButton.and(shiftButton.negate()).whenActive(new RaiseTelescopingArm(m_climber));
-        telescopeUpButton.and(shiftButton).whenActive(new LowerTelescopingArm(m_climber));
+        JoystickButton winchUpButton = new JoystickButton(m_controller, XboxController.Button.kStart.value);
+
+        //telescopeUpButton.and(shiftButton.negate()).whenActive(new RaiseTelescopingArm(m_climber));
+        //telescopeUpButton.and(shiftButton).whenActive(new LowerTelescopingArm(m_climber));
 
         winchUpButton.whileHeld(new WinchUp(m_climber));
 
         // Intake
+        JoystickButton toggleIntakeExtendButton = new JoystickButton(m_controller, XboxController.Button.kY.value);
+        JoystickButton driveIntakeButton = new JoystickButton(m_controller, XboxController.Button.kBumperRight.value);
+
         toggleIntakeExtendButton.whenPressed(new ToggleIntakeExtend(m_intake));
-        driveIntakeButton.whileHeld(new DriveIntake(m_intake));
+        driveIntakeButton.and(shiftButton.negate()).whileActiveContinuous(new DriveIntake(m_intake, false));
+        driveIntakeButton.and(shiftButton).whileActiveContinuous(new DriveIntake(m_intake, true));
 
         // Shooter
+        JoystickButton driveShooterButton = new JoystickButton(m_controller, XboxController.Button.kA.value);
+        JoystickButton driveAgitatorButton = new JoystickButton(m_controller, XboxController.Button.kB.value);
+
         driveShooterButton.whileHeld(new DriveShooter(m_shooter));
         driveAgitatorButton.whileHeld(new DriveAgitator(m_shooter));
-        driveAgitatorButton.and(shiftButton).whileActiveContinuous(new MakeRoomInHopper(m_shooter));
-        waitAndDriveFeederButton.whileHeld(new SequentialCommandGroup(new WaitForSetSpeed(m_shooter), new DriveFeederOnly(m_shooter)));
+        waitAndDriveFeederButton.whileHeld(new SequentialCommandGroup(new WaitForSetSpeed(m_shooter), new DriveAgitator(m_shooter)));
         
         // Spinner
+        JoystickButton driveSpinnerButton = new JoystickButton(m_controller, XboxController.Button.kBack.value);
+
         driveSpinnerButton.whileHeld(new DriveSpinner(m_spinner));
     }
 
@@ -112,6 +112,6 @@ public class RobotContainer {
      * @return the command to run in autonomous
      */
     public Command getAutonomousCommand() {
-        return new FollowPath(m_driveTrain, Trajectories.circleRight);
+        return new FollowPath(m_driveTrain, Trajectories.simpleForward);
     }
 }

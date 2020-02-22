@@ -29,14 +29,17 @@ public class DriveAgitator extends CommandBase {
     // Called every time the scheduler runs while the command is scheduled.
     @Override
     public void execute() {
-        double feederSpeed = SmartDashboard.getNumber("Speed Agitator", 0.5);
-        m_shooter.driveAgitator(feederSpeed);
+        double agitatorSpeed = SmartDashboard.getNumber("Speed Agitator", 0.5);
+        double feederSpeed = SmartDashboard.getNumber("Speed Feeder", 0.5);
+        m_shooter.driveFeeder(feederSpeed);
+        m_shooter.driveAgitator(agitatorSpeed);
     }
 
     // Called once the command ends or is interrupted.
     @Override
     public void end(boolean interrupted) {
         m_shooter.driveAgitator(0);
+        m_shooter.driveFeeder(0);
     }
 
     // Returns true when the command should end.

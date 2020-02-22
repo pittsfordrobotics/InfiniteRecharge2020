@@ -20,10 +20,10 @@ public class Intake extends SubsystemBase {
     private boolean m_isExtended = false;
 
     public Intake() {
-        SmartDashboard.putNumber("Speed Inner", 0.5);
+        SmartDashboard.putNumber("Speed Inner", 0.2);
         SmartDashboard.putNumber("Speed Outer", 0.5);
 
-        SmartDashboard.putNumber("Intake Extend", 0.5);
+        SmartDashboard.putNumber("Intake Extend", 1);
 
         m_intakeInner.restoreFactoryDefaults();
         m_intakeInner.getEncoder().setPosition(0);
