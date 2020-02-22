@@ -33,7 +33,7 @@ public class DriveShooter extends CommandBase {
         double mainSpeed = SmartDashboard.getNumber("Speed Main", 0.5);
         double feederSpeed = SmartDashboard.getNumber("Speed Feeder", 0.5);
         m_shooter.driveMain(mainSpeed);
-        m_shooter.driveMain(feederSpeed);
+        m_shooter.driveFeeder(feederSpeed);
     }
 
     // Called once the command ends or is interrupted.

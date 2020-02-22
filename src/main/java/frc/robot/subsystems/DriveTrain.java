@@ -59,6 +59,7 @@ public class DriveTrain extends SubsystemBase {
         resetEncoders();
 
         m_differentialDrive = new DifferentialDrive(m_leftPrimary, m_rightPrimary);
+        m_differentialDrive.setDeadband(0.05);
 
         m_ahrs = ahrs;
         m_ahrs.reset();
