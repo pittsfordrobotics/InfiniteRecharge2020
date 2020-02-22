@@ -49,7 +49,7 @@ public final class Constants {
     }
 
     public static final class PWM {
-        public static final int kIntakeLeft = 1;
+        public static final int kIntakeLeft = 0;
         public static final int kIntakeRight = 2;
     }
 

@@ -19,7 +19,6 @@ import frc.robot.commands.drivetrain.DriveWithXboxController;
 import frc.robot.commands.intake.DriveIntake;
 import frc.robot.commands.intake.ToggleIntakeExtend;
 import frc.robot.commands.shooter.DriveAgitator;
-import frc.robot.commands.shooter.DriveFeederOnly;
 import frc.robot.commands.shooter.DriveShooter;
 import frc.robot.commands.shooter.MakeRoomInHopper;
 import frc.robot.commands.spinner.DriveSpinner;
