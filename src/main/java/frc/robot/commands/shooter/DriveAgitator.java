@@ -18,7 +18,6 @@ public class DriveAgitator extends CommandBase {
      * Creates a new FeedShooter.
      */
     public DriveAgitator(Shooter shooter) {
-        addRequirements(shooter);
         m_shooter = shooter;
     }
 

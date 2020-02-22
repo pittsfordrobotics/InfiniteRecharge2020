@@ -21,6 +21,7 @@ import frc.robot.commands.intake.ToggleIntakeExtend;
 import frc.robot.commands.shooter.DriveAgitator;
 import frc.robot.commands.shooter.DriveFeederOnly;
 import frc.robot.commands.shooter.DriveShooter;
+import frc.robot.commands.shooter.MakeRoomInHopper;
 import frc.robot.commands.spinner.DriveSpinner;
 import frc.robot.commands.auto.FollowPath;
 import frc.robot.commands.climber.LowerTelescopingArm;
@@ -93,7 +94,7 @@ public class RobotContainer {
         // Shooter
         driveShooterButton.whileHeld(new DriveShooter(m_shooter));
         driveAgitatorButton.whileHeld(new DriveAgitator(m_shooter));
-        driveAgitatorButton.and(shiftButton).whenActive(new DriveFeederOnly(m_shooter));
+        driveAgitatorButton.and(shiftButton).whileActiveContinuous(new MakeRoomInHopper(m_shooter));
         
         // Spinner
         driveSpinnerButton.whileHeld(new DriveSpinner(m_spinner));
