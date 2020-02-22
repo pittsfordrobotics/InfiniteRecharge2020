@@ -11,14 +11,13 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Shooter;
 
-public class DriveShooter extends CommandBase {
+public class DriveFeederOnly extends CommandBase {
     private Shooter m_shooter;
 
     /**
-     * Creates a new DriveShooter.
+     * Creates a new DriveFeederOnly.
      */
-    public DriveShooter(Shooter shooter) {
-        addRequirements(shooter);
+    public DriveFeederOnly(Shooter shooter) {
         m_shooter = shooter;
     }
 
@@ -30,14 +29,14 @@ public class DriveShooter extends CommandBase {
     // Called every time the scheduler runs while the command is scheduled.
     @Override
     public void execute() {
-        double mainSpeed = SmartDashboard.getNumber("Speed Main", 3900);
-        m_shooter.driveMain(mainSpeed);
+        double feederSpeed = SmartDashboard.getNumber("Speed Feeder", 0.5);
+        m_shooter.driveFeeder(feederSpeed);
     }
 
     // Called once the command ends or is interrupted.
     @Override
     public void end(boolean interrupted) {
-        m_shooter.driveMain(0);
+        m_shooter.driveFeeder(0);
     }
 
     // Returns true when the command should end.

@@ -14,11 +14,13 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.ControlType;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import static frc.robot.Constants.Ports.*;
+import static frc.robot.Constants.Shooter.*;
 
 public class Shooter extends SubsystemBase {
     private CANSparkMax m_shooterMain = new CANSparkMax(CAN.kShooterMain, MotorType.kBrushless);
     private CANSparkMax m_shooterFeeder = new CANSparkMax(CAN.kShooterFeeder, MotorType.kBrushless);
     private CANSparkMax m_shooterAgitator = new CANSparkMax(CAN.kShooterAgitator, MotorType.kBrushless);
+    private double m_setSpeed = 0;
 
     /**
      * Creates a new Shooter.
@@ -55,6 +57,11 @@ public class Shooter extends SubsystemBase {
 
         m_shooterMain.getPIDController().setFF(f);
         m_shooterMain.getPIDController().setReference(speed, ControlType.kVelocity);
+        m_setSpeed = speed;
+    }
+
+    public boolean isAtSetSpeed() {
+        return Math.abs(m_shooterMain.getEncoder().getVelocity() - m_setSpeed) <= kSpeedDelta;
     }
 
     public void driveFeeder(double speed) {
