@@ -100,7 +100,8 @@ public final class Constants {
     }
 
     public static final class Shooter {
-
+        public static final int kP = 100;
+        public static final int kF = 3150;
     }
 
     public static final class Climber {
