@@ -63,6 +63,7 @@ public class RobotContainer {
      */
     private void configureButtonBindings() {
         JoystickButton shiftButton = new JoystickButton(m_driverController, XboxController.Button.kBumperLeft.value);
+        JoystickButton operatorShiftButton = new JoystickButton(m_operatorController, XboxController.Button.kBumperLeft.value);
 
         // Drivetrain
         new POVButton(m_driverController, 0).whenActive(()-> m_driveTrain.setThrottle(0.9));
@@ -80,10 +81,13 @@ public class RobotContainer {
         // Intake
         JoystickButton toggleIntakeExtendButton = new JoystickButton(m_operatorController, XboxController.Button.kY.value);
         JoystickButton driveIntakeButton = new JoystickButton(m_driverController, XboxController.Button.kBumperRight.value);
+        JoystickButton operatorDriveIntakeButton = new JoystickButton(m_operatorController, XboxController.Button.kBumperRight.value);
 
         toggleIntakeExtendButton.whenPressed(new ToggleIntakeExtend(m_intake));
         driveIntakeButton.and(shiftButton.negate()).whileActiveContinuous(new DriveIntake(m_intake, false));
         driveIntakeButton.and(shiftButton).whileActiveContinuous(new DriveIntake(m_intake, true));
+        operatorDriveIntakeButton.and(operatorShiftButton.negate()).whileActiveContinuous(new DriveIntake(m_intake, false));
+        operatorDriveIntakeButton.and(operatorShiftButton).whileActiveContinuous(new DriveIntake(m_intake, true));
 
         // Shooter
         JoystickButton driveShooterButton = new JoystickButton(m_operatorController, XboxController.Button.kA.value);
