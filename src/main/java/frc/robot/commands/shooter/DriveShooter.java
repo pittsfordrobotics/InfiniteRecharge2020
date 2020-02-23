@@ -32,11 +32,13 @@ public class DriveShooter extends CommandBase {
     public void execute() {
         double mainSpeed = SmartDashboard.getNumber("Speed Main", 3150);
         m_shooter.driveMain(mainSpeed);
+        SmartDashboard.putBoolean("Shooter On", true);
     }
 
     // Called once the command ends or is interrupted.
     @Override
     public void end(boolean interrupted) {
+        SmartDashboard.putBoolean("Shooter On", false);
         m_shooter.driveMain(0);
     }
 
