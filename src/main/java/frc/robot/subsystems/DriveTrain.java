@@ -73,6 +73,8 @@ public class DriveTrain extends SubsystemBase {
         m_rightEncoder.setPositionConversionFactor(Math.PI * kWheelDiameterMeters / kGearRatio);
         m_leftEncoder.setVelocityConversionFactor(Math.PI * kWheelDiameterMeters / kGearRatio / 60);
         m_rightEncoder.setVelocityConversionFactor(Math.PI * kWheelDiameterMeters / kGearRatio / 60);
+
+        setThrottle(0.6);
     }
 
     public void drive(double speed, double rotation) {

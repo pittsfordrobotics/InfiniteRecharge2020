@@ -11,6 +11,8 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.ColorMatch;
 import com.revrobotics.ColorMatchResult;
 import com.revrobotics.ColorSensorV3;
+import com.revrobotics.ControlType;
+import com.revrobotics.CANDigitalInput.LimitSwitchPolarity;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
@@ -24,6 +26,8 @@ import static frc.robot.Constants.Ports.*;
 
 public class Spinner extends SubsystemBase {
     private CANSparkMax m_spinnerLeftRight = new CANSparkMax(CAN.kSpinnerLeftRight, MotorType.kBrushless);
+    private CANSparkMax m_spinnerUpDown = new CANSparkMax(CAN.kSpinnerUpDown, MotorType.kBrushless);
+
     private ColorSensorV3 m_colorSensor = new ColorSensorV3(Port.kOnboard);
     private ColorMatch m_colorMatcher = new ColorMatch();
 
@@ -37,6 +41,11 @@ public class Spinner extends SubsystemBase {
         m_spinnerLeftRight.getEncoder().setPosition(0);
         m_spinnerLeftRight.setIdleMode(IdleMode.kBrake);
 
+        m_spinnerUpDown.restoreFactoryDefaults();
+        m_spinnerUpDown.getEncoder().setPosition(0);
+        m_spinnerUpDown.setIdleMode(IdleMode.kBrake);
+        m_spinnerUpDown.getPIDController().setFF(0.05);
+
         m_colorMatcher.addColorMatch(kBlueTarget);
         m_colorMatcher.addColorMatch(kGreenTarget);
         m_colorMatcher.addColorMatch(kRedTarget);
@@ -49,11 +58,34 @@ public class Spinner extends SubsystemBase {
         return result.color;
     }
 
-    public void spin(double spinSpeed) {
-        m_spinnerLeftRight.set(spinSpeed);
+    public void spin(double speed) {
+        m_spinnerLeftRight.set(speed);
+    }
+
+    public boolean isAtLowerLimit() {
+        return m_spinnerUpDown.getForwardLimitSwitch(LimitSwitchPolarity.kNormallyOpen).get();
+    }
+
+    public void initialDriveDown() {
+        m_spinnerUpDown.set(0.1);
+    }
+
+    public void resetPosition() {
+        m_spinnerUpDown.getEncoder().setPosition(0);
+    }
+
+    public void raise() {
+        m_spinnerUpDown.getPIDController().setReference(-12, ControlType.kPosition);
+        SmartDashboard.putBoolean("Spinner Stowed", false);
+    }
+
+    public void lower() {
+        m_spinnerUpDown.set(0.2);
+        SmartDashboard.putBoolean("Spinner Stowed", true);
     }
 
     @Override
     public void periodic() {
+        SmartDashboard.putNumber("Spinner Up Down Encoder", m_spinnerUpDown.getEncoder().getPosition());
     }
 }

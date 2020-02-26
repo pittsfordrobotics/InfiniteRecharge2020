@@ -42,6 +42,7 @@ public final class Constants {
             public static final int kShooterAgitator = 33;
             
             public static final int kSpinnerLeftRight = 41;
+            public static final int kSpinnerUpDown = 42;
 
             public static final int kIntakeInner = 51;
             public static final int kIntakeOuter = 52;
@@ -100,9 +101,9 @@ public final class Constants {
     }
 
     public static final class Shooter {
-        public static final int kP = 100;
-        public static final int kF = 3900;
-        public static final int kSpeedDelta = 50;
+        public static final double kP = 0.0003;
+        public static final double kF = 0.00018;
+        public static final double kSpeedDelta = 100;
     }
 
     public static final class Climber {
@@ -114,6 +115,5 @@ public final class Constants {
         public static final Color kGreenTarget = ColorMatch.makeColor(0.23, 0.50, 0.27);
         public static final Color kRedTarget = ColorMatch.makeColor(0.35, 0.43, 0.23);
         public static final Color kYellowTarget = ColorMatch.makeColor(0.30, 0.52, 0.18);
-
     }
 }

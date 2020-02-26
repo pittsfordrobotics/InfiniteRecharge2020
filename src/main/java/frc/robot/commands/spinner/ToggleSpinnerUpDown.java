@@ -5,20 +5,20 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.commands.shooter;
+package frc.robot.commands.spinner;
 
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.Shooter;
+import frc.robot.subsystems.Spinner;
 
-public class DriveFeederOnly extends CommandBase {
-    private Shooter m_shooter;
+public class ToggleSpinnerUpDown extends CommandBase {
+    private Spinner m_spinner;
 
     /**
-     * Creates a new DriveFeederOnly.
+     * Creates a new ToggleSpinnerUpDown.
      */
-    public DriveFeederOnly(Shooter shooter) {
-        m_shooter = shooter;
+    public ToggleSpinnerUpDown(Spinner spinner) {
+        addRequirements(spinner);
+        m_spinner = spinner;
     }
 
     // Called when the command is initially scheduled.
@@ -26,17 +26,16 @@ public class DriveFeederOnly extends CommandBase {
     public void initialize() {
     }
 
-    // Called every time the scheduler runs while the command is scheduled.
-    @Override
+    // Called every time the scheduler runs while the command is scheduled. 
+    @Override 
     public void execute() {
-        double feederSpeed = SmartDashboard.getNumber("Speed Feeder", 0.5);
-        m_shooter.driveFeeder(feederSpeed);
+        m_spinner.raise();
     }
 
     // Called once the command ends or is interrupted.
     @Override
     public void end(boolean interrupted) {
-        m_shooter.driveFeeder(0);
+        m_spinner.lower();
     }
 
     // Returns true when the command should end.

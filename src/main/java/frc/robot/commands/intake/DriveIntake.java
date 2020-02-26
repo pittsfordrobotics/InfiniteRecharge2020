@@ -13,15 +13,15 @@ import frc.robot.subsystems.Intake;
 
 public class DriveIntake extends CommandBase {
     private Intake m_intake;
-    private boolean m_invert = false;
+    private boolean m_isInverted;
 
     /**
      * Creates a new DriveIntake.
      */
-    public DriveIntake(Intake intake, boolean invert) {
+    public DriveIntake(Intake intake, boolean isInverted) {
         addRequirements(intake);
         m_intake = intake;
-        m_invert = invert;
+        m_isInverted = isInverted;
     }
 
     // Called when the command is initially scheduled.
@@ -32,11 +32,11 @@ public class DriveIntake extends CommandBase {
     // Called every time the scheduler runs while the command is scheduled.
     @Override
     public void execute() {
-        double innerSpeed = SmartDashboard.getNumber("Speed Inner", 0.2);
+        double innerSpeed = SmartDashboard.getNumber("Speed Inner", 0.3);
         double outerSpeed = SmartDashboard.getNumber("Speed Outer", 0.5);
 
-        if (m_invert) {
-            innerSpeed *= -2;
+        if (m_isInverted) {
+            innerSpeed *= -1.5;
             outerSpeed *= -1;
         }
 

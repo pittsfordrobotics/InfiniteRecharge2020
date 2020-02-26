@@ -33,7 +33,7 @@ public class DriveWithXboxController extends CommandBase {
     // Called every time the scheduler runs while the command is scheduled.
     @Override
     public void execute() {
-        m_driveTrain.drive(-m_controller.getY(Hand.kLeft),m_controller.getX(Hand.kRight)*0.75);
+        m_driveTrain.drive(-m_controller.getY(Hand.kLeft), m_controller.getX(Hand.kRight) * 0.75);
     }
 
     // Called once the command ends or is interrupted.

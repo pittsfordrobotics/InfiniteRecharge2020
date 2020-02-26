@@ -13,13 +13,15 @@ import frc.robot.subsystems.Spinner;
 
 public class DriveSpinner extends CommandBase {
     private Spinner m_spinner;
+    private boolean m_isInverted;
 
     /**
      * Creates a new SpinTheSpinner.
      */
-    public DriveSpinner(Spinner spinner) {
+    public DriveSpinner(Spinner spinner, boolean isInverted) {
         addRequirements(spinner);
         m_spinner = spinner;
+        m_isInverted = isInverted;
     }
 
     // Called when the command is initially scheduled.
@@ -31,6 +33,11 @@ public class DriveSpinner extends CommandBase {
     @Override
     public void execute() {
         double speed = SmartDashboard.getNumber("Spinner Speed", 0.5);
+
+        if (m_isInverted) {
+            speed *= -1;
+        }
+
         m_spinner.spin(speed);
     }
 
