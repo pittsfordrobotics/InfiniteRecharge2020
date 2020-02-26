@@ -30,17 +30,14 @@ public class ToggleIntakeExtend extends CommandBase {
     // Called every time the scheduler runs while the command is scheduled.
     @Override
     public void execute() {
-        if (m_intake.isExtended()) {
-            m_intake.retract();
-        } else {
-            double setpoint = SmartDashboard.getNumber("Intake Extend", 1);
-            m_intake.extend(setpoint);
-        }
+        double setpoint = SmartDashboard.getNumber("Intake Extend", 1);
+        m_intake.extend(setpoint);
     }
 
     // Called once the command ends or is interrupted.
     @Override
     public void end(boolean interrupted) {
+        m_intake.retract();
     }
 
     // Returns true when the command should end.

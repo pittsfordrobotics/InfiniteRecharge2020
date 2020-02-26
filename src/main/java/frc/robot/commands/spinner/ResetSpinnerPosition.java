@@ -5,21 +5,20 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.commands.shooter;
+package frc.robot.commands.spinner;
 
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.Shooter;
+import frc.robot.subsystems.Spinner;
 
-public class DriveShooter extends CommandBase {
-    private Shooter m_shooter;
+public class ResetSpinnerPosition extends CommandBase {
+    private Spinner m_spinner;
 
     /**
-     * Creates a new DriveShooter.
+     * Creates a new ResetSpinnerPosition.
      */
-    public DriveShooter(Shooter shooter) {
-        addRequirements(shooter);
-        m_shooter = shooter;
+    public ResetSpinnerPosition(Spinner spinner) {
+        addRequirements(spinner);
+        m_spinner = spinner;
     }
 
     // Called when the command is initially scheduled.
@@ -30,21 +29,18 @@ public class DriveShooter extends CommandBase {
     // Called every time the scheduler runs while the command is scheduled.
     @Override
     public void execute() {
-        double mainSpeed = SmartDashboard.getNumber("Speed Main", 2925);
-        m_shooter.driveMain(mainSpeed);
-        SmartDashboard.putBoolean("Shooter On", true);
+        m_spinner.initialDriveDown();
     }
 
     // Called once the command ends or is interrupted.
     @Override
     public void end(boolean interrupted) {
-        SmartDashboard.putBoolean("Shooter On", false);
-        m_shooter.driveMain(0);
+        m_spinner.resetPosition();
     }
 
     // Returns true when the command should end.
     @Override
     public boolean isFinished() {
-        return false;
+        return m_spinner.isAtLowerLimit();
     }
 }

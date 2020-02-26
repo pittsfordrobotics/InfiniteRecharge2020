@@ -42,6 +42,7 @@ public final class Constants {
             public static final int kShooterAgitator = 33;
             
             public static final int kSpinnerLeftRight = 41;
+            public static final int kSpinnerUpDown = 42;
 
             public static final int kIntakeInner = 51;
             public static final int kIntakeOuter = 52;
@@ -114,6 +115,5 @@ public final class Constants {
         public static final Color kGreenTarget = ColorMatch.makeColor(0.23, 0.50, 0.27);
         public static final Color kRedTarget = ColorMatch.makeColor(0.35, 0.43, 0.23);
         public static final Color kYellowTarget = ColorMatch.makeColor(0.30, 0.52, 0.18);
-
     }
 }

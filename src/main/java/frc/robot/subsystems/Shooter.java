@@ -26,7 +26,7 @@ public class Shooter extends SubsystemBase {
      * Creates a new Shooter.
      */
     public Shooter() {
-        SmartDashboard.putNumber("Speed Main", 3150);
+        SmartDashboard.putNumber("Speed Main", 2925);
         SmartDashboard.putNumber("Speed Feeder", 0.5);
         SmartDashboard.putNumber("Speed Agitator", 0.5);
 
