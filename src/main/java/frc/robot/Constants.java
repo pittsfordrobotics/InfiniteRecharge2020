@@ -49,6 +49,10 @@ public final class Constants {
         }
     }
 
+    public static final class PCM {
+
+    }
+
     public static final class PWM {
         public static final int kIntakeLeft = 0;
         public static final int kIntakeRight = 2;
@@ -112,6 +116,7 @@ public final class Constants {
     public static final class Shooter {
         public static final double kP = 0.0003;
         public static final double kF = 0.00018;
+        public static final int kMainSpeed = 2925;
         public static final int kSpeedThreshold = 2500;
     }
 

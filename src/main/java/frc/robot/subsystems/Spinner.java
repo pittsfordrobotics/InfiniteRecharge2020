@@ -7,6 +7,8 @@
 
 package frc.robot.subsystems;
 
+import com.revrobotics.CANEncoder;
+import com.revrobotics.CANPIDController;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.ColorMatch;
 import com.revrobotics.ColorMatchResult;
@@ -28,6 +30,11 @@ public class Spinner extends SubsystemBase {
     private CANSparkMax m_spinnerLeftRight = new CANSparkMax(CAN.kSpinnerLeftRight, MotorType.kBrushless);
     private CANSparkMax m_spinnerUpDown = new CANSparkMax(CAN.kSpinnerUpDown, MotorType.kBrushless);
 
+    private CANEncoder m_spinnerLeftRightEncoder = m_spinnerLeftRight.getEncoder();
+    private CANEncoder m_spinnerUpDownEncoder = m_spinnerUpDown.getEncoder();
+
+    private CANPIDController m_spinnerUpDownPIDController = m_spinnerUpDown.getPIDController();
+
     private ColorSensorV3 m_colorSensor = new ColorSensorV3(Port.kOnboard);
     private ColorMatch m_colorMatcher = new ColorMatch();
 
@@ -38,13 +45,13 @@ public class Spinner extends SubsystemBase {
         SmartDashboard.putNumber("Spinner Speed", 0.5);
 
         m_spinnerLeftRight.restoreFactoryDefaults();
-        m_spinnerLeftRight.getEncoder().setPosition(0);
+        m_spinnerLeftRightEncoder.setPosition(0);
         m_spinnerLeftRight.setIdleMode(IdleMode.kBrake);
 
         m_spinnerUpDown.restoreFactoryDefaults();
-        m_spinnerUpDown.getEncoder().setPosition(0);
+        m_spinnerUpDownEncoder.setPosition(0);
         m_spinnerUpDown.setIdleMode(IdleMode.kBrake);
-        m_spinnerUpDown.getPIDController().setFF(0.05);
+        m_spinnerUpDownPIDController.setFF(0.05);
 
         m_colorMatcher.addColorMatch(kBlueTarget);
         m_colorMatcher.addColorMatch(kGreenTarget);
@@ -71,11 +78,11 @@ public class Spinner extends SubsystemBase {
     }
 
     public void resetPosition() {
-        m_spinnerUpDown.getEncoder().setPosition(0);
+        m_spinnerUpDownEncoder.setPosition(0);
     }
 
     public void raise() {
-        m_spinnerUpDown.getPIDController().setReference(-12, ControlType.kPosition);
+        m_spinnerUpDownPIDController.setReference(-12, ControlType.kPosition);
         SmartDashboard.putBoolean("Spinner Stowed", false);
     }
 
@@ -86,6 +93,6 @@ public class Spinner extends SubsystemBase {
 
     @Override
     public void periodic() {
-        SmartDashboard.putNumber("Spinner Up Down Encoder", m_spinnerUpDown.getEncoder().getPosition());
+        SmartDashboard.putNumber("Spinner Up Down Encoder", m_spinnerUpDownEncoder.getPosition());
     }
 }

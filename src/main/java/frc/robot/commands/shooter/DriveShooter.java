@@ -10,6 +10,7 @@ package frc.robot.commands.shooter;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Shooter;
+import static frc.robot.Constants.Shooter.*;
 
 public class DriveShooter extends CommandBase {
     private Shooter m_shooter;
@@ -29,8 +30,7 @@ public class DriveShooter extends CommandBase {
     // Called every time the scheduler runs while the command is scheduled.
     @Override
     public void execute() {
-        double mainSpeed = SmartDashboard.getNumber("Speed Main", 2925);
-        m_shooter.driveMain(mainSpeed);
+        m_shooter.driveMain(kMainSpeed);
         SmartDashboard.putBoolean("Shooter On", true);
     }
 

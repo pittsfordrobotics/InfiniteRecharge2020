@@ -7,6 +7,7 @@
 
 package frc.robot.subsystems;
 
+import com.revrobotics.CANEncoder;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
@@ -16,7 +17,10 @@ import frc.robot.Constants.Ports.*;
 
 public class Climber extends SubsystemBase {
     private CANSparkMax m_telescopingArm = new CANSparkMax(CAN.kClimberTelescopingArm, MotorType.kBrushless);
+    private CANEncoder m_telescopingArmEncoder = m_telescopingArm.getEncoder();
+
     private CANSparkMax m_winch = new CANSparkMax(CAN.kClimberWinch, MotorType.kBrushless);
+    private CANEncoder m_winchEncoder = m_winch.getEncoder();
 
     /**
     * Creates a new Climber.
@@ -26,10 +30,10 @@ public class Climber extends SubsystemBase {
         SmartDashboard.putNumber("Winch Speed", 0.5);
 
         m_telescopingArm.restoreFactoryDefaults();
-        m_telescopingArm.getEncoder().setPosition(0);
+        m_telescopingArmEncoder.setPosition(0);
 
         m_winch.restoreFactoryDefaults();
-        m_winch.getEncoder().setPosition(0);
+        m_winchEncoder.setPosition(0);
     }
 
     public void driveTelescopingArm(double speed) {
