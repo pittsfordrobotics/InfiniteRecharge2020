@@ -14,13 +14,16 @@ import edu.wpi.first.wpilibj.SPI.Port;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
+import frc.robot.Constants.Intake.IntakeMode;
 import frc.robot.commands.drivetrain.DriveWithXboxController;
 import frc.robot.commands.intake.DriveIntake;
 import frc.robot.commands.intake.ToggleIntakeExtend;
 import frc.robot.commands.shooter.DriveAgitator;
 import frc.robot.commands.shooter.DriveShooter;
+import frc.robot.commands.shooter.WaitForSpeed;
 import frc.robot.commands.spinner.DriveSpinner;
 import frc.robot.commands.spinner.ResetSpinnerPosition;
 import frc.robot.commands.spinner.ToggleSpinnerUpDown;
@@ -95,10 +98,18 @@ public class RobotContainer {
 
         // Shooter
         JoystickButton driveShooterButton = new JoystickButton(m_operatorController, XboxController.Button.kA.value);
-        JoystickButton driveAgitatorButton = new JoystickButton(m_operatorController, XboxController.Button.kB.value);
+        JoystickButton feedShooterButton = new JoystickButton(m_operatorController, XboxController.Button.kB.value);
+
+        SequentialCommandGroup feedShooterCommand = new SequentialCommandGroup(
+                                                        new WaitForSpeed(m_shooter),
+                                                        new ParallelCommandGroup(
+                                                            new DriveAgitator(m_shooter),
+                                                            new DriveIntake(m_intake, false, IntakeMode.Inner)
+                                                        )
+                                                    );
 
         driveShooterButton.toggleWhenPressed(new DriveShooter(m_shooter));
-        driveAgitatorButton.whileHeld(new DriveAgitator(m_shooter));
+        feedShooterButton.whileHeld(feedShooterCommand);
         
         // Spinner
         JoystickButton driveSpinnerButton = new JoystickButton(m_operatorController, XboxController.Button.kX.value);
