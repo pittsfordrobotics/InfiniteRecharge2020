@@ -19,7 +19,6 @@ import edu.wpi.first.wpilibj.geometry.Pose2d;
 import edu.wpi.first.wpilibj.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.wpilibj.kinematics.DifferentialDriveWheelSpeeds;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 import static frc.robot.Constants.Ports.*;
@@ -79,11 +78,6 @@ public class DriveTrain extends SubsystemBase {
 
     public void drive(double speed, double rotation) {
         m_differentialDrive.arcadeDrive(speed, rotation);
-
-        SmartDashboard.putNumber("Right Primary", m_rightPrimary.get());
-        SmartDashboard.putNumber("Right Follower", m_rightFollower.get());
-        SmartDashboard.putNumber("Left Primary", m_leftPrimary.get());
-        SmartDashboard.putNumber("Left Follower", m_leftFollower.get());
     }
 
     public void setThrottle(double throttle) {
@@ -93,9 +87,6 @@ public class DriveTrain extends SubsystemBase {
     public void driveVolts(double left, double right) {
         m_leftPrimary.setVoltage(left);
         m_rightPrimary.setVoltage(-right);
-
-        SmartDashboard.putNumber("Right Set Voltage", right);
-        SmartDashboard.putNumber("Left Set Voltage", left);
 
         m_differentialDrive.feed();
     }
@@ -116,13 +107,6 @@ public class DriveTrain extends SubsystemBase {
         double leftMeters = m_leftEncoder.getPosition(); 
         double rightMeters = -m_rightEncoder.getPosition();
 
-        SmartDashboard.putNumber("Left Meters", leftMeters);
-        SmartDashboard.putNumber("Right Meters", rightMeters);
-        SmartDashboard.putNumber("gyro angle", m_ahrs.getAngle());
-        SmartDashboard.putNumber("Pose angle", m_pose.getRotation().getDegrees());
-        SmartDashboard.putNumber("Pose X", m_pose.getTranslation().getX());
-        SmartDashboard.putNumber("Pose Y", m_pose.getTranslation().getY());
-
         m_pose = m_odometry.update(
             Rotation2d.fromDegrees(getAngle()), 
             leftMeters,
@@ -131,9 +115,6 @@ public class DriveTrain extends SubsystemBase {
         // Velocity
         double leftVelocity = m_leftEncoder.getVelocity();
         double rightVelocity = -m_rightEncoder.getVelocity();
-
-        SmartDashboard.putNumber("Left Velocity", leftVelocity);
-        SmartDashboard.putNumber("Right Velocity", rightVelocity);
 
         m_wheelSpeeds = new DifferentialDriveWheelSpeeds(leftVelocity, rightVelocity);
     }

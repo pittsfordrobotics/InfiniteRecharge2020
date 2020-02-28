@@ -18,7 +18,6 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
 import frc.robot.commands.drivetrain.DriveWithXboxController;
 import frc.robot.commands.intake.DriveIntake;
-import frc.robot.commands.intake.ToggleIntakeExtend;
 import frc.robot.commands.shooter.DriveAgitator;
 import frc.robot.commands.shooter.DriveShooter;
 import frc.robot.commands.spinner.DriveSpinner;
@@ -83,11 +82,9 @@ public class RobotContainer {
         //winchUpButton.whileHeld(new WinchUp(m_climber));
 
         // Intake
-        JoystickButton toggleIntakeExtendButton = new JoystickButton(m_operatorController, XboxController.Button.kY.value);
         JoystickButton driveIntakeButton = new JoystickButton(m_driverController, XboxController.Button.kBumperRight.value);
         JoystickButton operatorDriveIntakeButton = new JoystickButton(m_operatorController, XboxController.Button.kBumperRight.value);
 
-        toggleIntakeExtendButton.toggleWhenPressed(new ToggleIntakeExtend(m_intake));
         driveIntakeButton.and(shiftButton.negate()).whileActiveContinuous(new DriveIntake(m_intake, false));
         driveIntakeButton.and(shiftButton).whileActiveContinuous(new DriveIntake(m_intake, true));
         operatorDriveIntakeButton.and(operatorShiftButton.negate()).whileActiveContinuous(new DriveIntake(m_intake, false));
