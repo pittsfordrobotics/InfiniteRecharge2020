@@ -10,13 +10,13 @@ package frc.robot.commands.shooter;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Shooter;
 
-public class WaitForSetSpeed extends CommandBase {
+public class WaitForSpeed extends CommandBase {
     private Shooter m_shooter;
-    
+
     /**
-     * Creates a new WaitForSetSpeed.
+     * Creates a new WaitForSpeed.
      */
-    public WaitForSetSpeed(Shooter shooter) {
+    public WaitForSpeed(Shooter shooter) {
         m_shooter = shooter;
     }
 
@@ -38,6 +38,6 @@ public class WaitForSetSpeed extends CommandBase {
     // Returns true when the command should end.
     @Override
     public boolean isFinished() {
-        return m_shooter.isAtSetSpeed();
+        return m_shooter.isUpToSpeed();
     }
 }

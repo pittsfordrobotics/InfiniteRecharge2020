@@ -18,7 +18,6 @@ public class DriveShooter extends CommandBase {
      * Creates a new DriveShooter.
      */
     public DriveShooter(Shooter shooter) {
-        addRequirements(shooter);
         m_shooter = shooter;
     }
 
