@@ -7,26 +7,32 @@
 
 package frc.robot;
 
-import java.util.List;
-
 import com.kauailabs.navx.frc.AHRS;
 
-import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.SPI.Port;
-import edu.wpi.first.wpilibj.controller.RamseteController;
-import edu.wpi.first.wpilibj.controller.SimpleMotorFeedforward;
-import edu.wpi.first.wpilibj.geometry.Pose2d;
-import edu.wpi.first.wpilibj.geometry.Rotation2d;
-import edu.wpi.first.wpilibj.trajectory.Trajectory;
-import edu.wpi.first.wpilibj.trajectory.TrajectoryConfig;
-import edu.wpi.first.wpilibj.trajectory.TrajectoryGenerator;
-import edu.wpi.first.wpilibj.trajectory.constraint.DifferentialDriveVoltageConstraint;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.RamseteCommand;
-import frc.robot.Constants.Drive;
-import frc.robot.commands.DriveWithJoysticks;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import edu.wpi.first.wpilibj2.command.button.POVButton;
+import frc.robot.Constants.Intake.IntakeMode;
+import frc.robot.commands.drivetrain.DriveWithXboxController;
+import frc.robot.commands.intake.DriveIntake;
+import frc.robot.commands.intake.ToggleIntakeExtend;
+import frc.robot.commands.shooter.DriveAgitator;
+import frc.robot.commands.shooter.DriveShooter;
+import frc.robot.commands.shooter.WaitForSpeed;
+import frc.robot.commands.spinner.DriveSpinner;
+import frc.robot.commands.spinner.ResetSpinnerPosition;
+import frc.robot.commands.spinner.ToggleSpinnerUpDown;
+//import frc.robot.commands.auto.FollowPath;
+//import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.DriveTrain;
+import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.Shooter;
+import frc.robot.subsystems.Spinner;
 
 /**
  * This class is where the bulk of the robot should be declared. Since
@@ -37,18 +43,22 @@ import frc.robot.subsystems.DriveTrain;
  */
 public class RobotContainer {
     // The robot's subsystems and commands are defined here...
-    private ScaledJoystick m_joystick = new ScaledJoystick(0);
+    private XboxController m_driverController = new XboxController(0);
+    private XboxController m_operatorController = new XboxController(1);
     private AHRS m_ahrs = new AHRS(Port.kMXP);
-
     private DriveTrain m_driveTrain = new DriveTrain(m_ahrs);
+    //private Climber m_climber = new Climber();
+    private Shooter m_shooter = new Shooter();
+    private Intake m_intake = new Intake();
+    private Spinner m_spinner = new Spinner();
 
     /**
      * The container for the robot. Contains subsystems, OI devices, and commands.
      */
     public RobotContainer() {
         // Configure the button bindings
-        m_ahrs.enableBoardlevelYawReset(true);
-        m_driveTrain.setDefaultCommand(new DriveWithJoysticks(m_driveTrain, m_joystick));
+        SmartDashboard.putData("Shooter", m_shooter);
+        m_driveTrain.setDefaultCommand(new DriveWithXboxController(m_driveTrain, m_driverController));
         configureButtonBindings();
     }
 
@@ -59,6 +69,55 @@ public class RobotContainer {
      * passing it to a {@link edu.wpi.first.wpilibj2.command.button.JoystickButton}.
      */
     private void configureButtonBindings() {
+        JoystickButton shiftButton = new JoystickButton(m_driverController, XboxController.Button.kBumperLeft.value);
+        JoystickButton operatorShiftButton = new JoystickButton(m_operatorController, XboxController.Button.kBumperLeft.value);
+
+        // Drivetrain
+        new POVButton(m_driverController, 0).whenActive(()-> m_driveTrain.setThrottle(0.9));
+        new POVButton(m_driverController, 270).whenActive(()-> m_driveTrain.setThrottle(0.6));
+        new POVButton(m_driverController, 180).whenActive(()-> m_driveTrain.setThrottle(0.3));
+
+        // Climber
+        //JoystickButton winchUpButton = new JoystickButton(m_driverController, XboxController.Button.kStart.value);
+
+        //telescopeUpButton.and(shiftButton.negate()).whenActive(new RaiseTelescopingArm(m_climber));
+        //telescopeUpButton.and(shiftButton).whenActive(new LowerTelescopingArm(m_climber));
+
+        //winchUpButton.whileHeld(new WinchUp(m_climber));
+
+        // Intake
+        JoystickButton toggleIntakeExtendButton = new JoystickButton(m_operatorController, XboxController.Button.kY.value);
+        JoystickButton driveIntakeButton = new JoystickButton(m_driverController, XboxController.Button.kBumperRight.value);
+        JoystickButton operatorDriveIntakeButton = new JoystickButton(m_operatorController, XboxController.Button.kBumperRight.value);
+
+        toggleIntakeExtendButton.toggleWhenPressed(new ToggleIntakeExtend(m_intake));
+        driveIntakeButton.and(shiftButton.negate()).whileActiveContinuous(new DriveIntake(m_intake, false));
+        driveIntakeButton.and(shiftButton).whileActiveContinuous(new DriveIntake(m_intake, true));
+        operatorDriveIntakeButton.and(operatorShiftButton.negate()).whileActiveContinuous(new DriveIntake(m_intake, false));
+        operatorDriveIntakeButton.and(operatorShiftButton).whileActiveContinuous(new DriveIntake(m_intake, true));
+
+        // Shooter
+        JoystickButton driveShooterButton = new JoystickButton(m_operatorController, XboxController.Button.kA.value);
+        JoystickButton feedShooterButton = new JoystickButton(m_operatorController, XboxController.Button.kB.value);
+
+        SequentialCommandGroup feedShooterCommand = new SequentialCommandGroup(
+                                                        new WaitForSpeed(m_shooter),
+                                                        new ParallelCommandGroup(
+                                                            new DriveAgitator(m_shooter),
+                                                            new DriveIntake(m_intake, false, IntakeMode.Inner)
+                                                        )
+                                                    );
+
+        driveShooterButton.toggleWhenPressed(new DriveShooter(m_shooter));
+        feedShooterButton.whileHeld(feedShooterCommand);
+        
+        // Spinner
+        JoystickButton driveSpinnerButton = new JoystickButton(m_operatorController, XboxController.Button.kX.value);
+        JoystickButton toggleSpinnerUpDown = new JoystickButton(m_driverController, XboxController.Button.kX.value);
+
+        driveSpinnerButton.and(shiftButton.negate()).whileActiveContinuous(new DriveSpinner(m_spinner, false));
+        driveSpinnerButton.and(shiftButton).whileActiveContinuous(new DriveSpinner(m_spinner, true));
+        toggleSpinnerUpDown.toggleWhenPressed(new ToggleSpinnerUpDown(m_spinner));
     }
 
     /**
@@ -67,40 +126,9 @@ public class RobotContainer {
      * @return the command to run in autonomous
      */
     public Command getAutonomousCommand() {
-        var voltageConstraint = new DifferentialDriveVoltageConstraint(
-            new SimpleMotorFeedforward(Drive.kS, Drive.kV, Drive.kA),
-            Drive.kKinematics, 
-            10);
-
-        TrajectoryConfig config = new TrajectoryConfig(Drive.kMaxVelocityMetersPerSecond, Drive.kMaxAccelerationMetersPerSecondSquared)
-        .setKinematics(Drive.kKinematics)
-        .addConstraint(voltageConstraint);
-
-        // Test trajectory
-        Trajectory traj = TrajectoryGenerator.generateTrajectory(
-            List.of(
-                new Pose2d(0, 0, Rotation2d.fromDegrees(0)),
-                new Pose2d(1, -1, Rotation2d.fromDegrees(-90)),
-                new Pose2d(0, -2, Rotation2d.fromDegrees(-180)),
-                new Pose2d(-1, -1, Rotation2d.fromDegrees(-270)),
-                new Pose2d(0, 0, Rotation2d.fromDegrees(0))
-            ), 
-            config);
-
-        m_driveTrain.resetOdometry(traj.getInitialPose());
-
-        RamseteCommand ramsete = new RamseteCommand(
-            traj, 
-            m_driveTrain::getPose, 
-            new RamseteController(),
-            new SimpleMotorFeedforward(Drive.kS, Drive.kV, Drive.kA), 
-            Drive.kKinematics, 
-            m_driveTrain::getWheelSpeeds, 
-            m_driveTrain.getLeftController(), 
-            m_driveTrain.getRightController(), 
-            m_driveTrain::driveVolts, 
-            m_driveTrain);
-
-        return ramsete.andThen(() -> m_driveTrain.driveVolts(0, 0), m_driveTrain);
+        return new ParallelCommandGroup(
+            //new FollowPath(m_driveTrain, Trajectories.simpleForward),
+            new ResetSpinnerPosition(m_spinner)
+        );
     }
 }
