@@ -102,13 +102,22 @@ public final class Constants {
         public static final double kMinActuatorPulse = 1;
         public static final double kMaxActuatorDeadband = 0.05;
         public static final double kMinActuatorDeadband = 0;
+
+        public static final double kOuterSpeed = 0.5;
+        public static final double kInnerSpeed = 0.3;
+
+        public enum IntakeMode {
+            Both,
+            Inner,
+            Outer
+        }
     }
 
     public static final class Shooter {
         public static final double kP = 0.0003;
         public static final double kF = 0.00018;
-        public static final double kSpeedDelta = 100;
         public static final int kMainSpeed = 2925;
+        public static final int kSpeedThreshold = 2500;
     }
 
     public static final class Climber {

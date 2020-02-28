@@ -46,6 +46,10 @@ public class Shooter extends SubsystemBase {
         m_shooterAgitatorEncoder.setPosition(0);
     }
 
+    public boolean isUpToSpeed() {
+        return m_shooterMain.getEncoder().getVelocity() > kSpeedThreshold;
+    }
+
     public void driveMain(double speed) {
         if (m_shooterMain.getEncoder().getVelocity() >= speed) {
             m_shooterMainPIDController.setP(0);
