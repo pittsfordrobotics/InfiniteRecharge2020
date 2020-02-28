@@ -36,7 +36,7 @@ public class ScaledJoystick extends Joystick {
         return t * getScaledThrottle();
     }
 
-    public double getScaledThrottle() {
+    private double getScaledThrottle() {
         return -getThrottle() / 2 + 0.5;
     }
 }

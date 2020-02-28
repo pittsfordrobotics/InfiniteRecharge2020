@@ -5,23 +5,23 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.commands.spinner;
+package frc.robot.commands;
 
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.Spinner;
+import frc.robot.ScaledJoystick;
+import frc.robot.subsystems.DriveTrain;
 
-public class DriveSpinner extends CommandBase {
-    private Spinner m_spinner;
-    private boolean m_isInverted;
+public class DriveWithJoysticks extends CommandBase {
+    private DriveTrain m_driveTrain;
+    private ScaledJoystick m_joystick;
 
     /**
-     * Creates a new SpinTheSpinner.
+     * Creates a new DriveWithJoysticks.
      */
-    public DriveSpinner(Spinner spinner, boolean isInverted) {
-        addRequirements(spinner);
-        m_spinner = spinner;
-        m_isInverted = isInverted;
+    public DriveWithJoysticks(DriveTrain driveTrain, ScaledJoystick joystick) {
+        addRequirements(driveTrain);
+        m_driveTrain = driveTrain;
+        m_joystick = joystick;
     }
 
     // Called when the command is initially scheduled.
@@ -32,19 +32,12 @@ public class DriveSpinner extends CommandBase {
     // Called every time the scheduler runs while the command is scheduled.
     @Override
     public void execute() {
-        double speed = SmartDashboard.getNumber("Spinner Speed", 0.5);
-
-        if (m_isInverted) {
-            speed *= -1;
-        }
-
-        m_spinner.spin(speed);
+        m_driveTrain.drive(m_joystick.getScaledY(), m_joystick.getScaledTwist());
     }
 
     // Called once the command ends or is interrupted.
     @Override
     public void end(boolean interrupted) {
-        m_spinner.spin(0);
     }
 
     // Returns true when the command should end.
