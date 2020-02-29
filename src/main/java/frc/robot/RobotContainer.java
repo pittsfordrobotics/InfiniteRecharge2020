@@ -11,6 +11,7 @@ import com.kauailabs.navx.frc.AHRS;
 
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.SPI.Port;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
@@ -18,6 +19,7 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
 import frc.robot.Constants.Intake.IntakeMode;
+import frc.robot.commands.auto.FollowPath;
 import frc.robot.commands.climber.LowerTelescopingArm;
 import frc.robot.commands.climber.RaiseTelescopingArm;
 import frc.robot.commands.climber.WinchUp;
@@ -55,6 +57,8 @@ public class RobotContainer {
     private Intake m_intake = new Intake();
     private Spinner m_spinner = new Spinner();
 
+    private SendableChooser<Command> m_commandChooser = new SendableChooser<Command>();
+
     /**
      * The container for the robot. Contains subsystems, OI devices, and commands.
      */
@@ -63,6 +67,10 @@ public class RobotContainer {
         SmartDashboard.putData("Shooter", m_shooter);
         m_driveTrain.setDefaultCommand(new DriveWithXboxController(m_driveTrain, m_driverController));
         configureButtonBindings();
+        m_commandChooser.setDefaultOption("Reset Spinner Only", new ResetSpinnerPosition(m_spinner));
+        m_commandChooser.setDefaultOption("Drive Forward", new ParallelCommandGroup(
+            new FollowPath(m_driveTrain, Trajectories.simpleForward),
+            new ResetSpinnerPosition(m_spinner)));
     }
 
     /**
@@ -130,9 +138,6 @@ public class RobotContainer {
      * @return the command to run in autonomous
      */
     public Command getAutonomousCommand() {
-        return new ParallelCommandGroup(
-            //new FollowPath(m_driveTrain, Trajectories.simpleForward),
-            new ResetSpinnerPosition(m_spinner)
-        );
+        return m_commandChooser.getSelected();
     }
 }
