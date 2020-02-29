@@ -130,6 +130,9 @@ public final class Constants {
         public static final Color kRedTarget = ColorMatch.makeColor(0.35, 0.43, 0.23);
         public static final Color kYellowTarget = ColorMatch.makeColor(0.30, 0.52, 0.18);
 
-        public static final double kMaxSpinnerPosition = -44; // Negative is up
+        public static final double kMaxUpDownPosition = -44; // Negative is up
+        public static final double kLeftRightSpeed = 0.5;
+        public static final double kUpDownResetSpeed = 0.1;
+        public static final double kUpDownSpeed = 0.2;
     }
 }

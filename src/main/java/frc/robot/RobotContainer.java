@@ -30,8 +30,6 @@ import frc.robot.commands.spinner.DriveSpinner;
 import frc.robot.commands.spinner.ResetSpinnerPosition;
 import frc.robot.commands.spinner.SpinnerDown;
 import frc.robot.commands.spinner.SpinnerUp;
-import frc.robot.commands.spinner.ToggleSpinnerUpDown;
-//import frc.robot.commands.spinner.ToggleSpinnerUpDown;
 import frc.robot.subsystems.Climber;
 //import frc.robot.commands.auto.FollowPath;
 import frc.robot.subsystems.DriveTrain;
@@ -52,11 +50,10 @@ public class RobotContainer {
     private XboxController m_operatorController = new XboxController(1);
     private AHRS m_ahrs = new AHRS(Port.kMXP);
     private DriveTrain m_driveTrain = new DriveTrain(m_ahrs);
-    //private Climber m_climber = new Climber();
+    private Climber m_climber = new Climber();
     private Shooter m_shooter = new Shooter();
     private Intake m_intake = new Intake();
     private Spinner m_spinner = new Spinner();
-    private Climber m_climber = new Climber();
 
     /**
      * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -118,16 +115,13 @@ public class RobotContainer {
         
         // Spinner
         JoystickButton driveSpinnerButton = new JoystickButton(m_operatorController, XboxController.Button.kX.value);
-        //JoystickButton spinnerUp = new JoystickButton(m_driverController, XboxController.Button.kX.value);
-        //JoystickButton spinnerDown = new JoystickButton(m_driverController, XboxController.Button.kY.value);
-        JoystickButton toggleSpinnerUpDown = new JoystickButton(m_driverController, XboxController.Button.kX.value);
+        JoystickButton spinnerUp = new JoystickButton(m_driverController, XboxController.Button.kX.value);
 
         driveSpinnerButton.and(operatorShiftButton.negate()).whileActiveContinuous(new DriveSpinner(m_spinner, false));
         driveSpinnerButton.and(operatorShiftButton).whileActiveContinuous(new DriveSpinner(m_spinner, true));
-        //toggleSpinnerUpDown.toggleWhenPressed(new ToggleSpinnerUpDown(m_spinner));
-        //spinnerUp.whenPressed(new SpinnerUp(m_spinner));
-        //spinnerDown.whenPressed(new SpinnerDown(m_spinner));
-        toggleSpinnerUpDown.toggleWhenPressed(new ToggleSpinnerUpDown(m_spinner));
+
+        spinnerUp.and(shiftButton.negate()).whenActive(new SpinnerUp(m_spinner));
+        spinnerUp.and(shiftButton).whenActive(new SpinnerDown(m_spinner));
     }
 
     /**
