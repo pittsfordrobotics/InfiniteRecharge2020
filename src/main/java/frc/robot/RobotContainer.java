@@ -18,6 +18,8 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
 import frc.robot.Constants.Intake.IntakeMode;
+import frc.robot.commands.climber.LowerTelescopingArm;
+import frc.robot.commands.climber.RaiseTelescopingArm;
 import frc.robot.commands.drivetrain.DriveWithXboxController;
 import frc.robot.commands.intake.DriveIntake;
 import frc.robot.commands.shooter.DriveAgitator;
@@ -25,7 +27,10 @@ import frc.robot.commands.shooter.DriveShooter;
 import frc.robot.commands.shooter.WaitForSpeed;
 import frc.robot.commands.spinner.DriveSpinner;
 import frc.robot.commands.spinner.ResetSpinnerPosition;
+import frc.robot.commands.spinner.SpinnerDown;
+import frc.robot.commands.spinner.SpinnerUp;
 import frc.robot.commands.spinner.ToggleSpinnerUpDown;
+import frc.robot.subsystems.Climber;
 //import frc.robot.commands.auto.FollowPath;
 //import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.DriveTrain;
@@ -50,6 +55,7 @@ public class RobotContainer {
     private Shooter m_shooter = new Shooter();
     private Intake m_intake = new Intake();
     private Spinner m_spinner = new Spinner();
+    private Climber m_climber = new Climber();
 
     /**
      * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -70,17 +76,18 @@ public class RobotContainer {
     private void configureButtonBindings() {
         JoystickButton shiftButton = new JoystickButton(m_driverController, XboxController.Button.kBumperLeft.value);
         JoystickButton operatorShiftButton = new JoystickButton(m_operatorController, XboxController.Button.kBumperLeft.value);
-
+        
         // Drivetrain
         new POVButton(m_driverController, 0).whenActive(()-> m_driveTrain.setThrottle(0.9));
         new POVButton(m_driverController, 270).whenActive(()-> m_driveTrain.setThrottle(0.6));
         new POVButton(m_driverController, 180).whenActive(()-> m_driveTrain.setThrottle(0.3));
 
         // Climber
+        JoystickButton telescopeUpButton = new JoystickButton(m_operatorController, XboxController.Button.kStart.value);
         //JoystickButton winchUpButton = new JoystickButton(m_driverController, XboxController.Button.kStart.value);
 
-        //telescopeUpButton.and(shiftButton.negate()).whenActive(new RaiseTelescopingArm(m_climber));
-        //telescopeUpButton.and(shiftButton).whenActive(new LowerTelescopingArm(m_climber));
+        telescopeUpButton.and(shiftButton.negate()).whenActive(new RaiseTelescopingArm(m_climber));
+        telescopeUpButton.and(shiftButton).whenActive(new LowerTelescopingArm(m_climber));
 
         //winchUpButton.whileHeld(new WinchUp(m_climber));
 
@@ -110,11 +117,15 @@ public class RobotContainer {
         
         // Spinner
         JoystickButton driveSpinnerButton = new JoystickButton(m_operatorController, XboxController.Button.kX.value);
-        JoystickButton toggleSpinnerUpDown = new JoystickButton(m_driverController, XboxController.Button.kX.value);
+        JoystickButton spinnerUp = new JoystickButton(m_driverController, XboxController.Button.kX.value);
+        JoystickButton spinnerDown = new JoystickButton(m_driverController, XboxController.Button.kY.value);
 
-        driveSpinnerButton.and(shiftButton.negate()).whileActiveContinuous(new DriveSpinner(m_spinner, false));
-        driveSpinnerButton.and(shiftButton).whileActiveContinuous(new DriveSpinner(m_spinner, true));
-        toggleSpinnerUpDown.toggleWhenPressed(new ToggleSpinnerUpDown(m_spinner));
+
+        driveSpinnerButton.and(operatorShiftButton.negate()).whileActiveContinuous(new DriveSpinner(m_spinner, false));
+        driveSpinnerButton.and(operatorShiftButton).whileActiveContinuous(new DriveSpinner(m_spinner, true));
+        //toggleSpinnerUpDown.toggleWhenPressed(new ToggleSpinnerUpDown(m_spinner));
+        spinnerUp.whenPressed(new SpinnerUp(m_spinner));
+        spinnerDown.whenPressed(new SpinnerDown(m_spinner));
     }
 
     /**

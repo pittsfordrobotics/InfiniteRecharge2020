@@ -43,6 +43,7 @@ public class Spinner extends SubsystemBase {
      */
     public Spinner() {
         SmartDashboard.putNumber("Spinner Speed", 0.5);
+        SmartDashboard.putData(this);
 
         m_spinnerLeftRight.restoreFactoryDefaults();
         m_spinnerLeftRightEncoder.setPosition(0);
@@ -52,7 +53,6 @@ public class Spinner extends SubsystemBase {
         m_spinnerUpDown.restoreFactoryDefaults();
         m_spinnerUpDownEncoder.setPosition(0);
         m_spinnerUpDown.setIdleMode(IdleMode.kBrake);
-        m_spinnerUpDownPIDController.setFF(0.05);
         m_spinnerUpDown.setSmartCurrentLimit(20);
 
         m_colorMatcher.addColorMatch(kBlueTarget);
@@ -84,12 +84,29 @@ public class Spinner extends SubsystemBase {
     }
 
     public void raise() {
-        m_spinnerUpDownPIDController.setReference(-12, ControlType.kPosition);
+
+        while (m_spinnerUpDownEncoder.getPosition() > -12) {
+            m_spinnerUpDown.set(-0.2);
+        }
+        m_spinnerUpDown.set(0);
         SmartDashboard.putBoolean("Spinner Stowed", false);
     }
+    
+    public boolean isRaised()
+    {
+        return m_spinnerUpDownEncoder.getPosition() <= -12;
+    }
 
+    public boolean isLowered()
+    {
+        return m_spinnerUpDownEncoder.getPosition() >= 0;
+    }
+    
     public void lower() {
-        m_spinnerUpDown.set(0.2);
+        while (m_spinnerUpDownEncoder.getPosition() < 0) {
+            m_spinnerUpDown.set(0.2);
+        }
+        m_spinnerUpDown.set(0);
         SmartDashboard.putBoolean("Spinner Stowed", true);
     }
 

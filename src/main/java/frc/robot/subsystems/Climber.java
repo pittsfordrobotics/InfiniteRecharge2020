@@ -26,7 +26,7 @@ public class Climber extends SubsystemBase {
     * Creates a new Climber.
     */
     public Climber() {
-        SmartDashboard.putNumber("Telescoping Arm Speed", 0.5);
+        SmartDashboard.putNumber("Telescoping Arm Speed", 0.25);
         SmartDashboard.putNumber("Winch Speed", 0.5);
 
         m_telescopingArm.restoreFactoryDefaults();
@@ -47,6 +47,7 @@ public class Climber extends SubsystemBase {
 
     @Override
     public void periodic() {
+        SmartDashboard.putNumber("Telescope Position", m_telescopingArmEncoder.getPosition());
         // This method will be called once per scheduler run
     }
 }
