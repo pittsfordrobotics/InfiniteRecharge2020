@@ -8,12 +8,10 @@
 package frc.robot.subsystems;
 
 import com.revrobotics.CANEncoder;
-import com.revrobotics.CANPIDController;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.ColorMatch;
 import com.revrobotics.ColorMatchResult;
 import com.revrobotics.ColorSensorV3;
-import com.revrobotics.ControlType;
 import com.revrobotics.CANDigitalInput.LimitSwitchPolarity;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
@@ -33,8 +31,6 @@ public class Spinner extends SubsystemBase {
     private CANEncoder m_spinnerLeftRightEncoder = m_spinnerLeftRight.getEncoder();
     private CANEncoder m_spinnerUpDownEncoder = m_spinnerUpDown.getEncoder();
 
-    private CANPIDController m_spinnerUpDownPIDController = m_spinnerUpDown.getPIDController();
-
     private ColorSensorV3 m_colorSensor = new ColorSensorV3(Port.kOnboard);
     private ColorMatch m_colorMatcher = new ColorMatch();
 
@@ -42,9 +38,6 @@ public class Spinner extends SubsystemBase {
      * Creates a new Spinner.
      */
     public Spinner() {
-        SmartDashboard.putNumber("Spinner Speed", 0.5);
-        SmartDashboard.putData(this);
-
         m_spinnerLeftRight.restoreFactoryDefaults();
         m_spinnerLeftRightEncoder.setPosition(0);
         m_spinnerLeftRight.setIdleMode(IdleMode.kBrake);
@@ -67,8 +60,8 @@ public class Spinner extends SubsystemBase {
         return result.color;
     }
 
-    public void spin(double speed) {
-        m_spinnerLeftRight.set(speed);
+    public void spin(boolean isInverted) {
+        m_spinnerLeftRight.set(isInverted ? kLeftRightSpeed : -kLeftRightSpeed);
     }
 
     public boolean isAtLowerLimit() {
@@ -76,7 +69,7 @@ public class Spinner extends SubsystemBase {
     }
 
     public void initialDriveDown() {
-        m_spinnerUpDown.set(0.1);
+        m_spinnerUpDown.set(kUpDownResetSpeed);
     }
 
     public void resetPosition() {
@@ -84,34 +77,36 @@ public class Spinner extends SubsystemBase {
     }
 
     public void raise() {
-
-        while (m_spinnerUpDownEncoder.getPosition() > -12) {
-            m_spinnerUpDown.set(-0.2);
-        }
-        m_spinnerUpDown.set(0);
+        m_spinnerUpDown.set(-kUpDownSpeed);
         SmartDashboard.putBoolean("Spinner Stowed", false);
     }
     
     public boolean isRaised()
     {
-        return m_spinnerUpDownEncoder.getPosition() <= -12;
+        return m_spinnerUpDownEncoder.getPosition() <= kMaxUpDownPosition;
+    }
+
+    public void lower() {
+        m_spinnerUpDown.set(kUpDownSpeed);
+        SmartDashboard.putBoolean("Spinner Stowed", true);
     }
 
     public boolean isLowered()
     {
         return m_spinnerUpDownEncoder.getPosition() >= 0;
     }
-    
-    public void lower() {
-        while (m_spinnerUpDownEncoder.getPosition() < 0) {
-            m_spinnerUpDown.set(0.2);
-        }
+
+    public void stopUpDown() {
         m_spinnerUpDown.set(0);
-        SmartDashboard.putBoolean("Spinner Stowed", true);
+    }
+
+    public void stopLeftRight() {
+        m_spinnerLeftRight.set(0);
     }
 
     @Override
     public void periodic() {
         SmartDashboard.putNumber("Spinner Up Down Encoder", m_spinnerUpDownEncoder.getPosition());
+        SmartDashboard.putBoolean("Spinner Forward", m_spinnerUpDown.getForwardLimitSwitch(LimitSwitchPolarity.kNormallyOpen).get());
     }
 }

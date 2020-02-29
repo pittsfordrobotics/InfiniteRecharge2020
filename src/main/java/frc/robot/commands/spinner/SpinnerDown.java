@@ -29,13 +29,13 @@ public class SpinnerDown extends CommandBase {
     // Called every time the scheduler runs while the command is scheduled. 
     @Override 
     public void execute() {
-        m_spinner. lower();
+        m_spinner.lower();
     }
 
     // Called once the command ends or is interrupted.
     @Override
     public void end(boolean interrupted) {
-
+        m_spinner.stopUpDown();
     }
 
     // Returns true when the command should end.

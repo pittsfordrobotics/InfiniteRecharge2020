@@ -7,7 +7,6 @@
 
 package frc.robot.commands.spinner;
 
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Spinner;
 
@@ -32,19 +31,13 @@ public class DriveSpinner extends CommandBase {
     // Called every time the scheduler runs while the command is scheduled.
     @Override
     public void execute() {
-        double speed = SmartDashboard.getNumber("Spinner Speed", 0.5);
-
-        if (m_isInverted) {
-            speed *= -1;
-        }
-
-        m_spinner.spin(speed);
+        m_spinner.spin(m_isInverted);
     }
 
     // Called once the command ends or is interrupted.
     @Override
     public void end(boolean interrupted) {
-        m_spinner.spin(0);
+        m_spinner.stopLeftRight();
     }
 
     // Returns true when the command should end.
