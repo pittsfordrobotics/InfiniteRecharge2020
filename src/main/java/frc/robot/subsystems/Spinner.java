@@ -8,12 +8,10 @@
 package frc.robot.subsystems;
 
 import com.revrobotics.CANEncoder;
-import com.revrobotics.CANPIDController;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.ColorMatch;
 import com.revrobotics.ColorMatchResult;
 import com.revrobotics.ColorSensorV3;
-import com.revrobotics.ControlType;
 import com.revrobotics.CANDigitalInput.LimitSwitchPolarity;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
@@ -32,8 +30,6 @@ public class Spinner extends SubsystemBase {
 
     private CANEncoder m_spinnerLeftRightEncoder = m_spinnerLeftRight.getEncoder();
     private CANEncoder m_spinnerUpDownEncoder = m_spinnerUpDown.getEncoder();
-
-    private CANPIDController m_spinnerUpDownPIDController = m_spinnerUpDown.getPIDController();
 
     private ColorSensorV3 m_colorSensor = new ColorSensorV3(Port.kOnboard);
     private ColorMatch m_colorMatcher = new ColorMatch();
@@ -84,8 +80,7 @@ public class Spinner extends SubsystemBase {
     }
 
     public void raise() {
-
-        while (m_spinnerUpDownEncoder.getPosition() > -12) {
+        while (m_spinnerUpDownEncoder.getPosition() > kMaxSpinnerPosition) {
             m_spinnerUpDown.set(-0.2);
         }
         m_spinnerUpDown.set(0);
@@ -94,7 +89,7 @@ public class Spinner extends SubsystemBase {
     
     public boolean isRaised()
     {
-        return m_spinnerUpDownEncoder.getPosition() <= -12;
+        return m_spinnerUpDownEncoder.getPosition() <= kMaxSpinnerPosition;
     }
 
     public boolean isLowered()
@@ -113,5 +108,6 @@ public class Spinner extends SubsystemBase {
     @Override
     public void periodic() {
         SmartDashboard.putNumber("Spinner Up Down Encoder", m_spinnerUpDownEncoder.getPosition());
+        SmartDashboard.putBoolean("Spinner Forward", m_spinnerUpDown.getForwardLimitSwitch(LimitSwitchPolarity.kNormallyOpen).get());
     }
 }

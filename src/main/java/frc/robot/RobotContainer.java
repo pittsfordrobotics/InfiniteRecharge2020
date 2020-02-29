@@ -20,6 +20,7 @@ import edu.wpi.first.wpilibj2.command.button.POVButton;
 import frc.robot.Constants.Intake.IntakeMode;
 import frc.robot.commands.climber.LowerTelescopingArm;
 import frc.robot.commands.climber.RaiseTelescopingArm;
+import frc.robot.commands.climber.WinchUp;
 import frc.robot.commands.drivetrain.DriveWithXboxController;
 import frc.robot.commands.intake.DriveIntake;
 import frc.robot.commands.shooter.DriveAgitator;
@@ -30,9 +31,9 @@ import frc.robot.commands.spinner.ResetSpinnerPosition;
 import frc.robot.commands.spinner.SpinnerDown;
 import frc.robot.commands.spinner.SpinnerUp;
 import frc.robot.commands.spinner.ToggleSpinnerUpDown;
+//import frc.robot.commands.spinner.ToggleSpinnerUpDown;
 import frc.robot.subsystems.Climber;
 //import frc.robot.commands.auto.FollowPath;
-//import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Shooter;
@@ -84,12 +85,12 @@ public class RobotContainer {
 
         // Climber
         JoystickButton telescopeUpButton = new JoystickButton(m_operatorController, XboxController.Button.kStart.value);
-        //JoystickButton winchUpButton = new JoystickButton(m_driverController, XboxController.Button.kStart.value);
+        JoystickButton winchUpButton = new JoystickButton(m_driverController, XboxController.Button.kBack.value);
 
         telescopeUpButton.and(shiftButton.negate()).whenActive(new RaiseTelescopingArm(m_climber));
         telescopeUpButton.and(shiftButton).whenActive(new LowerTelescopingArm(m_climber));
 
-        //winchUpButton.whileHeld(new WinchUp(m_climber));
+        winchUpButton.whileHeld(new WinchUp(m_climber));
 
         // Intake
         JoystickButton driveIntakeButton = new JoystickButton(m_driverController, XboxController.Button.kBumperRight.value);
@@ -117,15 +118,16 @@ public class RobotContainer {
         
         // Spinner
         JoystickButton driveSpinnerButton = new JoystickButton(m_operatorController, XboxController.Button.kX.value);
-        JoystickButton spinnerUp = new JoystickButton(m_driverController, XboxController.Button.kX.value);
-        JoystickButton spinnerDown = new JoystickButton(m_driverController, XboxController.Button.kY.value);
-
+        //JoystickButton spinnerUp = new JoystickButton(m_driverController, XboxController.Button.kX.value);
+        //JoystickButton spinnerDown = new JoystickButton(m_driverController, XboxController.Button.kY.value);
+        JoystickButton toggleSpinnerUpDown = new JoystickButton(m_driverController, XboxController.Button.kX.value);
 
         driveSpinnerButton.and(operatorShiftButton.negate()).whileActiveContinuous(new DriveSpinner(m_spinner, false));
         driveSpinnerButton.and(operatorShiftButton).whileActiveContinuous(new DriveSpinner(m_spinner, true));
         //toggleSpinnerUpDown.toggleWhenPressed(new ToggleSpinnerUpDown(m_spinner));
-        spinnerUp.whenPressed(new SpinnerUp(m_spinner));
-        spinnerDown.whenPressed(new SpinnerDown(m_spinner));
+        //spinnerUp.whenPressed(new SpinnerUp(m_spinner));
+        //spinnerDown.whenPressed(new SpinnerDown(m_spinner));
+        toggleSpinnerUpDown.toggleWhenPressed(new ToggleSpinnerUpDown(m_spinner));
     }
 
     /**
