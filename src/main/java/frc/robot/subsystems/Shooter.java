@@ -41,9 +41,11 @@ public class Shooter extends SubsystemBase {
         m_shooterFeeder.restoreFactoryDefaults();
         m_shooterFeederEncoder.setPosition(0);
         m_shooterFeeder.setInverted(true);
+        m_shooterFeeder.setSmartCurrentLimit(20);
 
         m_shooterAgitator.restoreFactoryDefaults();
         m_shooterAgitatorEncoder.setPosition(0);
+        m_shooterAgitator.setSmartCurrentLimit(20);
     }
 
     public boolean isUpToSpeed() {
