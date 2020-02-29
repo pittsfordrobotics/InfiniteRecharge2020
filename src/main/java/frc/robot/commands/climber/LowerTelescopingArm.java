@@ -31,7 +31,7 @@ public class LowerTelescopingArm extends CommandBase {
     // Called every time the scheduler runs while the command is scheduled.
     @Override
     public void execute() {
-        double speed = SmartDashboard.getNumber("Telescoping Arm Speed", 0.5);
+        double speed = SmartDashboard.getNumber("Telescoping Arm Speed", 0.25);
         m_climber.driveTelescopingArm(-speed);
     }
 
