@@ -8,6 +8,7 @@
 package frc.robot.subsystems;
 
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -22,11 +23,12 @@ public class Climber extends SubsystemBase {
     * Creates a new Climber.
     */
     public Climber() {
-        SmartDashboard.putNumber("Telescoping Arm Speed", 0.5);
-        SmartDashboard.putNumber("Winch Speed", 0.5);
+        SmartDashboard.putNumber("Telescoping Arm Speed", 0.25);
+        SmartDashboard.putNumber("Winch Speed", 0.2);
 
         m_telescopingArm.restoreFactoryDefaults();
         m_telescopingArm.getEncoder().setPosition(0);
+        m_telescopingArm.setIdleMode(IdleMode.kBrake);
 
         m_winch.restoreFactoryDefaults();
         m_winch.getEncoder().setPosition(0);
@@ -42,6 +44,6 @@ public class Climber extends SubsystemBase {
 
     @Override
     public void periodic() {
-        // This method will be called once per scheduler run
+        SmartDashboard.putNumber("Telescope Encoder", m_telescopingArm.getEncoder().getPosition());
     }
 }

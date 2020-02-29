@@ -32,7 +32,7 @@ public class WinchUp extends CommandBase {
     // Called every time the scheduler runs while the command is scheduled.
     @Override
     public void execute() {
-        double speed = SmartDashboard.getNumber("Winch Speed", 0.5);
+        double speed = SmartDashboard.getNumber("Winch Speed", 0.2);
         m_climber.driveWinch(speed);
     }
 
