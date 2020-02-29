@@ -25,6 +25,8 @@ import frc.robot.commands.shooter.DriveShooter;
 import frc.robot.commands.shooter.WaitForSpeed;
 import frc.robot.commands.spinner.DriveSpinner;
 import frc.robot.commands.spinner.ResetSpinnerPosition;
+import frc.robot.commands.spinner.SpinnerDown;
+import frc.robot.commands.spinner.SpinnerUp;
 import frc.robot.commands.spinner.ToggleSpinnerUpDown;
 //import frc.robot.commands.auto.FollowPath;
 //import frc.robot.subsystems.Climber;
@@ -110,11 +112,15 @@ public class RobotContainer {
         
         // Spinner
         JoystickButton driveSpinnerButton = new JoystickButton(m_operatorController, XboxController.Button.kX.value);
-        JoystickButton toggleSpinnerUpDown = new JoystickButton(m_driverController, XboxController.Button.kX.value);
+        JoystickButton spinnerUp = new JoystickButton(m_driverController, XboxController.Button.kX.value);
+        JoystickButton spinnerDown = new JoystickButton(m_driverController, XboxController.Button.kY.value);
 
-        driveSpinnerButton.and(shiftButton.negate()).whileActiveContinuous(new DriveSpinner(m_spinner, false));
-        driveSpinnerButton.and(shiftButton).whileActiveContinuous(new DriveSpinner(m_spinner, true));
-        toggleSpinnerUpDown.toggleWhenPressed(new ToggleSpinnerUpDown(m_spinner));
+
+        driveSpinnerButton.and(operatorShiftButton.negate()).whileActiveContinuous(new DriveSpinner(m_spinner, false));
+        driveSpinnerButton.and(operatorShiftButton).whileActiveContinuous(new DriveSpinner(m_spinner, true));
+        //toggleSpinnerUpDown.toggleWhenPressed(new ToggleSpinnerUpDown(m_spinner));
+        spinnerUp.whenPressed(new SpinnerUp(m_spinner));
+        spinnerDown.whenPressed(new SpinnerDown(m_spinner));
     }
 
     /**
