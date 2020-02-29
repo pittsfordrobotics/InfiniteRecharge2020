@@ -17,9 +17,11 @@ public class Intake extends SubsystemBase {
     public Intake() {
         m_intakeInner.restoreFactoryDefaults();
         m_intakeInnerEncoder.setPosition(0);
+        m_intakeInner.setSmartCurrentLimit(20);
 
         m_intakeOuter.restoreFactoryDefaults();
         m_intakeOuterEncoder.setPosition(0);
+        m_intakeOuter.setSmartCurrentLimit(20);
     }
 
     public void driveMotors(double innerSpeed, double outerSpeed) {

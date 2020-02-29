@@ -47,11 +47,13 @@ public class Spinner extends SubsystemBase {
         m_spinnerLeftRight.restoreFactoryDefaults();
         m_spinnerLeftRightEncoder.setPosition(0);
         m_spinnerLeftRight.setIdleMode(IdleMode.kBrake);
+        m_spinnerLeftRight.setSmartCurrentLimit(20);
 
         m_spinnerUpDown.restoreFactoryDefaults();
         m_spinnerUpDownEncoder.setPosition(0);
         m_spinnerUpDown.setIdleMode(IdleMode.kBrake);
         m_spinnerUpDownPIDController.setFF(0.05);
+        m_spinnerUpDown.setSmartCurrentLimit(20);
 
         m_colorMatcher.addColorMatch(kBlueTarget);
         m_colorMatcher.addColorMatch(kGreenTarget);

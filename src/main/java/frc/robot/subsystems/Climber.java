@@ -31,6 +31,7 @@ public class Climber extends SubsystemBase {
 
         m_telescopingArm.restoreFactoryDefaults();
         m_telescopingArmEncoder.setPosition(0);
+        m_telescopingArm.setSmartCurrentLimit(20);
 
         m_winch.restoreFactoryDefaults();
         m_winchEncoder.setPosition(0);
