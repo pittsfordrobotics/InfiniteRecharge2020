@@ -89,7 +89,17 @@ public class Spinner extends SubsystemBase {
         m_spinnerUpDown.set(0);
         SmartDashboard.putBoolean("Spinner Stowed", false);
     }
+    
+    public boolean isRaised()
+    {
+        return m_spinnerUpDownEncoder.getPosition() <= -12;
+    }
 
+    public boolean isLowered()
+    {
+        return m_spinnerUpDownEncoder.getPosition() >= 0;
+    }
+    
     public void lower() {
         while (m_spinnerUpDownEncoder.getPosition() < 0) {
             m_spinnerUpDown.set(0.2);
