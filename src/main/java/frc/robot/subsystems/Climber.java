@@ -24,7 +24,7 @@ public class Climber extends SubsystemBase {
     */
     public Climber() {
         SmartDashboard.putNumber("Telescoping Arm Speed", 0.25);
-        SmartDashboard.putNumber("Winch Speed", 0.2);
+        SmartDashboard.putNumber("Winch Speed", 0.4);
 
         m_telescopingArm.restoreFactoryDefaults();
         m_telescopingArm.getEncoder().setPosition(0);
