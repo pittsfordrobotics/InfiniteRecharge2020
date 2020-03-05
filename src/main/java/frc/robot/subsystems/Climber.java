@@ -7,6 +7,7 @@
 
 package frc.robot.subsystems;
 
+import com.revrobotics.CANEncoder;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
@@ -18,7 +19,10 @@ import static frc.robot.Constants.Climber.*;
 
 public class Climber extends SubsystemBase {
     private CANSparkMax m_telescopingArm = new CANSparkMax(CAN.kClimberTelescopingArm, MotorType.kBrushless);
+    private CANEncoder m_telescopingArmEncoder = m_telescopingArm.getEncoder();
+
     private CANSparkMax m_winch = new CANSparkMax(CAN.kClimberWinch, MotorType.kBrushless);
+    private CANEncoder m_winchEncoder = m_winch.getEncoder();
 
     /**
     * Creates a new Climber.
@@ -28,11 +32,12 @@ public class Climber extends SubsystemBase {
         SmartDashboard.putNumber("Winch Speed", kWinchSpeed);
 
         m_telescopingArm.restoreFactoryDefaults();
-        m_telescopingArm.getEncoder().setPosition(0);
+        m_telescopingArmEncoder.setPosition(0);
         m_telescopingArm.setIdleMode(IdleMode.kBrake);
+        m_telescopingArm.setSmartCurrentLimit(20);
 
         m_winch.restoreFactoryDefaults();
-        m_winch.getEncoder().setPosition(0);
+        m_winchEncoder.setPosition(0);
     }
 
     public void driveTelescopingArm(double speed) {
@@ -49,15 +54,15 @@ public class Climber extends SubsystemBase {
     }
 
     public boolean isTelescopingArmExtended() {
-        return m_telescopingArm.getEncoder().getPosition() >= kMaxTelescopingArmPosition;
+        return m_telescopingArmEncoder.getPosition() >= kMaxTelescopingArmPosition;
     }
 
     public boolean isTelescopingArmRetracted() {
-        return m_telescopingArm.getEncoder().getPosition() <= 0;
+        return m_telescopingArmEncoder.getPosition() <= 0;
     }
 
     @Override
     public void periodic() {
-        SmartDashboard.putNumber("Telescope Encoder", m_telescopingArm.getEncoder().getPosition());
+        SmartDashboard.putNumber("Telescope Position", m_telescopingArmEncoder.getPosition());
     }
 }

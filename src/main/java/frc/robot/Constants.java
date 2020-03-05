@@ -49,6 +49,10 @@ public final class Constants {
         }
     }
 
+    public static final class PCM {
+
+    }
+
     public static final class PWM {
         public static final int kIntakeLeft = 0;
         public static final int kIntakeRight = 2;
@@ -112,6 +116,7 @@ public final class Constants {
     public static final class Shooter {
         public static final double kP = 0.0003;
         public static final double kF = 0.00018;
+        public static final int kMainSpeed = 2925;
         public static final int kSpeedThreshold = 2500;
     }
 
@@ -126,5 +131,10 @@ public final class Constants {
         public static final Color kGreenTarget = ColorMatch.makeColor(0.23, 0.50, 0.27);
         public static final Color kRedTarget = ColorMatch.makeColor(0.35, 0.43, 0.23);
         public static final Color kYellowTarget = ColorMatch.makeColor(0.30, 0.52, 0.18);
+
+        public static final double kMaxUpDownPosition = -44; // Negative is up
+        public static final double kLeftRightSpeed = 0.5;
+        public static final double kUpDownResetSpeed = 0.1;
+        public static final double kUpDownSpeed = 0.2;
     }
 }

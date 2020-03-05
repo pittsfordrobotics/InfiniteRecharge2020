@@ -5,21 +5,20 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.commands.intake;
+package frc.robot.commands.spinner;
 
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.Spinner;
 
-public class ToggleIntakeExtend extends CommandBase {
-    private Intake m_intake;
-    
+public class SpinnerDown extends CommandBase {
+    private Spinner m_spinner;
+
     /**
-     * Creates a new ToggleIntakeExtend.
+     * Creates a new ToggleSpinnerUpDown.
      */
-    public ToggleIntakeExtend(Intake intake) {
-        addRequirements(intake);
-        m_intake = intake;
+    public SpinnerDown(Spinner spinner) {
+        addRequirements(spinner);
+        m_spinner = spinner;
     }
 
     // Called when the command is initially scheduled.
@@ -27,22 +26,21 @@ public class ToggleIntakeExtend extends CommandBase {
     public void initialize() {
     }
 
-    // Called every time the scheduler runs while the command is scheduled.
-    @Override
+    // Called every time the scheduler runs while the command is scheduled. 
+    @Override 
     public void execute() {
-        double setpoint = SmartDashboard.getNumber("Intake Extend", 1);
-        m_intake.extend(setpoint);
+        m_spinner.lower();
     }
 
     // Called once the command ends or is interrupted.
     @Override
     public void end(boolean interrupted) {
-        m_intake.retract();
+        m_spinner.stopUpDown();
     }
 
     // Returns true when the command should end.
     @Override
     public boolean isFinished() {
-        return false;
+        return m_spinner.isLowered();
     }
 }

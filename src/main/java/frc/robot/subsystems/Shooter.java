@@ -10,6 +10,8 @@ package frc.robot.subsystems;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
+import com.revrobotics.CANEncoder;
+import com.revrobotics.CANPIDController;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.ControlType;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
@@ -18,28 +20,32 @@ import static frc.robot.Constants.Shooter.*;
 
 public class Shooter extends SubsystemBase {
     private CANSparkMax m_shooterMain = new CANSparkMax(CAN.kShooterMain, MotorType.kBrushless);
+    private CANEncoder m_shooterMainEncoder = m_shooterMain.getEncoder();
+    private CANPIDController m_shooterMainPIDController = m_shooterMain.getPIDController();
+
     private CANSparkMax m_shooterFeeder = new CANSparkMax(CAN.kShooterFeeder, MotorType.kBrushless);
+    private CANEncoder m_shooterFeederEncoder = m_shooterFeeder.getEncoder();
+
     private CANSparkMax m_shooterAgitator = new CANSparkMax(CAN.kShooterAgitator, MotorType.kBrushless);
+    private CANEncoder m_shooterAgitatorEncoder = m_shooterAgitator.getEncoder();
 
     /**
      * Creates a new Shooter.
      */
     public Shooter() {
-        SmartDashboard.putNumber("Speed Main", 2925);
-        SmartDashboard.putNumber("Speed Feeder", 0.5);
-        SmartDashboard.putNumber("Speed Agitator", 0.5);
-
         m_shooterMain.restoreFactoryDefaults();
-        m_shooterMain.getEncoder().setPosition(0);
+        m_shooterMainEncoder.setPosition(0);
         m_shooterMain.setInverted(true);
         m_shooterMain.setClosedLoopRampRate(2);
 
         m_shooterFeeder.restoreFactoryDefaults();
-        m_shooterFeeder.getEncoder().setPosition(0);
+        m_shooterFeederEncoder.setPosition(0);
         m_shooterFeeder.setInverted(true);
+        m_shooterFeeder.setSmartCurrentLimit(20);
 
         m_shooterAgitator.restoreFactoryDefaults();
-        m_shooterAgitator.getEncoder().setPosition(0);
+        m_shooterAgitatorEncoder.setPosition(0);
+        m_shooterAgitator.setSmartCurrentLimit(20);
     }
 
     public boolean isUpToSpeed() {
@@ -48,13 +54,13 @@ public class Shooter extends SubsystemBase {
 
     public void driveMain(double speed) {
         if (m_shooterMain.getEncoder().getVelocity() >= speed) {
-            m_shooterMain.getPIDController().setP(0);
+            m_shooterMainPIDController.setP(0);
         } else {
-            m_shooterMain.getPIDController().setP(kP);
+            m_shooterMainPIDController.setP(kP);
         }
 
-        m_shooterMain.getPIDController().setFF(kF);
-        m_shooterMain.getPIDController().setReference(speed, ControlType.kVelocity);
+        m_shooterMainPIDController.setFF(kF);
+        m_shooterMainPIDController.setReference(speed, ControlType.kVelocity);
     }
 
     public void driveFeeder(double speed) {
@@ -68,6 +74,6 @@ public class Shooter extends SubsystemBase {
     @Override
     public void periodic() {
         SmartDashboard.putData("Shooter", this);
-        SmartDashboard.putNumber("Shooter Velocity", m_shooterMain.getEncoder().getVelocity());
+        SmartDashboard.putNumber("Shooter Velocity", m_shooterMainEncoder.getVelocity());
     }
 }

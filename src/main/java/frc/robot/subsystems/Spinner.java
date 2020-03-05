@@ -7,11 +7,11 @@
 
 package frc.robot.subsystems;
 
+import com.revrobotics.CANEncoder;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.ColorMatch;
 import com.revrobotics.ColorMatchResult;
 import com.revrobotics.ColorSensorV3;
-import com.revrobotics.ControlType;
 import com.revrobotics.CANDigitalInput.LimitSwitchPolarity;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
@@ -28,6 +28,9 @@ public class Spinner extends SubsystemBase {
     private CANSparkMax m_spinnerLeftRight = new CANSparkMax(CAN.kSpinnerLeftRight, MotorType.kBrushless);
     private CANSparkMax m_spinnerUpDown = new CANSparkMax(CAN.kSpinnerUpDown, MotorType.kBrushless);
 
+    private CANEncoder m_spinnerLeftRightEncoder = m_spinnerLeftRight.getEncoder();
+    private CANEncoder m_spinnerUpDownEncoder = m_spinnerUpDown.getEncoder();
+
     private ColorSensorV3 m_colorSensor = new ColorSensorV3(Port.kOnboard);
     private ColorMatch m_colorMatcher = new ColorMatch();
 
@@ -35,16 +38,15 @@ public class Spinner extends SubsystemBase {
      * Creates a new Spinner.
      */
     public Spinner() {
-        SmartDashboard.putNumber("Spinner Speed", 0.5);
-
         m_spinnerLeftRight.restoreFactoryDefaults();
-        m_spinnerLeftRight.getEncoder().setPosition(0);
+        m_spinnerLeftRightEncoder.setPosition(0);
         m_spinnerLeftRight.setIdleMode(IdleMode.kBrake);
+        m_spinnerLeftRight.setSmartCurrentLimit(20);
 
         m_spinnerUpDown.restoreFactoryDefaults();
-        m_spinnerUpDown.getEncoder().setPosition(0);
+        m_spinnerUpDownEncoder.setPosition(0);
         m_spinnerUpDown.setIdleMode(IdleMode.kBrake);
-        m_spinnerUpDown.getPIDController().setFF(0.05);
+        m_spinnerUpDown.setSmartCurrentLimit(20);
 
         m_colorMatcher.addColorMatch(kBlueTarget);
         m_colorMatcher.addColorMatch(kGreenTarget);
@@ -58,8 +60,8 @@ public class Spinner extends SubsystemBase {
         return result.color;
     }
 
-    public void spin(double speed) {
-        m_spinnerLeftRight.set(speed);
+    public void spin(boolean isInverted) {
+        m_spinnerLeftRight.set(isInverted ? kLeftRightSpeed : -kLeftRightSpeed);
     }
 
     public boolean isAtLowerLimit() {
@@ -67,25 +69,44 @@ public class Spinner extends SubsystemBase {
     }
 
     public void initialDriveDown() {
-        m_spinnerUpDown.set(0.1);
+        m_spinnerUpDown.set(kUpDownResetSpeed);
     }
 
     public void resetPosition() {
-        m_spinnerUpDown.getEncoder().setPosition(0);
+        m_spinnerUpDownEncoder.setPosition(0);
     }
 
     public void raise() {
-        m_spinnerUpDown.getPIDController().setReference(-12, ControlType.kPosition);
+        m_spinnerUpDown.set(-kUpDownSpeed);
         SmartDashboard.putBoolean("Spinner Stowed", false);
+    }
+    
+    public boolean isRaised()
+    {
+        return m_spinnerUpDownEncoder.getPosition() <= kMaxUpDownPosition;
     }
 
     public void lower() {
-        m_spinnerUpDown.set(0.2);
+        m_spinnerUpDown.set(kUpDownSpeed);
         SmartDashboard.putBoolean("Spinner Stowed", true);
+    }
+
+    public boolean isLowered()
+    {
+        return m_spinnerUpDownEncoder.getPosition() >= 0;
+    }
+
+    public void stopUpDown() {
+        m_spinnerUpDown.set(0);
+    }
+
+    public void stopLeftRight() {
+        m_spinnerLeftRight.set(0);
     }
 
     @Override
     public void periodic() {
-        SmartDashboard.putNumber("Spinner Up Down Encoder", m_spinnerUpDown.getEncoder().getPosition());
+        SmartDashboard.putNumber("Spinner Up Down Encoder", m_spinnerUpDownEncoder.getPosition());
+        SmartDashboard.putBoolean("Spinner Forward", m_spinnerUpDown.getForwardLimitSwitch(LimitSwitchPolarity.kNormallyOpen).get());
     }
 }

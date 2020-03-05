@@ -12,6 +12,7 @@ import com.kauailabs.navx.frc.AHRS;
 import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.SPI.Port;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
@@ -19,9 +20,12 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
 import frc.robot.Constants.Intake.IntakeMode;
+import frc.robot.commands.auto.FollowPath;
+import frc.robot.commands.climber.LowerTelescopingArm;
+import frc.robot.commands.climber.RaiseTelescopingArm;
+import frc.robot.commands.climber.WinchUp;
 import frc.robot.commands.drivetrain.DriveWithXboxController;
 import frc.robot.commands.intake.DriveIntake;
-import frc.robot.commands.intake.ToggleIntakeExtend;
 import frc.robot.commands.shooter.DriveAgitator;
 import frc.robot.commands.shooter.DriveShooter;
 import frc.robot.commands.shooter.WaitForSpeed;
@@ -56,6 +60,8 @@ public class RobotContainer {
     private Intake m_intake = new Intake();
     private Spinner m_spinner = new Spinner();
 
+    private SendableChooser<Command> m_commandChooser = new SendableChooser<Command>();
+
     /**
      * The container for the robot. Contains subsystems, OI devices, and commands.
      */
@@ -65,6 +71,10 @@ public class RobotContainer {
         SmartDashboard.putData("Shooter", m_shooter);
         m_driveTrain.setDefaultCommand(new DriveWithXboxController(m_driveTrain, m_driverController));
         configureButtonBindings();
+        m_commandChooser.setDefaultOption("Reset Spinner Only", new ResetSpinnerPosition(m_spinner));
+        m_commandChooser.setDefaultOption("Drive Forward", new ParallelCommandGroup(
+            new FollowPath(m_driveTrain, Trajectories.simpleForward),
+            new ResetSpinnerPosition(m_spinner)));
     }
 
     /**
@@ -76,7 +86,7 @@ public class RobotContainer {
     private void configureButtonBindings() {
         JoystickButton shiftButton = new JoystickButton(m_driverController, XboxController.Button.kBumperLeft.value);
         JoystickButton operatorShiftButton = new JoystickButton(m_operatorController, XboxController.Button.kBumperLeft.value);
-
+        
         // Drivetrain
         new POVButton(m_driverController, 0).whenActive(()-> m_driveTrain.setThrottle(0.9));
         new POVButton(m_driverController, 270).whenActive(()-> m_driveTrain.setThrottle(0.6));
@@ -92,11 +102,9 @@ public class RobotContainer {
         winchUpButton.whileHeld(new WinchUp(m_climber));
 
         // Intake
-        JoystickButton toggleIntakeExtendButton = new JoystickButton(m_operatorController, XboxController.Button.kY.value);
         JoystickButton driveIntakeButton = new JoystickButton(m_driverController, XboxController.Button.kBumperRight.value);
         JoystickButton operatorDriveIntakeButton = new JoystickButton(m_operatorController, XboxController.Button.kBumperRight.value);
 
-        toggleIntakeExtendButton.toggleWhenPressed(new ToggleIntakeExtend(m_intake));
         driveIntakeButton.and(shiftButton.negate()).whileActiveContinuous(new DriveIntake(m_intake, false));
         driveIntakeButton.and(shiftButton).whileActiveContinuous(new DriveIntake(m_intake, true));
         operatorDriveIntakeButton.and(operatorShiftButton.negate()).whileActiveContinuous(new DriveIntake(m_intake, false));
@@ -119,11 +127,13 @@ public class RobotContainer {
         
         // Spinner
         JoystickButton driveSpinnerButton = new JoystickButton(m_operatorController, XboxController.Button.kX.value);
-        JoystickButton toggleSpinnerUpDown = new JoystickButton(m_driverController, XboxController.Button.kX.value);
+        JoystickButton spinnerUp = new JoystickButton(m_driverController, XboxController.Button.kX.value);
 
-        driveSpinnerButton.and(shiftButton.negate()).whileActiveContinuous(new DriveSpinner(m_spinner, false));
-        driveSpinnerButton.and(shiftButton).whileActiveContinuous(new DriveSpinner(m_spinner, true));
-        toggleSpinnerUpDown.toggleWhenPressed(new ToggleSpinnerUpDown(m_spinner));
+        driveSpinnerButton.and(operatorShiftButton.negate()).whileActiveContinuous(new DriveSpinner(m_spinner, false));
+        driveSpinnerButton.and(operatorShiftButton).whileActiveContinuous(new DriveSpinner(m_spinner, true));
+
+        spinnerUp.and(shiftButton.negate()).whenActive(new SpinnerUp(m_spinner));
+        spinnerUp.and(shiftButton).whenActive(new SpinnerDown(m_spinner));
     }
 
     /**
@@ -132,9 +142,6 @@ public class RobotContainer {
      * @return the command to run in autonomous
      */
     public Command getAutonomousCommand() {
-        return new ParallelCommandGroup(
-            new FollowPath(m_driveTrain, Trajectories.simpleForward),
-            new ResetSpinnerPosition(m_spinner)
-        );
+        return m_commandChooser.getSelected();
     }
 }

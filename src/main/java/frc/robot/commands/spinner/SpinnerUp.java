@@ -10,13 +10,13 @@ package frc.robot.commands.spinner;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Spinner;
 
-public class ToggleSpinnerUpDown extends CommandBase {
+public class SpinnerUp extends CommandBase {
     private Spinner m_spinner;
 
     /**
      * Creates a new ToggleSpinnerUpDown.
      */
-    public ToggleSpinnerUpDown(Spinner spinner) {
+    public SpinnerUp(Spinner spinner) {
         addRequirements(spinner);
         m_spinner = spinner;
     }
@@ -35,12 +35,12 @@ public class ToggleSpinnerUpDown extends CommandBase {
     // Called once the command ends or is interrupted.
     @Override
     public void end(boolean interrupted) {
-        m_spinner.lower();
+        m_spinner.stopUpDown();
     }
 
     // Returns true when the command should end.
     @Override
     public boolean isFinished() {
-        return false;
+        return m_spinner.isRaised();
     }
 }
