@@ -9,6 +9,7 @@ package frc.robot;
 
 import com.kauailabs.navx.frc.AHRS;
 
+import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.SPI.Port;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -30,8 +31,11 @@ import frc.robot.commands.shooter.DriveShooter;
 import frc.robot.commands.shooter.WaitForSpeed;
 import frc.robot.commands.spinner.DriveSpinner;
 import frc.robot.commands.spinner.ResetSpinnerPosition;
-import frc.robot.commands.spinner.SpinnerDown;
-import frc.robot.commands.spinner.SpinnerUp;
+import frc.robot.commands.spinner.ToggleSpinnerUpDown;
+import frc.robot.commands.auto.FollowPath;
+import frc.robot.commands.climber.LowerTelescopingArm;
+import frc.robot.commands.climber.RaiseTelescopingArm;
+import frc.robot.commands.climber.WinchUp;
 import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.Intake;
@@ -63,6 +67,7 @@ public class RobotContainer {
      */
     public RobotContainer() {
         // Configure the button bindings
+        CameraServer.getInstance().startAutomaticCapture(0);
         SmartDashboard.putData("Shooter", m_shooter);
         m_driveTrain.setDefaultCommand(new DriveWithXboxController(m_driveTrain, m_driverController));
         configureButtonBindings();
@@ -88,11 +93,11 @@ public class RobotContainer {
         new POVButton(m_driverController, 180).whenActive(()-> m_driveTrain.setThrottle(0.3));
 
         // Climber
-        JoystickButton telescopeUpButton = new JoystickButton(m_operatorController, XboxController.Button.kStart.value);
-        JoystickButton winchUpButton = new JoystickButton(m_driverController, XboxController.Button.kBack.value);
+        JoystickButton winchUpButton = new JoystickButton(m_operatorController, XboxController.Button.kBack.value);
+        JoystickButton telescopingArmButton = new JoystickButton(m_operatorController, XboxController.Button.kStart.value);
 
-        telescopeUpButton.and(shiftButton.negate()).whenActive(new RaiseTelescopingArm(m_climber));
-        telescopeUpButton.and(shiftButton).whenActive(new LowerTelescopingArm(m_climber));
+        telescopingArmButton.and(operatorShiftButton.negate()).whileActiveContinuous(new RaiseTelescopingArm(m_climber));
+        telescopingArmButton.and(operatorShiftButton).whileActiveContinuous(new LowerTelescopingArm(m_climber));
 
         winchUpButton.whileHeld(new WinchUp(m_climber));
 
