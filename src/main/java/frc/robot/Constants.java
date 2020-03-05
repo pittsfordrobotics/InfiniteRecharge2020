@@ -121,7 +121,9 @@ public final class Constants {
     }
 
     public static final class Climber {
-
+        public static final int kMaxTelescopingArmPosition = 160;
+        public static final double kTelescopingArmSpeed = 0.25;
+        public static final double kWinchSpeed = 0.4;
     }
 
     public static final class Spinner {
