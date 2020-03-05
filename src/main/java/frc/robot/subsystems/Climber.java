@@ -48,6 +48,5 @@ public class Climber extends SubsystemBase {
     @Override
     public void periodic() {
         SmartDashboard.putNumber("Telescope Position", m_telescopingArmEncoder.getPosition());
-        // This method will be called once per scheduler run
     }
 }

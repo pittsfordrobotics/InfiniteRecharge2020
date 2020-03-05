@@ -33,7 +33,6 @@ import frc.robot.commands.spinner.ResetSpinnerPosition;
 import frc.robot.commands.spinner.SpinnerDown;
 import frc.robot.commands.spinner.SpinnerUp;
 import frc.robot.subsystems.Climber;
-//import frc.robot.commands.auto.FollowPath;
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Shooter;
