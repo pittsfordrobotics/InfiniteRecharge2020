@@ -14,6 +14,7 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.Ports.*;
+import static frc.robot.Constants.Climber.*;
 
 public class Climber extends SubsystemBase {
     private CANSparkMax m_telescopingArm = new CANSparkMax(CAN.kClimberTelescopingArm, MotorType.kBrushless);
@@ -23,8 +24,8 @@ public class Climber extends SubsystemBase {
     * Creates a new Climber.
     */
     public Climber() {
-        SmartDashboard.putNumber("Telescoping Arm Speed", 0.25);
-        SmartDashboard.putNumber("Winch Speed", 0.4);
+        SmartDashboard.putNumber("Telescoping Arm Speed", kTelescopingArmSpeed);
+        SmartDashboard.putNumber("Winch Speed", kWinchSpeed);
 
         m_telescopingArm.restoreFactoryDefaults();
         m_telescopingArm.getEncoder().setPosition(0);
@@ -35,11 +36,24 @@ public class Climber extends SubsystemBase {
     }
 
     public void driveTelescopingArm(double speed) {
-        m_telescopingArm.set(speed);
+        if (speed > 0 && isTelescopingArmExtended() ||
+            speed < 0 && isTelescopingArmRetracted()) {
+            m_telescopingArm.set(0);
+        } else {
+            m_telescopingArm.set(speed);
+        }
     }
 
     public void driveWinch(double speed) {
         m_winch.set(speed);
+    }
+
+    public boolean isTelescopingArmExtended() {
+        return m_telescopingArm.getEncoder().getPosition() >= kMaxTelescopingArmPosition;
+    }
+
+    public boolean isTelescopingArmRetracted() {
+        return m_telescopingArm.getEncoder().getPosition() <= 0;
     }
 
     @Override
