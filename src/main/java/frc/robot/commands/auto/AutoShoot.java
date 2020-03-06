@@ -8,10 +8,8 @@
 package frc.robot.commands.auto;
 
 import edu.wpi.first.wpilibj.trajectory.Trajectory;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.Constants.Intake.IntakeMode;
 import frc.robot.commands.intake.DriveIntake;
 import frc.robot.commands.shooter.DriveAgitator;
@@ -25,6 +23,10 @@ import frc.robot.subsystems.Shooter;
 // information, see:
 // https://docs.wpilib.org/en/latest/docs/software/commandbased/convenience-features.html
 public class AutoShoot extends SequentialCommandGroup {
+    private Shooter m_shooter;
+    private Intake m_intake;
+    private DriveTrain m_driveTrain;
+
     /**
      * Creates a new AutoShoot.
      */
@@ -40,19 +42,22 @@ public class AutoShoot extends SequentialCommandGroup {
             new ParallelCommandGroup(
                 new DriveAgitator(shooter), 
                 new DriveIntake(intake, false, IntakeMode.Inner)
-            ),
-
-            new WaitCommand(10),
-
-            new InstantCommand(() -> {
-                shooter.driveAgitator(0);
-                shooter.driveFeeder(0);
-                shooter.driveMain(0);
-
-                intake.driveMotors(0, 0);
-                
-                driveTrain.driveVolts(0, 0);
-            })
+            )
         );
+
+        m_shooter = shooter;
+        m_intake = intake;
+        m_driveTrain = driveTrain;
+    }
+
+    @Override
+    public void end(boolean interrupted) {
+        m_shooter.driveAgitator(0);
+        m_shooter.driveFeeder(0);
+        m_shooter.driveMain(0);
+
+        m_intake.driveMotors(0, 0);
+        
+        m_driveTrain.driveVolts(0, 0);
     }
 }
