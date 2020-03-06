@@ -7,9 +7,9 @@
 
 package frc.robot.commands.shooter;
 
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Shooter;
+import static frc.robot.Constants.Shooter.*;
 
 public class DriveAgitator extends CommandBase {
     private Shooter m_shooter;
@@ -29,10 +29,8 @@ public class DriveAgitator extends CommandBase {
     // Called every time the scheduler runs while the command is scheduled.
     @Override
     public void execute() {
-        double agitatorSpeed = SmartDashboard.getNumber("Speed Agitator", 0.5);
-        double feederSpeed = SmartDashboard.getNumber("Speed Feeder", 0.5);
-        m_shooter.driveFeeder(feederSpeed);
-        m_shooter.driveAgitator(agitatorSpeed);
+        m_shooter.driveFeeder(kFeederSpeed);
+        m_shooter.driveAgitator(kAgitatorSpeed);
     }
 
     // Called once the command ends or is interrupted.

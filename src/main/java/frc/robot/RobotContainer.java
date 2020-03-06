@@ -19,7 +19,6 @@ import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
-import frc.robot.Constants.Intake.IntakeMode;
 import frc.robot.commands.auto.FollowPath;
 import frc.robot.commands.climber.LowerTelescopingArm;
 import frc.robot.commands.climber.RaiseTelescopingArm;
@@ -115,7 +114,7 @@ public class RobotContainer {
                                                         new WaitForSpeed(m_shooter),
                                                         new ParallelCommandGroup(
                                                             new DriveAgitator(m_shooter),
-                                                            new DriveIntake(m_intake, false, IntakeMode.Inner)
+                                                            new DriveIntake(m_intake, false)
                                                         )
                                                     );
 
