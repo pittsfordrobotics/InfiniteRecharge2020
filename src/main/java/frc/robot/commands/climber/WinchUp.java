@@ -7,7 +7,6 @@
 
 package frc.robot.commands.climber;
 
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Climber;
 import static frc.robot.Constants.Climber.*;
@@ -33,8 +32,7 @@ public class WinchUp extends CommandBase {
     // Called every time the scheduler runs while the command is scheduled.
     @Override
     public void execute() {
-        double speed = SmartDashboard.getNumber("Winch Speed", kWinchSpeed);
-        m_climber.driveWinch(speed);
+        m_climber.driveWinch(kWinchSpeed);
     }
 
     // Called once the command ends or is interrupted.

@@ -28,9 +28,6 @@ public class Climber extends SubsystemBase {
     * Creates a new Climber.
     */
     public Climber() {
-        SmartDashboard.putNumber("Telescoping Arm Speed", kTelescopingArmSpeed);
-        SmartDashboard.putNumber("Winch Speed", kWinchSpeed);
-
         m_telescopingArm.restoreFactoryDefaults();
         m_telescopingArmEncoder.setPosition(0);
         m_telescopingArm.setIdleMode(IdleMode.kBrake);
@@ -41,12 +38,7 @@ public class Climber extends SubsystemBase {
     }
 
     public void driveTelescopingArm(double speed) {
-        if (speed > 0 && isTelescopingArmExtended() ||
-            speed < 0 && isTelescopingArmRetracted()) {
-            m_telescopingArm.set(0);
-        } else {
-            m_telescopingArm.set(speed);
-        }
+        m_telescopingArm.set(speed);
     }
 
     public void driveWinch(double speed) {
