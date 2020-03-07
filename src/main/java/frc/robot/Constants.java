@@ -103,8 +103,7 @@ public final class Constants {
         public static final double kMaxActuatorDeadband = 0.05;
         public static final double kMinActuatorDeadband = 0;
 
-        public static final double kOuterSpeed = 0.5;
-        public static final double kInnerSpeed = 0.3;
+        public static final double kInnerSpeed = 0.35;
     }
 
     public static final class Shooter {
@@ -117,7 +116,7 @@ public final class Constants {
     }
 
     public static final class Climber {
-        public static final int kMaxTelescopingArmPosition = 160;
+        public static final int kMaxTelescopingArmPosition = 175;
         public static final double kTelescopingArmSpeed = 0.25;
         public static final double kWinchSpeed = 0.4;
     }
