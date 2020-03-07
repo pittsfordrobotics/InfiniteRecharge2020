@@ -64,7 +64,7 @@ public class Shooter extends SubsystemBase {
     }
 
     public void driveFeeder(double speed) {
-        m_shooterFeeder.set(speed);
+        m_shooterFeeder.setVoltage(speed);
     }
 
     public void driveAgitator(double speed) {
@@ -75,5 +75,6 @@ public class Shooter extends SubsystemBase {
     public void periodic() {
         SmartDashboard.putData("Shooter", this);
         SmartDashboard.putNumber("Shooter Velocity", m_shooterMainEncoder.getVelocity());
+        SmartDashboard.putNumber("Feeder Velocity", m_shooterFeederEncoder.getVelocity());
     }
 }

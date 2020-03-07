@@ -105,23 +105,21 @@ public final class Constants {
 
         public static final double kOuterSpeed = 0.5;
         public static final double kInnerSpeed = 0.3;
-
-        public enum IntakeMode {
-            Both,
-            Inner,
-            Outer
-        }
     }
 
     public static final class Shooter {
         public static final double kP = 0.0003;
         public static final double kF = 0.00018;
-        public static final int kMainSpeed = 2925;
-        public static final int kSpeedThreshold = 2500;
+        public static final int kMainSpeed = 2955;
+        public static final double kAgitatorSpeed = 0.3;
+        public static final double kFeederSpeed = 2;
+        public static final int kSpeedThreshold = 2800;
     }
 
     public static final class Climber {
-
+        public static final int kMaxTelescopingArmPosition = 160;
+        public static final double kTelescopingArmSpeed = 0.25;
+        public static final double kWinchSpeed = 0.4;
     }
 
     public static final class Spinner {

@@ -10,7 +10,6 @@ package frc.robot.commands.auto;
 import edu.wpi.first.wpilibj.trajectory.Trajectory;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import frc.robot.Constants.Intake.IntakeMode;
 import frc.robot.commands.intake.DriveIntake;
 import frc.robot.commands.shooter.DriveAgitator;
 import frc.robot.commands.shooter.DriveShooter;
@@ -41,7 +40,7 @@ public class AutoShoot extends SequentialCommandGroup {
             
             new ParallelCommandGroup(
                 new DriveAgitator(shooter), 
-                new DriveIntake(intake, false, IntakeMode.Inner)
+                new DriveIntake(intake, false)
             )
         );
 
@@ -56,7 +55,7 @@ public class AutoShoot extends SequentialCommandGroup {
         m_shooter.driveFeeder(0);
         m_shooter.driveMain(0);
 
-        m_intake.driveMotors(0, 0);
+        m_intake.driveMotors(0);
         
         m_driveTrain.driveVolts(0, 0);
     }

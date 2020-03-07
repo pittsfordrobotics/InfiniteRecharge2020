@@ -9,6 +9,7 @@ package frc.robot;
 
 import com.kauailabs.navx.frc.AHRS;
 
+import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.SPI.Port;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -18,7 +19,6 @@ import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
-import frc.robot.Constants.Intake.IntakeMode;
 import frc.robot.commands.auto.AutoShoot;
 import frc.robot.commands.auto.FollowPath;
 import frc.robot.commands.climber.LowerTelescopingArm;
@@ -34,7 +34,6 @@ import frc.robot.commands.spinner.ResetSpinnerPosition;
 import frc.robot.commands.spinner.SpinnerDown;
 import frc.robot.commands.spinner.SpinnerUp;
 import frc.robot.subsystems.Climber;
-//import frc.robot.commands.auto.FollowPath;
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Shooter;
@@ -65,6 +64,7 @@ public class RobotContainer {
      */
     public RobotContainer() {
         // Configure the button bindings
+        CameraServer.getInstance().startAutomaticCapture(0);
         SmartDashboard.putData("Shooter", m_shooter);
         m_driveTrain.setDefaultCommand(new DriveWithXboxController(m_driveTrain, m_driverController));
         configureButtonBindings();
@@ -75,6 +75,8 @@ public class RobotContainer {
                 new AutoShoot(m_shooter, m_intake, m_driveTrain, Trajectories.shootDriveForward)
             )
         );
+
+        SmartDashboard.putData("Auto Command", m_commandChooser);
     }
 
     /**
@@ -93,11 +95,11 @@ public class RobotContainer {
         new POVButton(m_driverController, 180).whenActive(()-> m_driveTrain.setThrottle(0.3));
 
         // Climber
-        JoystickButton telescopeUpButton = new JoystickButton(m_operatorController, XboxController.Button.kStart.value);
-        JoystickButton winchUpButton = new JoystickButton(m_driverController, XboxController.Button.kBack.value);
+        JoystickButton winchUpButton = new JoystickButton(m_operatorController, XboxController.Button.kBack.value);
+        JoystickButton telescopingArmButton = new JoystickButton(m_operatorController, XboxController.Button.kStart.value);
 
-        telescopeUpButton.and(shiftButton.negate()).whenActive(new RaiseTelescopingArm(m_climber));
-        telescopeUpButton.and(shiftButton).whenActive(new LowerTelescopingArm(m_climber));
+        telescopingArmButton.and(operatorShiftButton.negate()).whileActiveContinuous(new RaiseTelescopingArm(m_climber));
+        telescopingArmButton.and(operatorShiftButton).whileActiveContinuous(new LowerTelescopingArm(m_climber));
 
         winchUpButton.whileHeld(new WinchUp(m_climber));
 
@@ -118,7 +120,7 @@ public class RobotContainer {
                                                         new WaitForSpeed(m_shooter),
                                                         new ParallelCommandGroup(
                                                             new DriveAgitator(m_shooter),
-                                                            new DriveIntake(m_intake, false, IntakeMode.Inner)
+                                                            new DriveIntake(m_intake, false)
                                                         )
                                                     );
 
