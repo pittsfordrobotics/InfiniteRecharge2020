@@ -7,7 +7,14 @@
 
 package frc.robot;
 
+import com.revrobotics.ColorMatch;
+
+import edu.wpi.first.wpilibj.util.Color;
+
+import edu.wpi.first.wpilibj.controller.SimpleMotorFeedforward;
 import edu.wpi.first.wpilibj.kinematics.DifferentialDriveKinematics;
+import edu.wpi.first.wpilibj.trajectory.TrajectoryConfig;
+import edu.wpi.first.wpilibj.trajectory.constraint.DifferentialDriveVoltageConstraint;
 
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide
@@ -26,11 +33,29 @@ public final class Constants {
             public static final int kDriveLeftFollower = 12;
             public static final int kDriveRightPrimary = 13;
             public static final int kDriveRightFollower = 14;
+
+            public static final int kClimberTelescopingArm = 21;
+            public static final int kClimberWinch = 22;
+
+            public static final int kShooterMain = 31;
+            public static final int kShooterFeeder = 32;
+            public static final int kShooterAgitator = 33;
+            
+            public static final int kSpinnerLeftRight = 41;
+            public static final int kSpinnerUpDown = 42;
+
+            public static final int kIntakeInner = 51;
+            public static final int kIntakeOuter = 52;
         }
     }
 
-    public static final class PWM {
+    public static final class PCM {
 
+    }
+
+    public static final class PWM {
+        public static final int kIntakeLeft = 0;
+        public static final int kIntakeRight = 2;
     }
 
     public static final class DIO {
@@ -39,6 +64,19 @@ public final class Constants {
 
     public static final class AIO {
 
+    }
+
+    public static final class Auto {
+        public static final TrajectoryConfig kConfig = new TrajectoryConfig(
+            Drive.kMaxVelocityMetersPerSecond,
+            Drive.kMaxAccelerationMetersPerSecondSquared)
+            .setKinematics(Drive.kKinematics)
+            .addConstraint(
+                new DifferentialDriveVoltageConstraint(new SimpleMotorFeedforward(Drive.kS, Drive.kV, Drive.kA),
+                Drive.kKinematics,
+                10
+            )
+        );
     }
 
     public static final class Drive {
@@ -59,18 +97,33 @@ public final class Constants {
     }
 
     public static final class Intake {
-
+        public static final double kInnerSpeed = 3;
     }
 
     public static final class Shooter {
-
+        public static final double kP = 0.0003;
+        public static final double kF = 0.00018;
+        public static final int kMainSpeed = 2955;
+        public static final double kAgitatorSpeed = 0.3;
+        public static final double kFeederSpeed = 2;
+        public static final int kSpeedThreshold = 2800;
     }
 
     public static final class Climber {
-
+        public static final int kMaxTelescopingArmPosition = 175;
+        public static final double kTelescopingArmSpeed = 0.25;
+        public static final double kWinchSpeed = 0.4;
     }
 
     public static final class Spinner {
+        public static final Color kBlueTarget = ColorMatch.makeColor(0.17, 0.43, 0.41);
+        public static final Color kGreenTarget = ColorMatch.makeColor(0.23, 0.50, 0.27);
+        public static final Color kRedTarget = ColorMatch.makeColor(0.35, 0.43, 0.23);
+        public static final Color kYellowTarget = ColorMatch.makeColor(0.30, 0.52, 0.18);
 
+        public static final double kMaxUpDownPosition = -44; // Negative is up
+        public static final double kLeftRightSpeed = 0.5;
+        public static final double kUpDownResetSpeed = 0.1;
+        public static final double kUpDownSpeed = 0.2;
     }
 }
