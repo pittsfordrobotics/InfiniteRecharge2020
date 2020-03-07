@@ -5,23 +5,23 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.commands;
+package frc.robot.commands.intake;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.ScaledJoystick;
-import frc.robot.subsystems.DriveTrain;
+import frc.robot.subsystems.Intake;
+import static frc.robot.Constants.Intake.*;
 
-public class DriveWithJoysticks extends CommandBase {
-    private DriveTrain m_driveTrain;
-    private ScaledJoystick m_joystick;
+public class DriveIntake extends CommandBase {
+    private Intake m_intake;
+    private boolean m_isInverted;
 
     /**
-     * Creates a new DriveWithJoysticks.
+     * Creates a new DriveIntake.
      */
-    public DriveWithJoysticks(DriveTrain driveTrain, ScaledJoystick joystick) {
-        addRequirements(driveTrain);
-        m_driveTrain = driveTrain;
-        m_joystick = joystick;
+    public DriveIntake(Intake intake, boolean isInverted)  {
+        addRequirements(intake);
+        m_intake = intake;
+        m_isInverted = isInverted;
     }
 
     // Called when the command is initially scheduled.
@@ -32,12 +32,13 @@ public class DriveWithJoysticks extends CommandBase {
     // Called every time the scheduler runs while the command is scheduled.
     @Override
     public void execute() {
-        m_driveTrain.drive(m_joystick.getScaledY(), m_joystick.getScaledTwist());
+        m_intake.driveMotors(m_isInverted ? -kInnerSpeed * 1.2 : kInnerSpeed);
     }
 
     // Called once the command ends or is interrupted.
     @Override
     public void end(boolean interrupted) {
+        m_intake.driveMotors(0);
     }
 
     // Returns true when the command should end.
