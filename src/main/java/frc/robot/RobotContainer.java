@@ -89,6 +89,9 @@ public class RobotContainer {
         new POVButton(m_driverController, 0).whenActive(()-> m_driveTrain.setThrottle(0.9));
         new POVButton(m_driverController, 270).whenActive(()-> m_driveTrain.setThrottle(0.6));
         new POVButton(m_driverController, 180).whenActive(()-> m_driveTrain.setThrottle(0.3));
+        
+        JoystickButton backUpButton = new JoystickButton(m_driverController, XboxController.Button.kStart.value);
+        backUpButton.whenPressed(new FollowPath(m_driveTrain, Trajectories.nineInchesBack));
 
         // Climber
         JoystickButton winchUpButton = new JoystickButton(m_operatorController, XboxController.Button.kBack.value);
