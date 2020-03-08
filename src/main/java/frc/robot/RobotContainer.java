@@ -71,6 +71,8 @@ public class RobotContainer {
         m_commandChooser.setDefaultOption("Drive Forward", new ParallelCommandGroup(
             new FollowPath(m_driveTrain, Trajectories.simpleForward),
             new ResetSpinnerPosition(m_spinner)));
+        m_commandChooser.setDefaultOption("Drive Circle", new FollowPath(m_driveTrain, Trajectories.circleRight));
+        m_commandChooser.setDefaultOption("Backwards P", new FollowPath(m_driveTrain, Trajectories.backwardsP));
         
         SmartDashboard.putData("Auto Command", m_commandChooser);
     }

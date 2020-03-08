@@ -106,7 +106,5 @@ public class Spinner extends SubsystemBase {
 
     @Override
     public void periodic() {
-        SmartDashboard.putNumber("Spinner Up Down Encoder", m_spinnerUpDownEncoder.getPosition());
-        SmartDashboard.putBoolean("Spinner Forward", m_spinnerUpDown.getForwardLimitSwitch(LimitSwitchPolarity.kNormallyOpen).get());
     }
 }
