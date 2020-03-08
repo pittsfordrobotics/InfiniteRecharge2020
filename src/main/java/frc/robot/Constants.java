@@ -77,6 +77,17 @@ public final class Constants {
                 10
             )
         );
+
+        public static final TrajectoryConfig kReversedConfig = new TrajectoryConfig(
+            Drive.kMaxVelocityMetersPerSecond,
+            Drive.kMaxAccelerationMetersPerSecondSquared)
+            .setKinematics(Drive.kKinematics)
+            .addConstraint(
+                new DifferentialDriveVoltageConstraint(new SimpleMotorFeedforward(Drive.kS, Drive.kV, Drive.kA),
+                Drive.kKinematics,
+                10
+            )
+        );
     }
 
     public static final class Drive {

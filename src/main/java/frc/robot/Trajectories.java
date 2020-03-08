@@ -40,10 +40,10 @@ public final class Trajectories {
 
     public static final Trajectory nineInchesBack = TrajectoryGenerator.generateTrajectory(
         List.of(
-            new Pose2d(0, 0, Rotation2d.fromDegrees(180)),
+            new Pose2d(0, 0, Rotation2d.fromDegrees(0)),
             // nine inches = 0.2886 meters.
-            new Pose2d(-0.2286, 0, Rotation2d.fromDegrees(180))
+            new Pose2d(-0.2286, 0, Rotation2d.fromDegrees(0))
         ),
-        Auto.kConfig
+        Auto.kReversedConfig
     );
 }
