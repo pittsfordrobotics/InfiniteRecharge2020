@@ -17,6 +17,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
 import frc.robot.commands.auto.FollowPath;
@@ -75,6 +76,7 @@ public class RobotContainer {
         m_commandChooser.setDefaultOption("Backwards P", new FollowPath(m_driveTrain, Trajectories.backwardsP));
         
         SmartDashboard.putData("Auto Command", m_commandChooser);
+        SmartDashboard.putNumber("Auto Delay", 0);
     }
 
     /**
@@ -142,6 +144,9 @@ public class RobotContainer {
      * @return the command to run in autonomous
      */
     public Command getAutonomousCommand() {
-        return m_commandChooser.getSelected();
+        return new SequentialCommandGroup(
+            new WaitUntilCommand(SmartDashboard.getNumber("Auto Delay", 0)),
+            m_commandChooser.getSelected()
+        );
     }
 }
