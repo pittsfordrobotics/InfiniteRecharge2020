@@ -95,16 +95,16 @@ public final class Constants {
         public static final double kI = 0;
         public static final double kD = 0;
 
-        public static final double kS = 0.174;
-        public static final double kV = 2.76;
-        public static final double kA = 0.326;
+        public static final double kS = 0.191;
+        public static final double kV = 2.72;
+        public static final double kA = 0.492;
 
         public static final double kMaxVelocityMetersPerSecond = 1.5;
         public static final double kMaxAccelerationMetersPerSecondSquared = 1;
 
         public static final double kGearRatio = 10.71;
         public static final double kWheelDiameterMeters = 0.1524;
-        public static final DifferentialDriveKinematics kKinematics = new DifferentialDriveKinematics(0.563);
+        public static final DifferentialDriveKinematics kKinematics = new DifferentialDriveKinematics(0.644);
     }
 
     public static final class Intake {
