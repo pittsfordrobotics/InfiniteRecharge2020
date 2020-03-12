@@ -18,7 +18,7 @@ public class Intake extends SubsystemBase {
     }
 
     public void driveMotors(double innerSpeed) {
-        m_intakeInner.set(innerSpeed);
+        m_intakeInner.setVoltage(innerSpeed);
     }
     
     @Override

@@ -77,6 +77,17 @@ public final class Constants {
                 10
             )
         );
+
+        public static final TrajectoryConfig kReversedConfig = new TrajectoryConfig(
+            Drive.kMaxVelocityMetersPerSecond,
+            Drive.kMaxAccelerationMetersPerSecondSquared)
+            .setKinematics(Drive.kKinematics)
+            .addConstraint(
+                new DifferentialDriveVoltageConstraint(new SimpleMotorFeedforward(Drive.kS, Drive.kV, Drive.kA),
+                Drive.kKinematics,
+                10
+            )
+        );
     }
 
     public static final class Drive {
@@ -84,27 +95,20 @@ public final class Constants {
         public static final double kI = 0;
         public static final double kD = 0;
 
-        public static final double kS = 0.174;
-        public static final double kV = 2.76;
-        public static final double kA = 0.326;
+        public static final double kS = 0.191;
+        public static final double kV = 2.72;
+        public static final double kA = 0.492;
 
         public static final double kMaxVelocityMetersPerSecond = 1.5;
         public static final double kMaxAccelerationMetersPerSecondSquared = 1;
 
         public static final double kGearRatio = 10.71;
         public static final double kWheelDiameterMeters = 0.1524;
-        public static final DifferentialDriveKinematics kKinematics = new DifferentialDriveKinematics(0.563);
+        public static final DifferentialDriveKinematics kKinematics = new DifferentialDriveKinematics(0.644);
     }
 
     public static final class Intake {
-        public static final double kMaxActuatorPulse = 2;
-        public static final double kCenterActuatorPulse = 1.5;
-        public static final double kMinActuatorPulse = 1;
-        public static final double kMaxActuatorDeadband = 0.05;
-        public static final double kMinActuatorDeadband = 0;
-
-        public static final double kOuterSpeed = 0.5;
-        public static final double kInnerSpeed = 0.3;
+        public static final double kInnerSpeed = 3;
     }
 
     public static final class Shooter {
