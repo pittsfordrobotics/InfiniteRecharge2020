@@ -41,7 +41,7 @@ public final class Trajectories {
     public static final Trajectory shootDriveForward = TrajectoryGenerator.generateTrajectory(
         List.of(
             new Pose2d(0, 0, Rotation2d.fromDegrees(0)),
-            new Pose2d(2, 0, Rotation2d.fromDegrees(0))
+            new Pose2d(2.64, 0, Rotation2d.fromDegrees(0))
         ),
         Auto.kConfig
     );

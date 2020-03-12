@@ -31,16 +31,17 @@ public class AutoShoot extends SequentialCommandGroup {
      */
     public AutoShoot(Shooter shooter, Intake intake, DriveTrain driveTrain, Trajectory traj) {
         super(
-            new ParallelCommandGroup(
-                new DriveShooter(shooter), 
-                new FollowPath(driveTrain, traj)
-            ),
+            new FollowPath(driveTrain, traj),
 
-            new WaitForSpeed(shooter), 
-            
             new ParallelCommandGroup(
-                new DriveAgitator(shooter), 
-                new DriveIntake(intake, false)
+                new DriveShooter(shooter),
+                new SequentialCommandGroup(
+                    new WaitForSpeed(shooter),
+                    new ParallelCommandGroup(
+                        new DriveAgitator(shooter), 
+                        new DriveIntake(intake, false)
+                    )
+                )
             )
         );
 
