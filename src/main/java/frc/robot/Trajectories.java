@@ -38,6 +38,14 @@ public final class Trajectories {
         Auto.kConfig
     );
 
+    public static final Trajectory shootDriveForward = TrajectoryGenerator.generateTrajectory(
+        List.of(
+            new Pose2d(0, 0, Rotation2d.fromDegrees(0)),
+            new Pose2d(2.64, 0, Rotation2d.fromDegrees(0))
+        ),
+        Auto.kConfig
+    );
+
     public static final Trajectory nineInchesBack = TrajectoryGenerator.generateTrajectory(
         List.of(
             new Pose2d(0, 0, Rotation2d.fromDegrees(0)),

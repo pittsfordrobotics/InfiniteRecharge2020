@@ -20,6 +20,7 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
+import frc.robot.commands.auto.AutoShoot;
 import frc.robot.commands.auto.FollowPath;
 import frc.robot.commands.climber.LowerTelescopingArm;
 import frc.robot.commands.climber.RaiseTelescopingArm;
@@ -69,6 +70,11 @@ public class RobotContainer {
         m_driveTrain.setDefaultCommand(new DriveWithXboxController(m_driveTrain, m_driverController));
         configureButtonBindings();
         m_commandChooser.setDefaultOption("Reset Spinner Only", new ResetSpinnerPosition(m_spinner));
+        m_commandChooser.setDefaultOption("Drive And Shoot", new ParallelCommandGroup(
+                new ResetSpinnerPosition(m_spinner),
+                new AutoShoot(m_shooter, m_intake, m_driveTrain, Trajectories.shootDriveForward)
+            )
+        );
         m_commandChooser.setDefaultOption("Drive Forward", new ParallelCommandGroup(
             new FollowPath(m_driveTrain, Trajectories.simpleForward),
             new ResetSpinnerPosition(m_spinner)));
