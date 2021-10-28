@@ -45,7 +45,8 @@ public final class Constants {
             public static final int kSpinnerUpDown = 42;
 
             public static final int kIntakeInner = 51;
-            public static final int kIntakeOuter = 52;
+            // removed
+            // public static final int kIntakeOuter = 52;
         }
     }
 
@@ -116,7 +117,7 @@ public final class Constants {
         public static final double kF = 0.00018;
         public static final int kMainSpeed = 2955;
         public static final double kAgitatorSpeed = 0.3;
-        public static final double kFeederSpeed = 2;
+        public static final double kFeederSpeed = 3;
         public static final int kSpeedThreshold = 2800;
     }
 
