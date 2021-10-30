@@ -83,6 +83,7 @@ public final class Constants {
             Drive.kMaxVelocityMetersPerSecond,
             Drive.kMaxAccelerationMetersPerSecondSquared)
             .setKinematics(Drive.kKinematics)
+            .setReversed(true)
             .addConstraint(
                 new DifferentialDriveVoltageConstraint(new SimpleMotorFeedforward(Drive.kS, Drive.kV, Drive.kA),
                 Drive.kKinematics,
