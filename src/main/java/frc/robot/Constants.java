@@ -45,7 +45,8 @@ public final class Constants {
             public static final int kSpinnerUpDown = 42;
 
             public static final int kIntakeInner = 51;
-            public static final int kIntakeOuter = 52;
+            // removed
+            // public static final int kIntakeOuter = 52;
         }
     }
 
@@ -77,6 +78,18 @@ public final class Constants {
                 10
             )
         );
+
+        public static final TrajectoryConfig kReversedConfig = new TrajectoryConfig(
+            Drive.kMaxVelocityMetersPerSecond,
+            Drive.kMaxAccelerationMetersPerSecondSquared)
+            .setKinematics(Drive.kKinematics)
+            .setReversed(true)
+            .addConstraint(
+                new DifferentialDriveVoltageConstraint(new SimpleMotorFeedforward(Drive.kS, Drive.kV, Drive.kA),
+                Drive.kKinematics,
+                10
+            )
+        );
     }
 
     public static final class Drive {
@@ -84,16 +97,16 @@ public final class Constants {
         public static final double kI = 0;
         public static final double kD = 0;
 
-        public static final double kS = 0.174;
-        public static final double kV = 2.76;
-        public static final double kA = 0.326;
+        public static final double kS = 0.191;
+        public static final double kV = 2.72;
+        public static final double kA = 0.492;
 
         public static final double kMaxVelocityMetersPerSecond = 1.5;
         public static final double kMaxAccelerationMetersPerSecondSquared = 1;
 
         public static final double kGearRatio = 10.71;
         public static final double kWheelDiameterMeters = 0.1524;
-        public static final DifferentialDriveKinematics kKinematics = new DifferentialDriveKinematics(0.563);
+        public static final DifferentialDriveKinematics kKinematics = new DifferentialDriveKinematics(0.644);
     }
 
     public static final class Intake {
@@ -105,7 +118,7 @@ public final class Constants {
         public static final double kF = 0.00018;
         public static final int kMainSpeed = 2955;
         public static final double kAgitatorSpeed = 0.3;
-        public static final double kFeederSpeed = 2;
+        public static final double kFeederSpeed = 3;
         public static final int kSpeedThreshold = 2800;
     }
 

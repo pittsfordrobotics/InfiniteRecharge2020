@@ -17,8 +17,10 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
+import frc.robot.commands.auto.AutoShoot;
 import frc.robot.commands.auto.FollowPath;
 import frc.robot.commands.climber.LowerTelescopingArm;
 import frc.robot.commands.climber.RaiseTelescopingArm;
@@ -68,11 +70,19 @@ public class RobotContainer {
         m_driveTrain.setDefaultCommand(new DriveWithXboxController(m_driveTrain, m_driverController));
         configureButtonBindings();
         m_commandChooser.setDefaultOption("Reset Spinner Only", new ResetSpinnerPosition(m_spinner));
+        m_commandChooser.setDefaultOption("Drive And Shoot", new ParallelCommandGroup(
+                new ResetSpinnerPosition(m_spinner),
+                new AutoShoot(m_shooter, m_intake, m_driveTrain, Trajectories.shootDriveForward)
+            )
+        );
         m_commandChooser.setDefaultOption("Drive Forward", new ParallelCommandGroup(
             new FollowPath(m_driveTrain, Trajectories.simpleForward),
             new ResetSpinnerPosition(m_spinner)));
+        m_commandChooser.setDefaultOption("Drive Circle", new FollowPath(m_driveTrain, Trajectories.circleRight));
+        m_commandChooser.setDefaultOption("Backwards P", new FollowPath(m_driveTrain, Trajectories.backwardsP));
         
         SmartDashboard.putData("Auto Command", m_commandChooser);
+        SmartDashboard.putNumber("Auto Delay", 0);
     }
 
     /**
@@ -89,6 +99,9 @@ public class RobotContainer {
         new POVButton(m_driverController, 0).whenActive(()-> m_driveTrain.setThrottle(0.9));
         new POVButton(m_driverController, 270).whenActive(()-> m_driveTrain.setThrottle(0.6));
         new POVButton(m_driverController, 180).whenActive(()-> m_driveTrain.setThrottle(0.3));
+        
+        JoystickButton backUpButton = new JoystickButton(m_driverController, XboxController.Button.kStart.value);
+        backUpButton.whenPressed(new FollowPath(m_driveTrain, Trajectories.nineInchesBack));
 
         // Climber
         JoystickButton winchUpButton = new JoystickButton(m_operatorController, XboxController.Button.kBack.value);
@@ -140,6 +153,9 @@ public class RobotContainer {
      * @return the command to run in autonomous
      */
     public Command getAutonomousCommand() {
-        return m_commandChooser.getSelected();
+        return new SequentialCommandGroup(
+            new WaitUntilCommand(SmartDashboard.getNumber("Auto Delay", 0)),
+            m_commandChooser.getSelected()
+        );
     }
 }
