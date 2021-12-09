@@ -19,6 +19,7 @@ import edu.wpi.first.wpilibj.geometry.Pose2d;
 import edu.wpi.first.wpilibj.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.wpilibj.kinematics.DifferentialDriveWheelSpeeds;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 import static frc.robot.Constants.Ports.*;
@@ -40,6 +41,8 @@ public class DriveTrain extends SubsystemBase {
     private DifferentialDriveWheelSpeeds m_wheelSpeeds;
     private Pose2d m_pose;
     private AHRS m_ahrs;
+
+    private double throttle;
 
     /**
      * Creates a new DriveTrain.
@@ -72,7 +75,7 @@ public class DriveTrain extends SubsystemBase {
         m_rightEncoder.setPositionConversionFactor(Math.PI * kWheelDiameterMeters / kGearRatio);
         m_leftEncoder.setVelocityConversionFactor(Math.PI * kWheelDiameterMeters / kGearRatio / 60);
         m_rightEncoder.setVelocityConversionFactor(Math.PI * kWheelDiameterMeters / kGearRatio / 60);
-
+        
         setThrottle(0.6);
     }
 
@@ -82,6 +85,11 @@ public class DriveTrain extends SubsystemBase {
 
     public void setThrottle(double throttle) {
         m_differentialDrive.setMaxOutput(throttle);
+        this.throttle = throttle;
+    }
+
+    public double getThrottle() {
+        return throttle;
     }
 
     public void driveVolts(double left, double right) {
@@ -117,6 +125,17 @@ public class DriveTrain extends SubsystemBase {
         double rightVelocity = -m_rightEncoder.getVelocity();
 
         m_wheelSpeeds = new DifferentialDriveWheelSpeeds(leftVelocity, rightVelocity);
+        SmartDashboard.putNumber("Velocity Left", leftVelocity);
+        SmartDashboard.putNumber("Velocity Right", rightVelocity);
+        SmartDashboard.putNumber("Throttle", throttle);
+    }
+
+    public double getLeftVelocity() {
+        return m_leftEncoder.getVelocity();
+    }
+
+    public double getRightVelocity() {
+        return -m_rightEncoder.getVelocity();
     }
 
     public PIDController getLeftController() {
@@ -137,6 +156,13 @@ public class DriveTrain extends SubsystemBase {
 
     private double getAngle() {
         return -m_ahrs.getAngle();
+    }
+
+    public void idleMode(IdleMode mode) {
+        m_leftPrimary.setIdleMode(mode);
+        m_leftFollower.setIdleMode(mode);
+        m_rightPrimary.setIdleMode(mode);
+        m_rightFollower.setIdleMode(mode);
     }
 
     private void initController(CANSparkMax controller) {

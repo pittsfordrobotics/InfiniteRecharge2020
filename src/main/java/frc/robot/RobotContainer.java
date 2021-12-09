@@ -67,7 +67,10 @@ public class RobotContainer {
         // Configure the button bindings
         CameraServer.getInstance().startAutomaticCapture(0);
         SmartDashboard.putData("Shooter", m_shooter);
+
+        // sets up driveTrain with xbox controllers
         m_driveTrain.setDefaultCommand(new DriveWithXboxController(m_driveTrain, m_driverController));
+        
         configureButtonBindings();
         m_commandChooser.setDefaultOption("Reset Spinner Only", new ResetSpinnerPosition(m_spinner));
         m_commandChooser.setDefaultOption("Drive And Shoot", new ParallelCommandGroup(
@@ -95,7 +98,7 @@ public class RobotContainer {
         JoystickButton shiftButton = new JoystickButton(m_driverController, XboxController.Button.kBumperLeft.value);
         JoystickButton operatorShiftButton = new JoystickButton(m_operatorController, XboxController.Button.kBumperLeft.value);
         
-        // Drivetrain
+        // Drivetrain Throttle Control
         new POVButton(m_driverController, 0).whenActive(()-> m_driveTrain.setThrottle(0.9));
         new POVButton(m_driverController, 270).whenActive(()-> m_driveTrain.setThrottle(0.6));
         new POVButton(m_driverController, 180).whenActive(()-> m_driveTrain.setThrottle(0.3));
