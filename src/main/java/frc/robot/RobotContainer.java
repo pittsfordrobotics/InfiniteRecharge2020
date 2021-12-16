@@ -20,25 +20,32 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
-import frc.robot.commands.auto.AutoShoot;
-import frc.robot.commands.auto.FollowPath;
-import frc.robot.commands.climber.LowerTelescopingArm;
-import frc.robot.commands.climber.RaiseTelescopingArm;
-import frc.robot.commands.climber.WinchUp;
-import frc.robot.commands.drivetrain.DriveWithXboxController;
-import frc.robot.commands.intake.DriveIntake;
-import frc.robot.commands.shooter.DriveAgitator;
-import frc.robot.commands.shooter.DriveShooter;
-import frc.robot.commands.shooter.WaitForSpeed;
-import frc.robot.commands.spinner.DriveSpinner;
-import frc.robot.commands.spinner.ResetSpinnerPosition;
-import frc.robot.commands.spinner.SpinnerDown;
-import frc.robot.commands.spinner.SpinnerUp;
-import frc.robot.subsystems.Climber;
-import frc.robot.subsystems.DriveTrain;
-import frc.robot.subsystems.Intake;
-import frc.robot.subsystems.Shooter;
-import frc.robot.subsystems.Spinner;
+import frc.robot.commands.auto.*;
+import frc.robot.commands.climber.*;
+import frc.robot.commands.drivetrain.*;
+import frc.robot.commands.intake.*;
+import frc.robot.commands.shooter.*;
+import frc.robot.commands.spinner.*;
+import frc.robot.subsystems.*;
+//import frc.robot.commands.auto.AutoShoot;
+//import frc.robot.commands.auto.FollowPath;
+//import frc.robot.commands.climber.LowerTelescopingArm;
+//import frc.robot.commands.climber.RaiseTelescopingArm;
+//import frc.robot.commands.climber.WinchUp;
+//import frc.robot.commands.drivetrain.DriveWithXboxController;
+//import frc.robot.commands.intake.DriveIntake;
+//import frc.robot.commands.shooter.DriveAgitator;
+//import frc.robot.commands.shooter.DriveShooter;
+//import frc.robot.commands.shooter.WaitForSpeed;
+//import frc.robot.commands.spinner.DriveSpinner;
+//import frc.robot.commands.spinner.ResetSpinnerPosition;
+//import frc.robot.commands.spinner.SpinnerDown;
+//import frc.robot.commands.spinner.SpinnerUp;
+//import frc.robot.subsystems.Climber;
+//import frc.robot.subsystems.DriveTrain;
+//import frc.robot.subsystems.Intake;
+//import frc.robot.subsystems.Shooter;
+//import frc.robot.subsystems.Spinner;
 
 /**
  * This class is where the bulk of the robot should be declared. Since
@@ -69,18 +76,18 @@ public class RobotContainer {
         SmartDashboard.putData("Shooter", m_shooter);
         m_driveTrain.setDefaultCommand(new DriveWithXboxController(m_driveTrain, m_driverController));
         configureButtonBindings();
-        m_commandChooser.setDefaultOption("Reset Spinner Only", new ResetSpinnerPosition(m_spinner));
-        m_commandChooser.setDefaultOption("Drive And Shoot", new ParallelCommandGroup(
+        m_commandChooser.addOption("Reset Spinner Only", new ResetSpinnerPosition(m_spinner));
+        m_commandChooser.addOption("Drive And Shoot", new ParallelCommandGroup(
                 new ResetSpinnerPosition(m_spinner),
                 new AutoShoot(m_shooter, m_intake, m_driveTrain, Trajectories.shootDriveForward)
             )
         );
-        m_commandChooser.setDefaultOption("Drive Forward", new ParallelCommandGroup(
+        m_commandChooser.addOption("Drive Forward", new ParallelCommandGroup(
             new FollowPath(m_driveTrain, Trajectories.simpleForward),
             new ResetSpinnerPosition(m_spinner)));
-        m_commandChooser.setDefaultOption("Drive Circle", new FollowPath(m_driveTrain, Trajectories.circleRight));
-        m_commandChooser.setDefaultOption("Backwards P", new FollowPath(m_driveTrain, Trajectories.backwardsP));
-        
+        m_commandChooser.addOption("Drive Circle", new FollowPath(m_driveTrain, Trajectories.circleRight));
+        m_commandChooser.addOption("Backwards P", new FollowPath(m_driveTrain, Trajectories.backwardsP));
+        m_commandChooser.addOption("Limelight Drive", new LimelightDrive(m_driveTrain));
         SmartDashboard.putData("Auto Command", m_commandChooser);
         SmartDashboard.putNumber("Auto Delay", 0);
     }
