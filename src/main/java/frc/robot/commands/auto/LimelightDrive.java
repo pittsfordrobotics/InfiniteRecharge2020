@@ -27,7 +27,7 @@ public class LimelightDrive extends CommandBase {
 
     @Override
     public boolean isFinished() {
-        return !limelight.hasTarget();
+        return limelight.getVertical() < 0.2 && limelight.getHorizontal() < 0.2;
     }
 
     @Override
