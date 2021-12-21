@@ -12,7 +12,7 @@ import com.revrobotics.CANEncoder;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
-
+import edu.wpi.first.wpilibj.SlewRateLimiter;
 import edu.wpi.first.wpilibj.controller.PIDController;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.geometry.Pose2d;
@@ -22,8 +22,8 @@ import edu.wpi.first.wpilibj.kinematics.DifferentialDriveWheelSpeeds;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
-import static frc.robot.Constants.Ports.*;
 import static frc.robot.Constants.Drive.*;
+import static frc.robot.Constants.Ports.CAN;
 
 public class DriveTrain extends SubsystemBase {
     private CANSparkMax m_leftPrimary = new CANSparkMax(CAN.kDriveLeftPrimary, MotorType.kBrushless);
@@ -41,7 +41,7 @@ public class DriveTrain extends SubsystemBase {
     private DifferentialDriveWheelSpeeds m_wheelSpeeds;
     private Pose2d m_pose;
     private AHRS m_ahrs;
-
+    private SlewRateLimiter rateLimit;
     private double throttle;
 
     /**
@@ -61,7 +61,7 @@ public class DriveTrain extends SubsystemBase {
         resetEncoders();
 
         m_differentialDrive = new DifferentialDrive(m_leftPrimary, m_rightPrimary);
-        m_differentialDrive.setDeadband(0.05);
+        m_differentialDrive.setDeadband(0.08);
 
         m_ahrs = ahrs;
         m_ahrs.reset();
@@ -77,6 +77,8 @@ public class DriveTrain extends SubsystemBase {
         m_rightEncoder.setVelocityConversionFactor(Math.PI * kWheelDiameterMeters / kGearRatio / 60);
         
         setThrottle(0.6);
+
+        enableRateLimit();
     }
 
     public void drive(double speed, double rotation) {
@@ -120,14 +122,11 @@ public class DriveTrain extends SubsystemBase {
             leftMeters,
             rightMeters);
 
-        // Velocity
-        double leftVelocity = m_leftEncoder.getVelocity();
-        double rightVelocity = -m_rightEncoder.getVelocity();
-
-        m_wheelSpeeds = new DifferentialDriveWheelSpeeds(leftVelocity, rightVelocity);
-        SmartDashboard.putNumber("Velocity Left", leftVelocity);
-        SmartDashboard.putNumber("Velocity Right", rightVelocity);
+        m_wheelSpeeds = new DifferentialDriveWheelSpeeds(getLeftVelocity(), getRightVelocity());
+        SmartDashboard.putNumber("Velocity Left", getLeftVelocity());
+        SmartDashboard.putNumber("Velocity Right", getRightVelocity());
         SmartDashboard.putNumber("Throttle", throttle);
+
     }
 
     public double getLeftVelocity() {
@@ -158,15 +157,25 @@ public class DriveTrain extends SubsystemBase {
         return -m_ahrs.getAngle();
     }
 
-    public void idleMode(IdleMode mode) {
-        m_leftPrimary.setIdleMode(mode);
-        m_leftFollower.setIdleMode(mode);
-        m_rightPrimary.setIdleMode(mode);
-        m_rightFollower.setIdleMode(mode);
-    }
-
     private void initController(CANSparkMax controller) {
         controller.restoreFactoryDefaults();
         controller.setIdleMode(IdleMode.kBrake);
     }
+
+    public SlewRateLimiter getRateLimit() {
+        return rateLimit;
+    }
+
+    public void enableRateLimit() {
+        rateLimit = new SlewRateLimiter(0.04);
+    }
+
+    public void disableRateLimit() {
+        rateLimit = new SlewRateLimiter(10);
+    }
+
+    public void setRateLimit(SlewRateLimiter rateLimit) {
+        this.rateLimit = rateLimit;
+    }
+
 }
