@@ -8,12 +8,8 @@
 package frc.robot.commands.auto;
 
 import edu.wpi.first.wpilibj.trajectory.Trajectory;
-import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import frc.robot.commands.intake.DriveIntake;
-import frc.robot.commands.shooter.DriveAgitator;
-import frc.robot.commands.shooter.DriveShooter;
-import frc.robot.commands.shooter.WaitForSpeed;
+import frc.robot.commands.shooter.EnhancedShooter;
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Shooter;
@@ -32,17 +28,7 @@ public class AutoShoot extends SequentialCommandGroup {
     public AutoShoot(Shooter shooter, Intake intake, DriveTrain driveTrain, Trajectory traj) {
         super(
             new FollowPath(driveTrain, traj),
-
-            new ParallelCommandGroup(
-                new DriveShooter(shooter),
-                new SequentialCommandGroup(
-                    new WaitForSpeed(shooter),
-                    new ParallelCommandGroup(
-                        new DriveAgitator(shooter), 
-                        new DriveIntake(intake, false)
-                    )
-                )
-            )
+            new EnhancedShooter(shooter, intake)
         );
 
         m_shooter = shooter;

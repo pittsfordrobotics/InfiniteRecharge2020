@@ -119,19 +119,6 @@ public class RobotContainer {
         JoystickButton driveShooterButton = new JoystickButton(m_operatorController, XboxController.Button.kA.value);
         driveShooterButton.toggleWhenPressed(new EnhancedShooter(m_shooter, m_intake));
 
-//        JoystickButton feedShooterButton = new JoystickButton(m_operatorController, XboxController.Button.kB.value);
-//
-//        SequentialCommandGroup feedShooterCommand = new SequentialCommandGroup(
-//                                                        new WaitForSpeed(m_shooter),
-//                                                        new ParallelCommandGroup(
-//                                                            new DriveAgitator(m_shooter),
-//                                                            new DriveIntake(m_intake, false)
-//                                                        )
-//                                                    );
-
-//        driveShooterButton.toggleWhenPressed(new DriveShooter(m_shooter));
-//        feedShooterButton.whileHeld(feedShooterCommand);
-        
         // Spinner
         JoystickButton driveSpinnerButton = new JoystickButton(m_operatorController, XboxController.Button.kX.value);
         JoystickButton spinnerUp = new JoystickButton(m_driverController, XboxController.Button.kX.value);
