@@ -8,10 +8,10 @@
 package frc.robot;
 
 import com.kauailabs.navx.frc.AHRS;
-
 import edu.wpi.first.cameraserver.CameraServer;
-import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.SPI.Port;
+import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -27,18 +27,12 @@ import frc.robot.commands.climber.RaiseTelescopingArm;
 import frc.robot.commands.climber.WinchUp;
 import frc.robot.commands.drivetrain.DriveWithXboxController;
 import frc.robot.commands.intake.DriveIntake;
-import frc.robot.commands.shooter.DriveAgitator;
-import frc.robot.commands.shooter.DriveShooter;
-import frc.robot.commands.shooter.WaitForSpeed;
+import frc.robot.commands.shooter.EnhancedShooter;
 import frc.robot.commands.spinner.DriveSpinner;
 import frc.robot.commands.spinner.ResetSpinnerPosition;
 import frc.robot.commands.spinner.SpinnerDown;
 import frc.robot.commands.spinner.SpinnerUp;
-import frc.robot.subsystems.Climber;
-import frc.robot.subsystems.DriveTrain;
-import frc.robot.subsystems.Intake;
-import frc.robot.subsystems.Shooter;
-import frc.robot.subsystems.Spinner;
+import frc.robot.subsystems.*;
 
 /**
  * This class is where the bulk of the robot should be declared. Since
@@ -123,18 +117,20 @@ public class RobotContainer {
 
         // Shooter
         JoystickButton driveShooterButton = new JoystickButton(m_operatorController, XboxController.Button.kA.value);
-        JoystickButton feedShooterButton = new JoystickButton(m_operatorController, XboxController.Button.kB.value);
+        driveShooterButton.toggleWhenPressed(new EnhancedShooter(m_shooter, m_intake));
 
-        SequentialCommandGroup feedShooterCommand = new SequentialCommandGroup(
-                                                        new WaitForSpeed(m_shooter),
-                                                        new ParallelCommandGroup(
-                                                            new DriveAgitator(m_shooter),
-                                                            new DriveIntake(m_intake, false)
-                                                        )
-                                                    );
+//        JoystickButton feedShooterButton = new JoystickButton(m_operatorController, XboxController.Button.kB.value);
+//
+//        SequentialCommandGroup feedShooterCommand = new SequentialCommandGroup(
+//                                                        new WaitForSpeed(m_shooter),
+//                                                        new ParallelCommandGroup(
+//                                                            new DriveAgitator(m_shooter),
+//                                                            new DriveIntake(m_intake, false)
+//                                                        )
+//                                                    );
 
-        driveShooterButton.toggleWhenPressed(new DriveShooter(m_shooter));
-        feedShooterButton.whileHeld(feedShooterCommand);
+//        driveShooterButton.toggleWhenPressed(new DriveShooter(m_shooter));
+//        feedShooterButton.whileHeld(feedShooterCommand);
         
         // Spinner
         JoystickButton driveSpinnerButton = new JoystickButton(m_operatorController, XboxController.Button.kX.value);
