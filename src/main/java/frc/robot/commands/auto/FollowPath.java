@@ -27,6 +27,7 @@ public class FollowPath extends SequentialCommandGroup {
     // Add your commands in the super() call, e.g.
     // super(new FooCommand(), new BarCommand());
     super(
+        new InstantCommand(() -> driveTrain.driveVolts(0, 0), driveTrain),
         new InstantCommand(() -> driveTrain.resetOdometry(traj.getInitialPose()), driveTrain),
         new RamseteCommand(
             traj, 
