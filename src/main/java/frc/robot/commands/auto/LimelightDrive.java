@@ -5,7 +5,7 @@ import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.Limelight;
 
 public class LimelightDrive extends CommandBase {
-    private final DriveTrain driveTrain;
+    private DriveTrain driveTrain;
     private final Limelight limelight = Limelight.getInstance();
 
     public LimelightDrive(DriveTrain driveTrain) {
@@ -22,17 +22,17 @@ public class LimelightDrive extends CommandBase {
     @Override
     public void execute() {
         driveTrain.setThrottle(0.2);
-        driveTrain.drive(limelight.getVertical() * -0.1, limelight.getHorizontal() * -0.1);
+        driveTrain.drive(limelight.getVertical() * -0.5, limelight.getHorizontal() * 0.5);
     }
 
     @Override
     public boolean isFinished() {
-        return limelight.getVertical() < 0.2 && limelight.getHorizontal() < 0.2;
+        return !(limelight.getVertical() < 0.1 || limelight.getHorizontal() < 0.1);
     }
 
     @Override
     public void end(boolean interrupted) {
-        limelight.disable();
+//        limelight.disable();
         driveTrain.driveVolts(0, 0);
     }
 }

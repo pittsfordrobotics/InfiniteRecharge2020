@@ -8,24 +8,30 @@
 package frc.robot;
 
 import com.kauailabs.navx.frc.AHRS;
-
 import edu.wpi.first.cameraserver.CameraServer;
-import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.SPI.Port;
+import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
-import frc.robot.commands.auto.*;
-import frc.robot.commands.climber.*;
-import frc.robot.commands.drivetrain.*;
-import frc.robot.commands.intake.*;
-import frc.robot.commands.shooter.*;
-import frc.robot.commands.spinner.*;
+import frc.robot.commands.auto.FollowPath;
+import frc.robot.commands.auto.LimelightDrive;
+import frc.robot.commands.climber.LowerTelescopingArm;
+import frc.robot.commands.climber.RaiseTelescopingArm;
+import frc.robot.commands.climber.WinchUp;
+import frc.robot.commands.drivetrain.DriveWithXboxController;
+import frc.robot.commands.intake.DriveIntake;
+import frc.robot.commands.shooter.DriveAgitator;
+import frc.robot.commands.shooter.DriveShooter;
+import frc.robot.commands.shooter.WaitForSpeed;
+import frc.robot.commands.spinner.DriveSpinner;
+import frc.robot.commands.spinner.SpinnerDown;
+import frc.robot.commands.spinner.SpinnerUp;
 import frc.robot.subsystems.*;
 //import frc.robot.commands.auto.AutoShoot;
 //import frc.robot.commands.auto.FollowPath;
@@ -75,19 +81,19 @@ public class RobotContainer {
         CameraServer.getInstance().startAutomaticCapture(0);
         SmartDashboard.putData("Shooter", m_shooter);
         m_driveTrain.setDefaultCommand(new DriveWithXboxController(m_driveTrain, m_driverController));
-        configureButtonBindings();
-        m_commandChooser.addOption("Reset Spinner Only", new ResetSpinnerPosition(m_spinner));
-        m_commandChooser.addOption("Drive And Shoot", new ParallelCommandGroup(
-                new ResetSpinnerPosition(m_spinner),
-                new AutoShoot(m_shooter, m_intake, m_driveTrain, Trajectories.shootDriveForward)
-            )
-        );
-        m_commandChooser.addOption("Drive Forward", new ParallelCommandGroup(
-            new FollowPath(m_driveTrain, Trajectories.simpleForward),
-            new ResetSpinnerPosition(m_spinner)));
-        m_commandChooser.addOption("Drive Circle", new FollowPath(m_driveTrain, Trajectories.circleRight));
-        m_commandChooser.addOption("Backwards P", new FollowPath(m_driveTrain, Trajectories.backwardsP));
-        m_commandChooser.addOption("Limelight Drive", new LimelightDrive(m_driveTrain));
+//        configureButtonBindings();
+//        m_commandChooser.addOption("Reset Spinner Only", new ResetSpinnerPosition(m_spinner));
+//        m_commandChooser.addOption("Drive And Shoot", new ParallelCommandGroup(
+//                new ResetSpinnerPosition(m_spinner),
+//                new AutoShoot(m_shooter, m_intake, m_driveTrain, Trajectories.shootDriveForward)
+//            )
+//        );
+//        m_commandChooser.addOption("Drive Forward", new ParallelCommandGroup(
+//            new FollowPath(m_driveTrain, Trajectories.simpleForward),
+//            new ResetSpinnerPosition(m_spinner)));
+//        m_commandChooser.addOption("Drive Circle", new FollowPath(m_driveTrain, Trajectories.circleRight));
+//        m_commandChooser.addOption("Backwards P", new FollowPath(m_driveTrain, Trajectories.backwardsP));
+        m_commandChooser.setDefaultOption("Limelight Drive", new LimelightDrive(m_driveTrain));
         SmartDashboard.putData("Auto Command", m_commandChooser);
         SmartDashboard.putNumber("Auto Delay", 0);
     }
@@ -160,9 +166,10 @@ public class RobotContainer {
      * @return the command to run in autonomous
      */
     public Command getAutonomousCommand() {
-        return new SequentialCommandGroup(
-            new WaitUntilCommand(SmartDashboard.getNumber("Auto Delay", 0)),
-            m_commandChooser.getSelected()
-        );
+//        return new SequentialCommandGroup(
+//            new WaitUntilCommand(SmartDashboard.getNumber("Auto Delay", 0)),
+//            m_commandChooser.getSelected()
+//        );
+        return m_commandChooser.getSelected();
     }
 }
