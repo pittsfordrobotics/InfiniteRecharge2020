@@ -26,32 +26,11 @@ import frc.robot.commands.climber.RaiseTelescopingArm;
 import frc.robot.commands.climber.WinchUp;
 import frc.robot.commands.drivetrain.DriveWithXboxController;
 import frc.robot.commands.intake.DriveIntake;
-import frc.robot.commands.shooter.DriveAgitator;
-import frc.robot.commands.shooter.DriveShooter;
-import frc.robot.commands.shooter.WaitForSpeed;
+import frc.robot.commands.shooter.EnhancedShooter;
 import frc.robot.commands.spinner.DriveSpinner;
 import frc.robot.commands.spinner.SpinnerDown;
 import frc.robot.commands.spinner.SpinnerUp;
 import frc.robot.subsystems.*;
-//import frc.robot.commands.auto.AutoShoot;
-//import frc.robot.commands.auto.FollowPath;
-//import frc.robot.commands.climber.LowerTelescopingArm;
-//import frc.robot.commands.climber.RaiseTelescopingArm;
-//import frc.robot.commands.climber.WinchUp;
-//import frc.robot.commands.drivetrain.DriveWithXboxController;
-//import frc.robot.commands.intake.DriveIntake;
-//import frc.robot.commands.shooter.DriveAgitator;
-//import frc.robot.commands.shooter.DriveShooter;
-//import frc.robot.commands.shooter.WaitForSpeed;
-//import frc.robot.commands.spinner.DriveSpinner;
-//import frc.robot.commands.spinner.ResetSpinnerPosition;
-//import frc.robot.commands.spinner.SpinnerDown;
-//import frc.robot.commands.spinner.SpinnerUp;
-//import frc.robot.subsystems.Climber;
-//import frc.robot.subsystems.DriveTrain;
-//import frc.robot.subsystems.Intake;
-//import frc.robot.subsystems.Shooter;
-//import frc.robot.subsystems.Spinner;
 
 /**
  * This class is where the bulk of the robot should be declared. Since
@@ -80,20 +59,23 @@ public class RobotContainer {
         // Configure the button bindings
         CameraServer.getInstance().startAutomaticCapture(0);
         SmartDashboard.putData("Shooter", m_shooter);
+
+        // sets up driveTrain with xbox controllers
         m_driveTrain.setDefaultCommand(new DriveWithXboxController(m_driveTrain, m_driverController));
-//        configureButtonBindings();
-//        m_commandChooser.addOption("Reset Spinner Only", new ResetSpinnerPosition(m_spinner));
-//        m_commandChooser.addOption("Drive And Shoot", new ParallelCommandGroup(
-//                new ResetSpinnerPosition(m_spinner),
-//                new AutoShoot(m_shooter, m_intake, m_driveTrain, Trajectories.shootDriveForward)
-//            )
-//        );
-//        m_commandChooser.addOption("Drive Forward", new ParallelCommandGroup(
-//            new FollowPath(m_driveTrain, Trajectories.simpleForward),
-//            new ResetSpinnerPosition(m_spinner)));
-//        m_commandChooser.addOption("Drive Circle", new FollowPath(m_driveTrain, Trajectories.circleRight));
-//        m_commandChooser.addOption("Backwards P", new FollowPath(m_driveTrain, Trajectories.backwardsP));
-        m_commandChooser.setDefaultOption("Limelight Drive", new LimelightDrive(m_driveTrain));
+
+        configureButtonBindings();
+        m_commandChooser.setDefaultOption("Drive Forward", new ParallelCommandGroup(
+            new FollowPath(m_driveTrain, Trajectories.simpleForward),
+            new ResetSpinnerPosition(m_spinner)));
+        m_commandChooser.addOption("Reset Spinner Only", new ResetSpinnerPosition(m_spinner));
+        m_commandChooser.addOption("Drive And Shoot", new ParallelCommandGroup(
+                new ResetSpinnerPosition(m_spinner),
+                new AutoShoot(m_shooter, m_intake, m_driveTrain, Trajectories.shootDriveForward)
+            )
+        );
+        m_commandChooser.addOption("Drive Circle", new FollowPath(m_driveTrain, Trajectories.circleRight));
+        m_commandChooser.addOption("Backwards P", new FollowPath(m_driveTrain, Trajectories.backwardsP));
+        m_commandChooser.addOption("Limelight Drive", new LimelightDrive(m_driveTrain));
         SmartDashboard.putData("Auto Command", m_commandChooser);
         SmartDashboard.putNumber("Auto Delay", 0);
     }
@@ -108,7 +90,7 @@ public class RobotContainer {
         JoystickButton shiftButton = new JoystickButton(m_driverController, XboxController.Button.kBumperLeft.value);
         JoystickButton operatorShiftButton = new JoystickButton(m_operatorController, XboxController.Button.kBumperLeft.value);
         
-        // Drivetrain
+        // Drivetrain Throttle Control
         new POVButton(m_driverController, 0).whenActive(()-> m_driveTrain.setThrottle(0.9));
         new POVButton(m_driverController, 270).whenActive(()-> m_driveTrain.setThrottle(0.6));
         new POVButton(m_driverController, 180).whenActive(()-> m_driveTrain.setThrottle(0.3));
@@ -136,19 +118,8 @@ public class RobotContainer {
 
         // Shooter
         JoystickButton driveShooterButton = new JoystickButton(m_operatorController, XboxController.Button.kA.value);
-        JoystickButton feedShooterButton = new JoystickButton(m_operatorController, XboxController.Button.kB.value);
+        driveShooterButton.toggleWhenPressed(new EnhancedShooter(m_shooter, m_intake));
 
-        SequentialCommandGroup feedShooterCommand = new SequentialCommandGroup(
-                                                        new WaitForSpeed(m_shooter),
-                                                        new ParallelCommandGroup(
-                                                            new DriveAgitator(m_shooter),
-                                                            new DriveIntake(m_intake, false)
-                                                        )
-                                                    );
-
-        driveShooterButton.toggleWhenPressed(new DriveShooter(m_shooter));
-        feedShooterButton.whileHeld(feedShooterCommand);
-        
         // Spinner
         JoystickButton driveSpinnerButton = new JoystickButton(m_operatorController, XboxController.Button.kX.value);
         JoystickButton spinnerUp = new JoystickButton(m_driverController, XboxController.Button.kX.value);
@@ -166,10 +137,9 @@ public class RobotContainer {
      * @return the command to run in autonomous
      */
     public Command getAutonomousCommand() {
-//        return new SequentialCommandGroup(
-//            new WaitUntilCommand(SmartDashboard.getNumber("Auto Delay", 0)),
-//            m_commandChooser.getSelected()
-//        );
-        return m_commandChooser.getSelected();
+       return new SequentialCommandGroup(
+           new WaitUntilCommand(SmartDashboard.getNumber("Auto Delay", 0)),
+           m_commandChooser.getSelected()
+       );
     }
 }

@@ -12,17 +12,18 @@ import com.revrobotics.CANEncoder;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
-
+import edu.wpi.first.wpilibj.SlewRateLimiter;
 import edu.wpi.first.wpilibj.controller.PIDController;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.geometry.Pose2d;
 import edu.wpi.first.wpilibj.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.wpilibj.kinematics.DifferentialDriveWheelSpeeds;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
-import static frc.robot.Constants.Ports.*;
 import static frc.robot.Constants.Drive.*;
+import static frc.robot.Constants.Ports.CAN;
 
 public class DriveTrain extends SubsystemBase {
     private CANSparkMax m_leftPrimary = new CANSparkMax(CAN.kDriveLeftPrimary, MotorType.kBrushless);
@@ -40,6 +41,8 @@ public class DriveTrain extends SubsystemBase {
     private DifferentialDriveWheelSpeeds m_wheelSpeeds;
     private Pose2d m_pose;
     private AHRS m_ahrs;
+    private SlewRateLimiter rateLimit;
+    private double throttle;
 
     /**
      * Creates a new DriveTrain.
@@ -58,7 +61,7 @@ public class DriveTrain extends SubsystemBase {
         resetEncoders();
 
         m_differentialDrive = new DifferentialDrive(m_leftPrimary, m_rightPrimary);
-        m_differentialDrive.setDeadband(0.05);
+        m_differentialDrive.setDeadband(0.08);
 
         m_ahrs = ahrs;
         m_ahrs.reset();
@@ -72,16 +75,28 @@ public class DriveTrain extends SubsystemBase {
         m_rightEncoder.setPositionConversionFactor(Math.PI * kWheelDiameterMeters / kGearRatio);
         m_leftEncoder.setVelocityConversionFactor(Math.PI * kWheelDiameterMeters / kGearRatio / 60);
         m_rightEncoder.setVelocityConversionFactor(Math.PI * kWheelDiameterMeters / kGearRatio / 60);
-
+        
         setThrottle(0.6);
+
+        enableRateLimit();
     }
 
     public void drive(double speed, double rotation) {
-        m_differentialDrive.arcadeDrive(speed, rotation);
+        if (speed < 0.1) {
+            m_differentialDrive.curvatureDrive(speed, rotation, true);
+        }
+        else {
+            m_differentialDrive.curvatureDrive(speed, rotation, false);
+        }
     }
 
     public void setThrottle(double throttle) {
         m_differentialDrive.setMaxOutput(throttle);
+        this.throttle = throttle;
+    }
+
+    public double getThrottle() {
+        return throttle;
     }
 
     public void driveVolts(double left, double right) {
@@ -112,11 +127,19 @@ public class DriveTrain extends SubsystemBase {
             leftMeters,
             rightMeters);
 
-        // Velocity
-        double leftVelocity = m_leftEncoder.getVelocity();
-        double rightVelocity = -m_rightEncoder.getVelocity();
+        m_wheelSpeeds = new DifferentialDriveWheelSpeeds(getLeftVelocity(), getRightVelocity());
+        SmartDashboard.putNumber("Velocity Left", getLeftVelocity());
+        SmartDashboard.putNumber("Velocity Right", getRightVelocity());
+        SmartDashboard.putNumber("Throttle", throttle);
 
-        m_wheelSpeeds = new DifferentialDriveWheelSpeeds(leftVelocity, rightVelocity);
+    }
+
+    public double getLeftVelocity() {
+        return m_leftEncoder.getVelocity();
+    }
+
+    public double getRightVelocity() {
+        return -m_rightEncoder.getVelocity();
     }
 
     public PIDController getLeftController() {
@@ -143,4 +166,21 @@ public class DriveTrain extends SubsystemBase {
         controller.restoreFactoryDefaults();
         controller.setIdleMode(IdleMode.kBrake);
     }
+
+    public SlewRateLimiter getRateLimit() {
+        return rateLimit;
+    }
+
+    public void enableRateLimit() {
+        rateLimit = new SlewRateLimiter(2);
+    }
+
+    public void disableRateLimit() {
+        rateLimit = new SlewRateLimiter(100000000);
+    }
+
+    public void setRateLimit(SlewRateLimiter rateLimit) {
+        this.rateLimit = rateLimit;
+    }
+
 }
