@@ -7,14 +7,19 @@
 
 package frc.robot.commands.drivetrain;
 
-import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.GenericHID.Hand;
+import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.DriveTrain;
 
 public class DriveWithXboxController extends CommandBase {
     private DriveTrain m_driveTrain;
     private XboxController m_controller;
+    private double throttle;
+    private double limitedThrottle;
+    private double offset;
+    private Timer m_timer = new Timer();
 
     /**
      * Creates a new DriveWithJoysticks.
@@ -28,12 +33,40 @@ public class DriveWithXboxController extends CommandBase {
     // Called when the command is initially scheduled.
     @Override
     public void initialize() {
+        m_timer.reset();
+        m_timer.start();
+        offset = -m_controller.getY(Hand.kLeft);
+        throttle = 0;
+        limitedThrottle = 0;
     }
 
     // Called every time the scheduler runs while the command is scheduled.
     @Override
     public void execute() {
-        m_driveTrain.drive(-m_controller.getY(Hand.kLeft), m_controller.getX(Hand.kRight) * 0.75);
+        
+        // option 1
+//         if (m_timer.get() >= 0.2 && m_driveTrain.getCurve() == true) {
+//             throttle = -m_controller.getY(Hand.kLeft);
+//             limitedThrottle += Math.abs(throttle - limitedThrottle) >= 0.2 ? 0.2 * Math.signum(throttle - limitThrottle) : 0;
+//             limitedThrottle = Math.abs(limitedThrottle) > 1 ? Math.signum(limitedThrottle) : limitedThrottle;
+//             m_timer.reset();
+//         }
+        //        else {
+//            limitedThrottle = -m_controller.getY(Hand.kLeft);
+//        }
+        //        m_driveTrain.drive(limitedThrottle, m_controller.getX(Hand.kRight) * 0.75);
+
+//        SmartDashboard.putNumber("Controller", -m_controller.getY(GenericHID.Hand.kLeft));
+        // option 2
+//        if (m_driveTrain.getCurve() == true) {
+//            throttle = -m_controller.getY(Hand.kLeft) - offset;
+//            limitedThrottle += Math.abs(throttle - limitedThrottle) >= 0.02 ? 0.02 * Math.signum(throttle - limitedThrottle) : 0;
+//            limitedThrottle = Math.abs(limitedThrottle) > 1 ? Math.signum(limitedThrottle) : limitedThrottle;
+//        }
+//        else {
+//            limitedThrottle = -m_controller.getY(Hand.kLeft);
+//        }
+        m_driveTrain.drive(m_driveTrain.getRateLimit().calculate(-m_controller.getY(Hand.kLeft)), m_controller.getX(Hand.kRight) * 0.75);
     }
 
     // Called once the command ends or is interrupted.
