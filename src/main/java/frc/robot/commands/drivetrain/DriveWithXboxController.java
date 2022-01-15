@@ -7,13 +7,10 @@
 
 package frc.robot.commands.drivetrain;
 
-import edu.wpi.first.wpilibj.GenericHID;
-import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.GenericHID.Hand;
-
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.DriveTrain;
 
 public class DriveWithXboxController extends CommandBase {
@@ -70,7 +67,7 @@ public class DriveWithXboxController extends CommandBase {
 //            limitedThrottle = -m_controller.getY(Hand.kLeft);
 //        }
         m_driveTrain.drive(m_driveTrain.getRateLimit().calculate(-m_controller.getY(Hand.kLeft)), m_controller.getX(Hand.kRight) * 0.75);
-    }    
+    }
 
     // Called once the command ends or is interrupted.
     @Override

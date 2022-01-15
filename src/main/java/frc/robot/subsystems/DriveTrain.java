@@ -82,7 +82,12 @@ public class DriveTrain extends SubsystemBase {
     }
 
     public void drive(double speed, double rotation) {
-        m_differentialDrive.arcadeDrive(speed, rotation);
+        if (speed < 0.1) {
+            m_differentialDrive.curvatureDrive(speed, rotation, true);
+        }
+        else {
+            m_differentialDrive.curvatureDrive(speed, rotation, false);
+        }
     }
 
     public void setThrottle(double throttle) {
@@ -167,11 +172,11 @@ public class DriveTrain extends SubsystemBase {
     }
 
     public void enableRateLimit() {
-        rateLimit = new SlewRateLimiter(0.04);
+        rateLimit = new SlewRateLimiter(2);
     }
 
     public void disableRateLimit() {
-        rateLimit = new SlewRateLimiter(10);
+        rateLimit = new SlewRateLimiter(100000000);
     }
 
     public void setRateLimit(SlewRateLimiter rateLimit) {
