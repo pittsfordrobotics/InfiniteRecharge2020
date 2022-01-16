@@ -43,29 +43,6 @@ public class DriveWithXboxController extends CommandBase {
     // Called every time the scheduler runs while the command is scheduled.
     @Override
     public void execute() {
-        
-        // option 1
-//         if (m_timer.get() >= 0.2 && m_driveTrain.getCurve() == true) {
-//             throttle = -m_controller.getY(Hand.kLeft);
-//             limitedThrottle += Math.abs(throttle - limitedThrottle) >= 0.2 ? 0.2 * Math.signum(throttle - limitThrottle) : 0;
-//             limitedThrottle = Math.abs(limitedThrottle) > 1 ? Math.signum(limitedThrottle) : limitedThrottle;
-//             m_timer.reset();
-//         }
-        //        else {
-//            limitedThrottle = -m_controller.getY(Hand.kLeft);
-//        }
-        //        m_driveTrain.drive(limitedThrottle, m_controller.getX(Hand.kRight) * 0.75);
-
-//        SmartDashboard.putNumber("Controller", -m_controller.getY(GenericHID.Hand.kLeft));
-        // option 2
-//        if (m_driveTrain.getCurve() == true) {
-//            throttle = -m_controller.getY(Hand.kLeft) - offset;
-//            limitedThrottle += Math.abs(throttle - limitedThrottle) >= 0.02 ? 0.02 * Math.signum(throttle - limitedThrottle) : 0;
-//            limitedThrottle = Math.abs(limitedThrottle) > 1 ? Math.signum(limitedThrottle) : limitedThrottle;
-//        }
-//        else {
-//            limitedThrottle = -m_controller.getY(Hand.kLeft);
-//        }
         m_driveTrain.drive(m_driveTrain.getRateLimit().calculate(-m_controller.getY(Hand.kLeft)), m_controller.getX(Hand.kRight) * 0.75);
     }
 
