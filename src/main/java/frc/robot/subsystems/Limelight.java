@@ -1,11 +1,9 @@
 package frc.robot.subsystems;
 
 
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.networktables.NetworkTable;
-import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 import static frc.robot.Constants.Limelight.*;
 
@@ -91,6 +89,10 @@ public class Limelight extends SubsystemBase {
         NetworkTableInstance.getDefault().getTable("limelight").getEntry("camMode").setNumber(mode);
     }
 
+    public boolean isAligned() {
+        return Math.abs(limelight.getVertical()) < 0.1 && Math.abs(limelight.getHorizontal()) < 0.1;
+    }
+
     public void enable() {
         setCamMode(0);
         setLED(3);
@@ -106,4 +108,3 @@ public class Limelight extends SubsystemBase {
     }
 
 }
-
