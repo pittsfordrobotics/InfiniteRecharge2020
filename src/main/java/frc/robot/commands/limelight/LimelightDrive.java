@@ -1,4 +1,4 @@
-package frc.robot.commands.auto;
+package frc.robot.commands.limelight;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.DriveTrain;
@@ -32,7 +32,7 @@ public class LimelightDrive extends CommandBase {
 
     @Override
     public void end(boolean interrupted) {
-//        limelight.disable();
+        limelight.disable();
         driveTrain.driveVolts(0, 0);
     }
 }

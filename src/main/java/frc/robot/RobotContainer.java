@@ -17,10 +17,11 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
+import frc.robot.commands.auto.AutoShoot;
 import frc.robot.commands.auto.FollowPath;
-import frc.robot.commands.auto.LimelightDrive;
 import frc.robot.commands.climber.LowerTelescopingArm;
 import frc.robot.commands.climber.RaiseTelescopingArm;
 import frc.robot.commands.climber.WinchUp;
@@ -28,6 +29,7 @@ import frc.robot.commands.drivetrain.DriveWithXboxController;
 import frc.robot.commands.intake.DriveIntake;
 import frc.robot.commands.shooter.EnhancedShooter;
 import frc.robot.commands.spinner.DriveSpinner;
+import frc.robot.commands.spinner.ResetSpinnerPosition;
 import frc.robot.commands.spinner.SpinnerDown;
 import frc.robot.commands.spinner.SpinnerUp;
 import frc.robot.subsystems.*;
@@ -75,7 +77,6 @@ public class RobotContainer {
         );
         m_commandChooser.addOption("Drive Circle", new FollowPath(m_driveTrain, Trajectories.circleRight));
         m_commandChooser.addOption("Backwards P", new FollowPath(m_driveTrain, Trajectories.backwardsP));
-        m_commandChooser.addOption("Limelight Drive", new LimelightDrive(m_driveTrain));
         SmartDashboard.putData("Auto Command", m_commandChooser);
         SmartDashboard.putNumber("Auto Delay", 0);
     }

@@ -35,7 +35,7 @@ public class Robot extends TimedRobot {
         // and put our
         // autonomous chooser on the dashboard.
         m_robotContainer = new RobotContainer();
-        limelight.enable();
+        limelight.disable();
     }
 
     /**
@@ -64,7 +64,7 @@ public class Robot extends TimedRobot {
      */
     @Override
     public void disabledInit() {
-//        limelight.disable();
+        limelight.disable();
     }
 
     @Override
