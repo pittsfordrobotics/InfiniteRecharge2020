@@ -7,8 +7,6 @@ import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
 
-import static frc.robot.Constants.Limelight.*;
-
 public class Limelight extends SubsystemBase {
 
     // With eager singleton initialization, any static variables/fields used in the
@@ -76,7 +74,7 @@ public class Limelight extends SubsystemBase {
     /**
      * Sets the LED mode of the Limelight.
      *
-     * @param mode 0: pipeline mode, 1: off, 2: blink, 3: on
+     * @param mode 0: current mode, 1: off, 2: blink, 3: on
      */
     public void setLED(int mode) {
         NetworkTableInstance.getDefault().getTable("limelight").getEntry("ledMode").setNumber(mode);
@@ -90,20 +88,5 @@ public class Limelight extends SubsystemBase {
     public void setCamMode(int mode) {
         NetworkTableInstance.getDefault().getTable("limelight").getEntry("camMode").setNumber(mode);
     }
-
-    public void enable() {
-        setCamMode(0);
-        setLED(3);
-    }
-
-    public void disable() {
-        setCamMode(1);
-        setLED(1);
-    }
-
-    public double getDistance() {
-        return (targetHeight - robotHeight) / Math.tan(offsetAngle + getVertical());
-    }
-
 }
 

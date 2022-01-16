@@ -139,15 +139,4 @@ public final class Constants {
         public static final double kUpDownResetSpeed = 0.1;
         public static final double kUpDownSpeed = 0.2;
     }
-
-    public static final class Limelight {
-//        change these numbers
-//        represents the angle between robot and limelight
-        public static final double offsetAngle = 0;
-//        height to limelight
-        public static final double robotHeight = 0;
-//        target height
-        public static final double targetHeight = 0;
-
-    }
 }

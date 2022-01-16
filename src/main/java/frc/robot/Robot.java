@@ -10,7 +10,6 @@ package frc.robot;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import frc.robot.subsystems.Limelight;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -23,7 +22,6 @@ public class Robot extends TimedRobot {
     private Command m_autonomousCommand;
 
     private RobotContainer m_robotContainer;
-    private Limelight limelight = Limelight.getInstance();
 
     /**
      * This function is run when the robot is first started up and should be used
@@ -35,7 +33,6 @@ public class Robot extends TimedRobot {
         // and put our
         // autonomous chooser on the dashboard.
         m_robotContainer = new RobotContainer();
-        limelight.disable();
     }
 
     /**
@@ -64,7 +61,6 @@ public class Robot extends TimedRobot {
      */
     @Override
     public void disabledInit() {
-        limelight.disable();
     }
 
     @Override
