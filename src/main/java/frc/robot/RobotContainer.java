@@ -119,7 +119,7 @@ public class RobotContainer {
 
         // Shooter
         JoystickButton driveShooterButton = new JoystickButton(m_operatorController, XboxController.Button.kA.value);
-        driveShooterButton.toggleWhenPressed(new EnhancedShooter(m_shooter, m_intake));
+        driveShooterButton.whileActiveContinuous(new EnhancedShooter(m_shooter, m_intake, m_driveTrain));
 
         // Spinner
         JoystickButton driveSpinnerButton = new JoystickButton(m_operatorController, XboxController.Button.kX.value);

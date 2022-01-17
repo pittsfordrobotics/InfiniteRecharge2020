@@ -28,7 +28,7 @@ public class AutoShoot extends SequentialCommandGroup {
     public AutoShoot(Shooter shooter, Intake intake, DriveTrain driveTrain, Trajectory traj) {
         super(
             new FollowPath(driveTrain, traj),
-            new EnhancedShooter(shooter, intake)
+            new EnhancedShooter(shooter, intake, driveTrain)
         );
 
         m_shooter = shooter;
