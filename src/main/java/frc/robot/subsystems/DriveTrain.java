@@ -82,7 +82,7 @@ public class DriveTrain extends SubsystemBase {
     }
 
     public void drive(double speed, double rotation) {
-        if (speed < 0.1) {
+        if (speed < 0.15) {
             m_differentialDrive.curvatureDrive(speed, rotation, true);
         }
         else {
