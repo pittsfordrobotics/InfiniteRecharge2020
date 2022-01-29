@@ -81,13 +81,17 @@ public class DriveTrain extends SubsystemBase {
         enableRateLimit();
     }
 
-    public void drive(double speed, double rotation) {
+    public void curveDrive(double speed, double rotation) {
         if (speed < 0.15) {
             m_differentialDrive.curvatureDrive(speed, rotation, true);
         }
         else {
             m_differentialDrive.curvatureDrive(speed, rotation, false);
         }
+    }
+
+    public void arcadeDrive(double speed, double rotation) {
+        m_differentialDrive.arcadeDrive(speed, rotation);
     }
 
     public void setThrottle(double throttle) {

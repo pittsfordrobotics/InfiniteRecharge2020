@@ -45,10 +45,10 @@ public class DriveWithXboxController extends CommandBase {
         }
         pastInput = -m_controller.getY(Hand.kLeft);
         if (accelerate) {
-            m_driveTrain.drive(m_driveTrain.getRateLimit().calculate(-m_controller.getY(Hand.kLeft)), m_controller.getX(Hand.kRight) * 0.75);
+            m_driveTrain.curveDrive(m_driveTrain.getRateLimit().calculate(-m_controller.getY(Hand.kLeft)), m_controller.getX(Hand.kRight) * 0.75);
         }
         else {
-            m_driveTrain.drive(-m_controller.getY(Hand.kLeft), m_controller.getX(Hand.kRight) * 0.75);
+            m_driveTrain.curveDrive(-m_controller.getY(Hand.kLeft), m_controller.getX(Hand.kRight) * 0.75);
         }
     }
 

@@ -28,6 +28,7 @@ import frc.robot.commands.climber.WinchUp;
 import frc.robot.commands.drivetrain.DriveWithXboxController;
 import frc.robot.commands.intake.DriveIntake;
 import frc.robot.commands.shooter.EnhancedShooter;
+import frc.robot.commands.shooter.LimelightOn;
 import frc.robot.commands.spinner.DriveSpinner;
 import frc.robot.commands.spinner.ResetSpinnerPosition;
 import frc.robot.commands.spinner.SpinnerDown;
@@ -118,8 +119,11 @@ public class RobotContainer {
         operatorDriveIntakeButton.and(operatorShiftButton).whileActiveContinuous(new DriveIntake(m_intake, true));
 
         // Shooter
-        JoystickButton driveShooterButton = new JoystickButton(m_operatorController, XboxController.Button.kA.value);
+        JoystickButton driveShooterButton = new JoystickButton(m_driverController, XboxController.Button.kA.value);
         driveShooterButton.whileActiveContinuous(new EnhancedShooter(m_shooter, m_intake, m_driveTrain));
+
+        JoystickButton limelightButton = new JoystickButton(m_driverController, XboxController.Button.kB.value);
+        limelightButton.whileActiveContinuous(new LimelightOn());
 
         // Spinner
         JoystickButton driveSpinnerButton = new JoystickButton(m_operatorController, XboxController.Button.kX.value);
