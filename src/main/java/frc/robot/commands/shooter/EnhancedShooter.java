@@ -37,7 +37,7 @@ public class EnhancedShooter extends CommandBase {
     @Override
     public void execute() {
         if (!mShooter.isUpToSpeed() || mLimelight.hasTarget() && !mLimelight.isAligned()) {
-            mDriveTrain.arcadeDrive(mLimelight.getVertical() * -0.5, mLimelight.getHorizontal() * 0.5);
+            mDriveTrain.arcadeDrive(mLimelight.getVertical() * -0.5, mLimelight.getHorizontal() * 0.25);
             return;
         }
 //        not sure if this drive volts is needed
