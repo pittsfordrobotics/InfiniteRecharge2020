@@ -52,6 +52,7 @@ public class RobotContainer {
     private Shooter m_shooter = new Shooter();
     private Intake m_intake = new Intake();
     private Spinner m_spinner = new Spinner();
+    private Limelight m_limelight = Limelight.getInstance();
 
     private SendableChooser<Command> m_commandChooser = new SendableChooser<Command>();
 
@@ -78,6 +79,7 @@ public class RobotContainer {
         );
         m_commandChooser.addOption("Drive Circle", new FollowPath(m_driveTrain, Trajectories.circleRight));
         m_commandChooser.addOption("Backwards P", new FollowPath(m_driveTrain, Trajectories.backwardsP));
+        SmartDashboard.putBoolean("Limelight Has Target", m_limelight.hasTarget());
         SmartDashboard.putData("Auto Command", m_commandChooser);
         SmartDashboard.putNumber("Auto Delay", 0);
     }

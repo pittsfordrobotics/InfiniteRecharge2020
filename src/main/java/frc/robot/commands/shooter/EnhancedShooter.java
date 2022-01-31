@@ -21,7 +21,7 @@ public class EnhancedShooter extends CommandBase {
         mIntake = intake;
         mDriveTrain = driveTrain;
         // each subsystem used by the command must be passed into the addRequirements() method (which takes a vararg of Subsystem)
-        addRequirements(mShooter, mIntake, mLimelight);
+        addRequirements(mShooter, mIntake, mLimelight, mDriveTrain);
     }
 
     @Override
@@ -36,8 +36,11 @@ public class EnhancedShooter extends CommandBase {
 
     @Override
     public void execute() {
-        if (!mShooter.isUpToSpeed() || mLimelight.hasTarget() && !mLimelight.isAligned()) {
+        if (mLimelight.hasTarget() && !mLimelight.isAligned()) {
             mDriveTrain.arcadeDrive(mLimelight.getVertical() * -0.5, mLimelight.getHorizontal() * 0.25);
+            return;
+        }
+        if (!mShooter.isUpToSpeed()) {
             return;
         }
 //        not sure if this drive volts is needed

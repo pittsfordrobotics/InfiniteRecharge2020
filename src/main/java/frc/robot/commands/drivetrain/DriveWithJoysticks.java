@@ -32,7 +32,7 @@ public class DriveWithJoysticks extends CommandBase {
     // Called every time the scheduler runs while the command is scheduled.
     @Override
     public void execute() {
-        m_driveTrain.drive(m_joystick.getScaledY(), m_joystick.getScaledTwist());
+        m_driveTrain.arcadeDrive(m_joystick.getScaledY(), m_joystick.getScaledTwist());
     }
 
     // Called once the command ends or is interrupted.
