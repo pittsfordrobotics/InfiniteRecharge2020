@@ -79,7 +79,6 @@ public class RobotContainer {
         );
         m_commandChooser.addOption("Drive Circle", new FollowPath(m_driveTrain, Trajectories.circleRight));
         m_commandChooser.addOption("Backwards P", new FollowPath(m_driveTrain, Trajectories.backwardsP));
-        SmartDashboard.putBoolean("Limelight Has Target", m_limelight.hasTarget());
         SmartDashboard.putData("Auto Command", m_commandChooser);
         SmartDashboard.putNumber("Auto Delay", 0);
     }

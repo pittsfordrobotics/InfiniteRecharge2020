@@ -44,6 +44,8 @@ public class Limelight extends SubsystemBase {
         SmartDashboard.putNumber("Limelight Horizontal", getHorizontal());
         SmartDashboard.putNumber("Limelight Vertical", getVertical());
         SmartDashboard.putNumber("Limelight Area", getArea());
+        SmartDashboard.putBoolean("Limelight Has Target", hasTarget());
+        SmartDashboard.putBoolean("LIMELIGHT", isAligned());
     }
 
     public boolean hasTarget() {
@@ -90,7 +92,7 @@ public class Limelight extends SubsystemBase {
     }
 
     public boolean isAligned() {
-        return Math.abs(limelight.getVertical()) < 0.1 && Math.abs(limelight.getHorizontal()) < 0.1;
+        return Math.abs(limelight.getVertical()) < 1 && Math.abs(limelight.getHorizontal()) < 1;
     }
 
     public void enable() {

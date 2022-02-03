@@ -22,7 +22,7 @@ public class LimelightDrive extends CommandBase {
     @Override
     public void execute() {
         driveTrain.setThrottle(0.2);
-        driveTrain.drive(limelight.getVertical() * -0.5, limelight.getHorizontal() * 0.5);
+        driveTrain.arcadeDrive(limelight.getVertical() * -0.5, limelight.getHorizontal() * 0.5);
     }
 
     @Override

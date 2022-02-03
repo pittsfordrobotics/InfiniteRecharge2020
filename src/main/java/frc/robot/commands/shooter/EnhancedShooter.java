@@ -15,6 +15,7 @@ public class EnhancedShooter extends CommandBase {
     private DriveTrain mDriveTrain;
     private final Limelight mLimelight = Limelight.getInstance();
     private double throttle;
+    private double test;
 
     public EnhancedShooter(Shooter shooter, Intake intake, DriveTrain driveTrain) {
         mShooter = shooter;
@@ -22,13 +23,14 @@ public class EnhancedShooter extends CommandBase {
         mDriveTrain = driveTrain;
         // each subsystem used by the command must be passed into the addRequirements() method (which takes a vararg of Subsystem)
         addRequirements(mShooter, mIntake, mLimelight, mDriveTrain);
+//        SmartDashboard.putNumber("PID FORWARD LIMELIGHT", 0.3);
     }
 
     @Override
     public void initialize() {
         SmartDashboard.putBoolean("Shooter On", true);
         throttle = mDriveTrain.getThrottle();
-        mDriveTrain.setThrottle(0.2);
+        mDriveTrain.setThrottle(0.5);
         mShooter.driveMain(kMainSpeed);
         mLimelight.enable();
         mLimelight.setPipeline(0);
@@ -36,11 +38,15 @@ public class EnhancedShooter extends CommandBase {
 
     @Override
     public void execute() {
+//        test = SmartDashboard.getNumber("PID FORWARD LIMELIGHT", 0.3);
         if (mLimelight.hasTarget() && !mLimelight.isAligned()) {
-            mDriveTrain.arcadeDrive(mLimelight.getVertical() * -0.5, mLimelight.getHorizontal() * 0.25);
+            mDriveTrain.arcadeDrive(mLimelight.getVertical() * -0.2, mLimelight.getHorizontal() * 0.2);
             return;
         }
         if (!mShooter.isUpToSpeed()) {
+            mShooter.driveFeeder(0);
+            mShooter.driveAgitator(0);
+            mDriveTrain.driveVolts(0,0);
             return;
         }
 //        not sure if this drive volts is needed
