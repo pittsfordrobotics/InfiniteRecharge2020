@@ -145,7 +145,7 @@ public final class Constants {
 //        represents the angle between robot and limelight
         public static final double offsetAngle = 0;
 //        height to limelight
-        public static final double robotHeight = 0;
+        public static final double limelightHeight = 0;
 //        target height
         public static final double targetHeight = 0;
 
