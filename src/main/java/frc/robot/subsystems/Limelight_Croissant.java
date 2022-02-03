@@ -7,9 +7,22 @@ import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
 
-import static frc.robot.Constants.Limelight.*;
+import frc.robot.Constants;
 
 public class Limelight extends SubsystemBase {
+    
+    private final static Limelight limelight = new Limelight();
+    
+    @SuppressWarnings("WeakerAccess")
+    public static Limelight getInstance() {
+        return limelight;
+    }
+    
+    private Limelight() {
+        setLedMode(1);
+        setCamMode(0);
+    }
+    
     NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight");
     //NetworkTable key names can be found at https://docs.limelightvision.io/en/latest/networktables_api.html
     //Outputs from Limelight:
@@ -47,6 +60,8 @@ public class Limelight extends SubsystemBase {
         public double x, y, area, skew, latency;
         public int width, length, horizontal, vertical, ledMode, pipeline;
     }
+    
+    private PeriodicIO mPeriodicIO = new PeriodicIO();
 
     private void updateConstants() {
         if(mPeriodicIO.setLedMode != mPeriodicIO.ledMode || mPeriodicIO.setPipeline != mPeriodicIO.pipeline){
@@ -58,14 +73,16 @@ public class Limelight extends SubsystemBase {
         }
     }
 
-    private PeriodicIO mPeriodicIO = new PeriodicIO();
-
-    public void setPipeline(int _pipe){
-        mPeriodicIO.setPipeline = _pipe;
+    public void setLedMode(int newLedMode) {
+        mPeriodicIO.setLedMode = newLedMode;
     }
-
-    public void setLedMode(int _ledMode) {
-        mPeriodicIO.setLedMode = _ledMode;
+    
+    public void setCamMode(int newCamMode) {
+        mPeriodicIO.camMode = newCamMode;
+    }
+        
+    public void setPipeline(int newPipe) {
+        mPeriodicIO.setPipeline = newPipe;
     }
 
     public boolean hasTarget(){
@@ -73,11 +90,7 @@ public class Limelight extends SubsystemBase {
     }
 
     public double[] getTargetOffset() {
-        return new double[] {mPeriodicIO.x, mPeriodicIO.y, };
-    }
-
-    public double getDistance() {
-        return((targetHeight - robotHeight)/Math.tan(mPeriodicIO.y + offsetAngle));
+        return new double[] {mPeriodicIO.x, mPeriodicIO.y};
     }
 
     public double getArea() {
@@ -87,9 +100,34 @@ public class Limelight extends SubsystemBase {
     public double[] getDimensions() {
         return new double[] {mPeriodicIO.horizontal, mPeriodicIO.vertical};
     }
+    
+    public int getPipeline() {
+        return mPeriodicIO.pipeline
+    }
 
+    /*
+        *@return the latency in receiving each frame, including network and capture latency
+    */
     public double getLatency() {
-        return(mPeriodicIO.latency + 11);
+        return(mPeriodicIO.latency + 0.011);
+    }
+    
+    public boolean isAligned() {
+        return Math.abs(limelight.getVertical()) < 1 && Math.abs(limelight.getHorizontal()) < 1;
+    }
+    
+    public double getDistance() {
+        return (Constants.targetHeight - Constants.limelightHeight) / Math.tan(offsetAngle + getVertical());
+    }
+    
+    public void enable() {
+        setCamMode(0);
+        setLedMode(3);
+    }
+
+    public void disable() {
+        setCamMode(1);
+        setLedMode(1);
     }
 
     @Override
@@ -101,19 +139,18 @@ public class Limelight extends SubsystemBase {
         mPeriodicIO.y = ty.getDouble(0.0); //Vertical offset from crosshair to target; ±24.85° in LL2
         mPeriodicIO.area = ta.getDouble(0.0); //Target area; 0% to 100%
         mPeriodicIO.skew = ts.getDouble(0.0); //Skew or rotation of the target, from -90 degrees to 0 degrees
-        mPeriodicIO.latency = tl.getDouble(0.0); //In ms, add >= 11 ms for image capture latency
+        mPeriodicIO.latency = tl.getDouble(0.0) / 1000.0; //In ms, add >= 11 ms for image capture latency
         mPeriodicIO.width = (int) tshort.getDouble(0); //Length of shortest side of bounding box, in pixels
         mPeriodicIO.length = (int) tlong.getDouble(0); //Length of longest side of bounding box, in pixels
         mPeriodicIO.horizontal = (int) thor.getDouble(0); //Length of horizontal side of bounding box, 0-320 pixels
         mPeriodicIO.vertical = (int) tvert.getDouble(0); //Length of vertical side of bounding box, 0-320 pixels
         mPeriodicIO.pipeline = (int) getpipe.getDouble(0); //Pipeline used, between 0 and 9
 
-        SmartDashboard.putBoolean("LimelightHasTarget", mPeriodicIO.hasTarget);
-        SmartDashboard.putNumber("LimelightX", mPeriodicIO.x);
-        SmartDashboard.putNumber("LimelightY", mPeriodicIO.y);
-        SmartDashboard.putNumber("LimelightArea", mPeriodicIO.area);
-        SmartDashboard.putNumber("LimelightSkew", mPeriodicIO.skew);
-        SmartDashboard.putNumber("LimelightLatency", mPeriodicIO.latency);
-        SmartDashboard.putNumber("LimelightPipeline", mPeriodicIO.pipeline);
+        SmartDashboard.putBoolean("LimelightHasTarget", hasTarget());
+        SmartDashboard.putNumber("LimelightX", getDimensions()[0]);
+        SmartDashboard.putNumber("LimelightY", getDimensions()[1]);
+        SmartDashboard.putNumber("LimelightArea", getArea());
+        SmartDashboard.putNumber("LimelightLatency", getLatency());
+        SmartDashboard.putNumber("LimelightPipeline", getPipeline());
     }
 }
