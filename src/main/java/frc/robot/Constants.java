@@ -142,7 +142,7 @@ public final class Constants {
 
     public static final class Limelight {
 //        change these numbers
-//        represents the angle between robot and limelight
+//        represents the angle between robot base and limelight POV
         public static final double offsetAngle = 0;
 //        height to limelight
         public static final double limelightHeight = 0;
