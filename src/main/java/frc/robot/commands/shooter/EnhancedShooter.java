@@ -40,7 +40,7 @@ public class EnhancedShooter extends CommandBase {
     public void execute() {
 //        test = SmartDashboard.getNumber("PID FORWARD LIMELIGHT", 0.3);
         if (mLimelight.hasTarget() && !mLimelight.isAligned()) {
-            mDriveTrain.arcadeDrive(mLimelight.getVertical() * -0.2, mLimelight.getHorizontal() * 0.2);
+            mDriveTrain.arcadeDrive(mLimelight.getVertical() * -0.2, mLimelight.getHorizontal() * 0.1);
             return;
         }
         if (!mShooter.isUpToSpeed()) {
