@@ -16,7 +16,7 @@ public class DriveWithXboxController extends CommandBase {
     private DriveTrain m_driveTrain;
     private XboxController m_controller;
     private double pastInput;
-    private boolean accelerate;
+    private boolean decelerate;
 
     /**
      * Creates a new DriveWithJoysticks.
@@ -30,25 +30,27 @@ public class DriveWithXboxController extends CommandBase {
     // Called when the command is initially scheduled.
     @Override
     public void initialize() {
-        accelerate = false;
+        decelerate = false;
         pastInput = 0;
     }
 
     // Called every time the scheduler runs while the command is scheduled.
     @Override
     public void execute() {
-        if (accelerate && Math.abs(m_driveTrain.getLeftVelocity()) > 0) {
-            accelerate = true;
+        pastInput = m_controller.getY(Hand.kLeft);
+        if (Math.abs(applyDeadband((m_driveTrain.getLeftVelocity()+m_driveTrain.getRightVelocity())/2,0.2)) == 0) {
+            decelerate = false;
         }
-        else {
-            accelerate = -m_controller.getY(Hand.kLeft) - pastInput < 0;
+        else if (!decelerate) {
+            decelerate = m_controller.getY(Hand.kLeft) != 0 && (m_controller.getY(Hand.kLeft) > 0 ? m_controller.getY(Hand.kLeft) - pastInput <= 0 : m_controller.getY(Hand.kLeft) - pastInput >= 0);
         }
-        pastInput = -m_controller.getY(Hand.kLeft);
-        if (accelerate) {
+
+        if (decelerate) {
             m_driveTrain.curveDrive(m_driveTrain.getRateLimit().calculate(-m_controller.getY(Hand.kLeft)), m_controller.getX(Hand.kRight) * 0.75);
         }
         else {
             m_driveTrain.curveDrive(-m_controller.getY(Hand.kLeft), m_controller.getX(Hand.kRight) * 0.75);
+            m_driveTrain.getRateLimit().calculate(-m_controller.getY(Hand.kLeft));
         }
     }
 
@@ -62,5 +64,16 @@ public class DriveWithXboxController extends CommandBase {
     @Override
     public boolean isFinished() {
         return false;
+    }
+    private static double applyDeadband(double value, double deadband) {
+        if (Math.abs(value) > deadband) {
+            if (value > 0.0) {
+                return (value - deadband) / (1.0 - deadband);
+            } else {
+                return (value + deadband) / (1.0 - deadband);
+            }
+        } else {
+            return 0.0;
+        }
     }
 }
