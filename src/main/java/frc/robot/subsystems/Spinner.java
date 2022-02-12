@@ -48,10 +48,10 @@ public class Spinner extends SubsystemBase {
         m_spinnerUpDown.setIdleMode(IdleMode.kBrake);
         m_spinnerUpDown.setSmartCurrentLimit(20);
 
-        m_colorMatcher.addColorMatch(kBlueTarget);
-        m_colorMatcher.addColorMatch(kGreenTarget);
-        m_colorMatcher.addColorMatch(kRedTarget);
-        m_colorMatcher.addColorMatch(kYellowTarget);
+        // m_colorMatcher.addColorMatch(kBlueTarget);
+        // m_colorMatcher.addColorMatch(kGreenTarget);
+        // m_colorMatcher.addColorMatch(kRedTarget);
+        // m_colorMatcher.addColorMatch(kYellowTarget);
     }
 
     public Color readColor() {

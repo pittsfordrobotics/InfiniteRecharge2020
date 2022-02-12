@@ -59,7 +59,7 @@ public class RobotContainer {
      */
     public RobotContainer() {
         // Configure the button bindings
-        CameraServer.getInstance().startAutomaticCapture(0);
+        CameraServer.startAutomaticCapture(0);
         SmartDashboard.putData("Shooter", m_shooter);
 
         // sets up driveTrain with xbox controllers
@@ -88,8 +88,8 @@ public class RobotContainer {
      * passing it to a {@link edu.wpi.first.wpilibj2.command.button.JoystickButton}.
      */
     private void configureButtonBindings() {
-        JoystickButton shiftButton = new JoystickButton(m_driverController, XboxController.Button.kBumperLeft.value);
-        JoystickButton operatorShiftButton = new JoystickButton(m_operatorController, XboxController.Button.kBumperLeft.value);
+        JoystickButton shiftButton = new JoystickButton(m_driverController, XboxController.Button.kLeftBumper.value);
+        JoystickButton operatorShiftButton = new JoystickButton(m_operatorController, XboxController.Button.kLeftBumper.value);
         
         // Drivetrain Throttle Control
         new POVButton(m_driverController, 0).whenActive(()-> m_driveTrain.setThrottle(0.9));
@@ -109,8 +109,8 @@ public class RobotContainer {
         winchUpButton.whileHeld(new WinchUp(m_climber));
 
         // Intake
-        JoystickButton driveIntakeButton = new JoystickButton(m_driverController, XboxController.Button.kBumperRight.value);
-        JoystickButton operatorDriveIntakeButton = new JoystickButton(m_operatorController, XboxController.Button.kBumperRight.value);
+        JoystickButton driveIntakeButton = new JoystickButton(m_driverController, XboxController.Button.kRightBumper.value);
+        JoystickButton operatorDriveIntakeButton = new JoystickButton(m_operatorController, XboxController.Button.kRightBumper.value);
 
         driveIntakeButton.and(shiftButton.negate()).whileActiveContinuous(new DriveIntake(m_intake, false));
         driveIntakeButton.and(shiftButton).whileActiveContinuous(new DriveIntake(m_intake, true));

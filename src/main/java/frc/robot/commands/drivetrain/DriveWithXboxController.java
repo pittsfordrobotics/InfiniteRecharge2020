@@ -7,7 +7,6 @@
 
 package frc.robot.commands.drivetrain;
 
-import edu.wpi.first.wpilibj.GenericHID.Hand;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.CommandBase;
@@ -35,7 +34,7 @@ public class DriveWithXboxController extends CommandBase {
     public void initialize() {
         m_timer.reset();
         m_timer.start();
-        offset = -m_controller.getY(Hand.kLeft);
+        offset = -m_controller.getLeftY();
         throttle = 0;
         limitedThrottle = 0;
     }
@@ -43,7 +42,7 @@ public class DriveWithXboxController extends CommandBase {
     // Called every time the scheduler runs while the command is scheduled.
     @Override
     public void execute() {
-        m_driveTrain.drive(m_driveTrain.getRateLimit().calculate(-m_controller.getY(Hand.kLeft)), m_controller.getX(Hand.kRight) * 0.75);
+        m_driveTrain.drive(m_driveTrain.getRateLimit().calculate(-m_controller.getLeftY()), m_controller.getRightX() * 0.75);
     }
 
     // Called once the command ends or is interrupted.

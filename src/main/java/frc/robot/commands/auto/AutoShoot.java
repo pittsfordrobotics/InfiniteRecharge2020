@@ -7,7 +7,7 @@
 
 package frc.robot.commands.auto;
 
-import edu.wpi.first.wpilibj.trajectory.Trajectory;
+import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.commands.shooter.EnhancedShooter;
 import frc.robot.subsystems.DriveTrain;
